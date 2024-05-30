@@ -351,7 +351,7 @@ class Send_data(Base):
 
         # First the window layout in 2 columns
         first_column = [
-            [sg.Text('Choose your arduino: ')],
+            [sg.Text('Escolha o seu arduino: ')],
             [sg.Text("Sample period (s)")],
             [sg.Text('Plot data?')],
             [sg.Text("Data")],
