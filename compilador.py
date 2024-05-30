@@ -1,3 +1,6 @@
-from pydaq.send_data import Send_data
-s = Send_data()
-s.send_data_arduino_gui()
+from pydaq.pid_control import MyGUI, create_application
+
+app = create_application()
+gui = MyGUI(app)
+gui.show()
+app.exec_()
