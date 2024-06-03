@@ -1,6 +1,5 @@
-from pydaq.pid_control import MyGUI, create_application
+# compilador.py
 
-app = create_application()
-gui = MyGUI(app)
-gui.show()
-app.exec_()
+from pydaq.pid_control import *
+
+app = start_application()
