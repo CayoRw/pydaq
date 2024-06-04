@@ -14,6 +14,8 @@ import warnings
 import nidaqmx
 from nidaqmx.constants import TerminalConfiguration
 
+from pydaq.gui import *
+
 
 class Step_response(Base):
     """
@@ -549,3 +551,6 @@ class Step_response(Base):
             self._save_data(self.output, 'output.dat')
             print('\nData saved ...')
         return
+    
+    def step_response_arduino_pyside(self):
+        start_application()

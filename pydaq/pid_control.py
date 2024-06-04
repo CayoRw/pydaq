@@ -5,8 +5,8 @@ import os
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-
-class MyGUI(QMainWindow):
+    
+class Pid_Control(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -165,13 +165,13 @@ class MyGUI(QMainWindow):
         self.start_button.setStyleSheet("background-color: green; color: white")
         self.start_button.setMinimumWidth(150)
         self.start_button.setMaximumWidth(150)
-        
+
         #ADD Stop button
         self.stop_button = QPushButton("Stop")
         self.stop_button.setStyleSheet("background-color: green; color: white")
         self.stop_button.setMinimumWidth(150)
         self.stop_button.setMaximumWidth(150)
-        
+
         #Add button to bottom layout
         self.bottom_content_layout.addWidget(self.start_button)
         self.bottom_content_layout.addWidget(self.stop_button)
@@ -183,12 +183,13 @@ class MyGUI(QMainWindow):
         self.main_layout.addWidget(self.bottom_horizontal_line)
         self.main_layout.addWidget(self.bottom_layout)
 
+        #Central widget
         self.setCentralWidget(self.central_frame)
-
+    
 
 def create_and_show_window():
     app = QApplication(sys.argv)  # Criação da aplicação
-    window = MyGUI()  # Criação da janela
+    window = Pid_Control()  # Criação da janela
     window.show()  # Exibe a janela
     sys.exit(app.exec())  # Execução do loop da aplicação
 
