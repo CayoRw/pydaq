@@ -6,40 +6,38 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
     
+#Load the style.qss    
+def apply_stylesheet(app, stylesheet_path):
+    with open(stylesheet_path, "r") as f:
+        stylesheet = f.read()
+    app.setStyleSheet(stylesheet)
+    
 class Pid_Control(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Controle PID")
-
         self.setup_ui()
 
     def setup_ui(self):
-
-        self.setFixedSize(800, 300)
-
-        #CREATE CENTRAL WIDGET
+        self.setMinimumSize(700, 300)
+        
+        #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
-        self.central_frame.setStyleSheet("background-color: #434544")
-
+        
         #Layout principal
         self.main_layout = QVBoxLayout(self.central_frame)
-        #Para retirar as bordas
-        self.main_layout.setContentsMargins(0,0,0,0)
-        #Para retirar o espacamento central
-        self.main_layout.setSpacing(0)
+        self.main_layout.setContentsMargins(0,0,0,0) #Para retirar as bordas
+        self.main_layout.setSpacing(0) #Para retirar o espacamento central
 
-
-        #Pagina inicial
-        self.content = QFrame()
-        self.content.setStyleSheet("background-color: #434544")
+        #CREATE TOP LAYOUT FRAME
+        self.top_layout = QFrame()
 
         #CONTENT LAYOUT
-        self.content_top_layout = QHBoxLayout(self.content)
+        self.content_top_layout = QHBoxLayout(self.top_layout)
         self.content_top_layout.setContentsMargins(0,0,0,0)
         self.content_top_layout.setSpacing(0)
 
-        #LEFT LAYOUT
+        #LEFT MENU LAYOUT
         self.left_menu = QFrame()
         self.left_menu.setStyleSheet("background-color: #434544")
         self.left_menu.setMaximumWidth(200)
@@ -48,64 +46,54 @@ class Pid_Control(QMainWindow):
         
         #Label setpoint
         self.label1 = QLabel("Setpoint:")
-        self.label1.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
         self.left_menu_content_layout.addWidget(self.label1, 0, 0, Qt.AlignLeft)
         
-        #Label kp
-        self.label2 = QLabel("Kp:")
-        self.label2.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
+        #Label controler type
+        self.label2 = QLabel("Controller type:")
         self.left_menu_content_layout.addWidget(self.label2, 1, 0, Qt.AlignLeft)
         
-        #Label ki
-        self.label3 = QLabel("Ki:")
-        self.label3.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
-        self.left_menu_content_layout.addWidget(self.label3, 2, 0, Qt.AlignLeft)
+        #Empty Label
+        self.label4 = QLabel(" ")
+        self.left_menu_content_layout.addWidget(self.label4, 2, 0, Qt.AlignLeft)
         
-        #Label kd
-        self.label4 = QLabel("Kd:")
-        self.label4.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
-        self.left_menu_content_layout.addWidget(self.label4, 3, 0, Qt.AlignLeft)
-        
-        #Label apply parameters
+        #Empty Label
         self.label5 = QLabel(" ")
-        self.label5.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
-        self.left_menu_content_layout.addWidget(self.label5, 4, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label5, 3, 0, Qt.AlignLeft)
 
         #RIGHT LAYOUT
         self.right_menu = QFrame()
-        self.right_menu.setStyleSheet("background-color: #434544")
+        self.right_menu.setObjectName("right_menu")
         self.right_content_layout = QGridLayout(self.right_menu)
         
         # WIDGETS OF THE RIGHT LAYOUT
         self.setpoint_input = QLineEdit()
-        self.setpoint_input.setStyleSheet("background-color: #988782")
         self.setpoint_input.setMaximumSize(300,25)
-        self.kp_input = QLineEdit()
-        self.kp_input.setStyleSheet("background-color: #988782")
-        self.kp_input.setMaximumSize(300, 25)
-        self.ki_input = QLineEdit()
-        self.ki_input.setStyleSheet("background-color: #988782")
-        self.ki_input.setMaximumSize(300, 25)
-        self.kd_input = QLineEdit()
-        self.kd_input.setStyleSheet("background-color: #988782")
-        self.kd_input.setMaximumSize(300, 25)
-        self.apply_button = QPushButton("Apply Parameters")
-        self.apply_button.setStyleSheet("background-color: green; color: white")
-        self.apply_button.setMinimumWidth(150)
-        self.apply_button.setMaximumWidth(150)
+        
+        # Controller type       
+        self.controller_type_combo = QComboBox()
+        self.controller_type_combo.addItems(["P", "PI", "PID"])
+        self.controller_type_combo.setStyleSheet("background-color: #988782")
+        self.controller_type_combo.setMaximumSize(100,25)
+        
+        #SELECT PARAMETERS BUTTON
+        self.open_button = QPushButton("Select Parameters")
+        self.open_button.clicked.connect(self.open_controller_interface)
+        self.open_button.setMinimumWidth(150)
+        self.open_button.setMaximumWidth(150)
+        
+        # Label to show the select par  ameters
+        self.parameters_label = QLabel("Parâmetros Configurados: Nenhum")
 
         #ADDING WIDGETS TO THE RIGHT LAYOUT
         self.right_content_layout.addWidget(self.setpoint_input, 0, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.kp_input, 1, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.ki_input, 2, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.kd_input, 3, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.apply_button, 4, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.controller_type_combo, 1, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.open_button, 2, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.parameters_label, 3, 1, alignment=Qt.AlignLeft)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
         self.vertical_line.setFrameShape(QFrame.VLine)
         self.vertical_line.setFrameShadow(QFrame.Sunken)
-        self.vertical_line.setStyleSheet("background-color: white")
 
         #ADD the content to layout
         self.content_top_layout.addWidget(self.left_menu)
@@ -116,11 +104,10 @@ class Pid_Control(QMainWindow):
         self.central_horizontal_line = QFrame()
         self.central_horizontal_line.setFrameShape(QFrame.HLine)
         self.central_horizontal_line.setFrameShadow(QFrame.Sunken)
-        self.central_horizontal_line.setStyleSheet("background-color: white")
         
         #create the central layout
         self.central_layout = QFrame()
-        self.central_layout.setStyleSheet("background-color: #434544")
+        self.central_layout.setObjectName("central_layout")
 
         #create de central layout content
         self.central_content_layout = QHBoxLayout(self.central_layout)
@@ -128,9 +115,7 @@ class Pid_Control(QMainWindow):
         
         # Output display
         self.output_label = QLabel("Output:")
-        self.output_label.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
         self.output_display = QLabel("0.0")
-        self.output_display.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
         output_layout = QHBoxLayout()
         output_layout.addWidget(self.output_label)
         output_layout.addWidget(self.output_display)
@@ -138,9 +123,7 @@ class Pid_Control(QMainWindow):
         
         # Error display
         self.error_label = QLabel("Error:")
-        self.error_label.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
         self.error_display = QLabel("0.0")
-        self.error_display.setStyleSheet("font: 100 15pt 'Helvetica'; color: white")
         error_layout = QHBoxLayout()
         error_layout.addWidget(self.error_label)
         error_layout.addWidget(self.error_display)
@@ -150,11 +133,9 @@ class Pid_Control(QMainWindow):
         self.bottom_horizontal_line = QFrame()
         self.bottom_horizontal_line.setFrameShape(QFrame.HLine)
         self.bottom_horizontal_line.setFrameShadow(QFrame.Sunken)
-        self.bottom_horizontal_line.setStyleSheet("background-color: white")
 
         #create bottom layout
         self.bottom_layout = QFrame()
-        self.bottom_layout.setStyleSheet("background-color: #434544")
 
         #create the bottom content layout
         self.bottom_content_layout = QHBoxLayout(self.bottom_layout)
@@ -162,13 +143,11 @@ class Pid_Control(QMainWindow):
         
         #ADD start Button
         self.start_button = QPushButton("Start")
-        self.start_button.setStyleSheet("background-color: green; color: white")
         self.start_button.setMinimumWidth(150)
         self.start_button.setMaximumWidth(150)
 
         #ADD Stop button
         self.stop_button = QPushButton("Stop")
-        self.stop_button.setStyleSheet("background-color: green; color: white")
         self.stop_button.setMinimumWidth(150)
         self.stop_button.setMaximumWidth(150)
 
@@ -177,7 +156,7 @@ class Pid_Control(QMainWindow):
         self.bottom_content_layout.addWidget(self.stop_button)
 
         #Add the content to main layout
-        self.main_layout.addWidget(self.content)
+        self.main_layout.addWidget(self.top_layout)
         self.main_layout.addWidget(self.central_horizontal_line)
         self.main_layout.addWidget(self.central_layout)
         self.main_layout.addWidget(self.bottom_horizontal_line)
@@ -185,14 +164,114 @@ class Pid_Control(QMainWindow):
 
         #Central widget
         self.setCentralWidget(self.central_frame)
+        
+    def open_controller_interface(self):
+        controller_type = self.controller_type_combo.currentText()
+        if controller_type == "P":
+           self.controller_window = PControllerWindow(self)
+        elif controller_type == "PI":
+            self.controller_window = PIControllerWindow(self)
+        elif controller_type == "PID":
+            self.controller_window = PIDControllerWindow(self)
+            
+        self.controller_window.exec()
+
+    def set_parameters(self, parameters):
+        self.parameters_label.setText(f"Parâmetros Configurados: {parameters}")
     
+class PControllerWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent = parent
+        self.initUI()
 
+    def initUI(self):
+        self.setWindowTitle('Configuração Controlador P')
+        layout = QFormLayout()
+
+        self.kp_input = QLineEdit()
+        layout.addRow("Kp:", self.kp_input)
+
+        create_button = QPushButton("Confirmar")
+        create_button.clicked.connect(self.create_p_controller)
+
+        layout.addWidget(create_button)
+        self.setLayout(layout)
+
+    def create_p_controller(self):
+        kp = float(self.kp_input.text())
+        parameters = f"Kp: {kp}"
+        self.parent.set_parameters(parameters)
+        self.accept()
+
+class PIControllerWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent = parent
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Configuração Controlador PI')
+        layout = QFormLayout()
+
+        self.kp_input = QLineEdit()
+        self.ki_input = QLineEdit()
+
+        layout.addRow("Kp:", self.kp_input)
+        layout.addRow("Ki:", self.ki_input)
+
+        create_button = QPushButton("Confirmar")
+        create_button.clicked.connect(self.create_pi_controller)
+
+        layout.addWidget(create_button)
+        self.setLayout(layout)
+
+    def create_pi_controller(self):
+        kp = float(self.kp_input.text())
+        ki = float(self.ki_input.text())
+        parameters = f"Kp: {kp}, Ki: {ki}"
+        self.parent.set_parameters(parameters)
+        self.accept()
+
+class PIDControllerWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent = parent
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Configuração Controlador PID')
+        layout = QFormLayout()
+
+        self.kp_input = QLineEdit()
+        self.ki_input = QLineEdit()
+        self.kd_input = QLineEdit()
+
+        layout.addRow("Kp:", self.kp_input)
+        layout.addRow("Ki:", self.ki_input)
+        layout.addRow("Kd:", self.kd_input)
+
+        create_button = QPushButton("Confirmar")
+        create_button.clicked.connect(self.create_pid_controller)
+
+        layout.addWidget(create_button)
+        self.setLayout(layout)
+
+    def create_pid_controller(self):
+        kp = float(self.kp_input.text())
+        ki = float(self.ki_input.text())
+        kd = float(self.kd_input.text())
+        parameters = f"Kp: {kp}, Ki: {ki}, Kd: {kd}"
+        self.parent.set_parameters(parameters)
+        self.accept()
+        
 def create_and_show_window():
-    app = QApplication(sys.argv)  # Criação da aplicação
-    window = Pid_Control()  # Criação da janela
-    window.show()  # Exibe a janela
-    sys.exit(app.exec())  # Execução do loop da aplicação
-
+    app = QApplication(sys.argv)  # Create Aplicacion
+    apply_stylesheet(app,"pydaq/style.qss") #Apply the css
+    window = Pid_Control()  # Create Windows
+    window.show()  # Show Windows
+    sys.exit(app.exec())  # Execute application loop 
+    
 def start_application():
     create_and_show_window()
 

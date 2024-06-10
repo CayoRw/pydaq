@@ -1,0 +1,36 @@
+QWidget {
+    font-size: 14px;
+    background-color: #434544;
+}
+QLabel {
+    font: 100 15pt 'Helvetica';
+    color: white;
+}
+QLineEdit {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #988782;
+}
+QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+}
+QPushButton:hover {
+    background-color: #45a049;
+}
+QComboBox {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #988782;
+}
+QDialog {
+    background-color: #434544;
+}
+QFrame#central_frame, QFrame#right_menu, QFrame#central_layout, QFrame#bottom_layout {
+    background-color: #434544;
+}
