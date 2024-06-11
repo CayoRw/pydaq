@@ -103,36 +103,7 @@ class Pid_Control(QMainWindow):
         self.content_top_layout.addWidget(self.left_menu)
         self.content_top_layout.addWidget(self.vertical_line)
         self.content_top_layout.addWidget(self.right_menu)
-
-        # create the central line separator
-        self.central_horizontal_line = QFrame()
-        self.central_horizontal_line.setFrameShape(QFrame.HLine)
-        self.central_horizontal_line.setFrameShadow(QFrame.Sunken)
-        
-        #create the central layout
-        self.central_layout = QFrame()
-        self.central_layout.setObjectName("central_layout")
-
-        #create de central layout content
-        self.central_content_layout = QHBoxLayout(self.central_layout)
-        self.central_content_layout.setContentsMargins(10, 0, 10, 0)
-        
-        # Output display
-        self.output_label = QLabel("Output:")
-        self.output_display = QLabel("0.0")
-        output_layout = QHBoxLayout()
-        output_layout.addWidget(self.output_label)
-        output_layout.addWidget(self.output_display)
-        self.central_content_layout.addLayout(output_layout)
-        
-        # Error display
-        self.error_label = QLabel("Error:")
-        self.error_display = QLabel("0.0")
-        error_layout = QHBoxLayout()
-        error_layout.addWidget(self.error_label)
-        error_layout.addWidget(self.error_display)
-        self.central_content_layout.addLayout(error_layout)
-
+       
         #create the bottom line separator
         self.bottom_horizontal_line = QFrame()
         self.bottom_horizontal_line.setFrameShape(QFrame.HLine)
@@ -151,19 +122,11 @@ class Pid_Control(QMainWindow):
         self.start_button.setMinimumWidth(150)
         self.start_button.setMaximumWidth(150)
 
-        #ADD Stop button
-        self.stop_button = QPushButton("Stop")
-        self.stop_button.setMinimumWidth(150)
-        self.stop_button.setMaximumWidth(150)
-
         #Add button to bottom layout
         self.bottom_content_layout.addWidget(self.start_button)
-        self.bottom_content_layout.addWidget(self.stop_button)
 
         #Add the content to main layout
         self.main_layout.addWidget(self.top_layout)
-        self.main_layout.addWidget(self.central_horizontal_line)
-        self.main_layout.addWidget(self.central_layout)
         self.main_layout.addWidget(self.bottom_horizontal_line)
         self.main_layout.addWidget(self.bottom_layout)
 
@@ -288,22 +251,30 @@ class MplCanvas(FigureCanvas):
 class GraphWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Gráficos Exponencial e Senoide')
+        self.setWindowTitle('Graphics')
+        self.setMinimumSize(800, 350)
 
-        # Criação dos canvases
+        #Criação dos canvases
         self.exponential_canvas = MplCanvas(self, width=5, height=4, dpi=100)
         self.sine_canvas = MplCanvas(self, width=5, height=4, dpi=100)
 
-        # Layouts
+        #ADD Stop button
+        self.stop_button = QPushButton("Stop")
+        self.stop_button.clicked.connect(self.stop_and_close)
+        self.stop_button.setMinimumWidth(150)
+        self.stop_button.setMaximumWidth(150)
+
+        #Layouts
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.exponential_canvas)
         main_layout.addWidget(self.sine_canvas)
+        main_layout.addWidget(self.stop_button)
 
         widget = QWidget()
         widget.setLayout(main_layout)
         self.setCentralWidget(widget)
 
-        # Dados para os gráficos
+        #Dados para os gráficos
         self.time_data = np.linspace(0, 100, 500)
         self.exponential_data = np.exp(self.time_data / 10)  # Exponencial
         self.sine_data = np.sin(self.time_data / 10)  # Senoide
@@ -328,6 +299,11 @@ class GraphWindow(QMainWindow):
         self.sine_canvas.axes.set_ylabel('Amplitude')
         self.sine_canvas.axes.legend()
         self.sine_canvas.draw()
+        
+    def stop_and_close(self):
+        self.close()
+        window = Pid_Control()  # Create Windows
+        window.show()  # Show Windows
         
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
