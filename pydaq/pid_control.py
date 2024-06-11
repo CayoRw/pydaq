@@ -1,17 +1,18 @@
 # pid_control.py
 import sys 
 import os 
-
+import numpy as np
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-    
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 #Load the style.qss    
 def apply_stylesheet(app, stylesheet_path):
     with open(stylesheet_path, "r") as f:
         stylesheet = f.read()
     app.setStyleSheet(stylesheet)
-    
 class Pid_Control(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -19,7 +20,7 @@ class Pid_Control(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-        self.setMinimumSize(700, 300)
+        self.setMinimumSize(800, 350)
         
         #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
@@ -81,14 +82,17 @@ class Pid_Control(QMainWindow):
         self.open_button.setMinimumWidth(150)
         self.open_button.setMaximumWidth(150)
         
-        # Label to show the select par  ameters
-        self.parameters_label = QLabel("Parâmetros Configurados: Nenhum")
+        # Label to show the select parameters
+        self.parameters_label = QLabel("Parameters Selected: None")
+        #Label to show the PID equation
+        self.label_equation = QLabel("PID Equation: u(t) = Kp * e(t) + Ki * ∫e(t) dt + Kd * de(t)/dt", self)
 
         #ADDING WIDGETS TO THE RIGHT LAYOUT
         self.right_content_layout.addWidget(self.setpoint_input, 0, 1, alignment=Qt.AlignLeft)
         self.right_content_layout.addWidget(self.controller_type_combo, 1, 1, alignment=Qt.AlignLeft)
         self.right_content_layout.addWidget(self.open_button, 2, 1, alignment=Qt.AlignLeft)
         self.right_content_layout.addWidget(self.parameters_label, 3, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.label_equation, 4, 1, alignment=Qt.AlignLeft)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
@@ -143,6 +147,7 @@ class Pid_Control(QMainWindow):
         
         #ADD start Button
         self.start_button = QPushButton("Start")
+        self.start_button.clicked.connect(self.show_graph_window)
         self.start_button.setMinimumWidth(150)
         self.start_button.setMaximumWidth(150)
 
@@ -176,8 +181,13 @@ class Pid_Control(QMainWindow):
             
         self.controller_window.exec()
 
-    def set_parameters(self, parameters):
-        self.parameters_label.setText(f"Parâmetros Configurados: {parameters}")
+    def set_parameters(self, parameters, equation):
+        self.parameters_label.setText(f"Parameters selected: {parameters}")
+        self.label_equation.setText(f"PID Equation: u(t):{equation}")
+        
+    def show_graph_window(self):
+        self.graph_window = GraphWindow()
+        self.graph_window.show()
     
 class PControllerWindow(QDialog):
     def __init__(self, parent=None):
@@ -186,13 +196,13 @@ class PControllerWindow(QDialog):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Configuração Controlador P')
+        self.setWindowTitle('P Controller Configuration ')
         layout = QFormLayout()
 
         self.kp_input = QLineEdit()
         layout.addRow("Kp:", self.kp_input)
 
-        create_button = QPushButton("Confirmar")
+        create_button = QPushButton("Confirm")
         create_button.clicked.connect(self.create_p_controller)
 
         layout.addWidget(create_button)
@@ -201,7 +211,8 @@ class PControllerWindow(QDialog):
     def create_p_controller(self):
         kp = float(self.kp_input.text())
         parameters = f"Kp: {kp}"
-        self.parent.set_parameters(parameters)
+        equation = f"{kp} * e(t)"
+        self.parent.set_parameters(parameters,equation)
         self.accept()
 
 class PIControllerWindow(QDialog):
@@ -211,7 +222,7 @@ class PIControllerWindow(QDialog):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Configuração Controlador PI')
+        self.setWindowTitle('PI Controller Configuration')
         layout = QFormLayout()
 
         self.kp_input = QLineEdit()
@@ -220,7 +231,7 @@ class PIControllerWindow(QDialog):
         layout.addRow("Kp:", self.kp_input)
         layout.addRow("Ki:", self.ki_input)
 
-        create_button = QPushButton("Confirmar")
+        create_button = QPushButton("Confirm")
         create_button.clicked.connect(self.create_pi_controller)
 
         layout.addWidget(create_button)
@@ -230,7 +241,8 @@ class PIControllerWindow(QDialog):
         kp = float(self.kp_input.text())
         ki = float(self.ki_input.text())
         parameters = f"Kp: {kp}, Ki: {ki}"
-        self.parent.set_parameters(parameters)
+        equation = f"{kp} * e(t) + {ki} * ∫e(t) dt"
+        self.parent.set_parameters(parameters,equation)
         self.accept()
 
 class PIDControllerWindow(QDialog):
@@ -240,7 +252,7 @@ class PIDControllerWindow(QDialog):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Configuração Controlador PID')
+        self.setWindowTitle('PID Controler Configuration')
         layout = QFormLayout()
 
         self.kp_input = QLineEdit()
@@ -251,7 +263,7 @@ class PIDControllerWindow(QDialog):
         layout.addRow("Ki:", self.ki_input)
         layout.addRow("Kd:", self.kd_input)
 
-        create_button = QPushButton("Confirmar")
+        create_button = QPushButton("Confirm")
         create_button.clicked.connect(self.create_pid_controller)
 
         layout.addWidget(create_button)
@@ -262,8 +274,60 @@ class PIDControllerWindow(QDialog):
         ki = float(self.ki_input.text())
         kd = float(self.kd_input.text())
         parameters = f"Kp: {kp}, Ki: {ki}, Kd: {kd}"
-        self.parent.set_parameters(parameters)
+        equation = f"{kp} * e(t) + {ki} * ∫e(t) dt + {kd} * de(t)/dt"
+        self.parent.set_parameters(parameters,equation)
         self.accept()
+        
+
+class MplCanvas(FigureCanvas):
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        super(MplCanvas, self).__init__(fig)
+        
+class GraphWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Gráficos Exponencial e Senoide')
+
+        # Criação dos canvases
+        self.exponential_canvas = MplCanvas(self, width=5, height=4, dpi=100)
+        self.sine_canvas = MplCanvas(self, width=5, height=4, dpi=100)
+
+        # Layouts
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.exponential_canvas)
+        main_layout.addWidget(self.sine_canvas)
+
+        widget = QWidget()
+        widget.setLayout(main_layout)
+        self.setCentralWidget(widget)
+
+        # Dados para os gráficos
+        self.time_data = np.linspace(0, 100, 500)
+        self.exponential_data = np.exp(self.time_data / 10)  # Exponencial
+        self.sine_data = np.sin(self.time_data / 10)  # Senoide
+
+        self.plot_graphs()
+
+    def plot_graphs(self):
+        # Plotar gráfico exponencial
+        self.exponential_canvas.axes.cla()
+        self.exponential_canvas.axes.plot(self.time_data, self.exponential_data, label='Exponencial')
+        self.exponential_canvas.axes.set_title('Gráfico Exponencial')
+        self.exponential_canvas.axes.set_xlabel('Tempo (s)')
+        self.exponential_canvas.axes.set_ylabel('Amplitude')
+        self.exponential_canvas.axes.legend()
+        self.exponential_canvas.draw()
+
+        # Plotar gráfico senoide
+        self.sine_canvas.axes.cla()
+        self.sine_canvas.axes.plot(self.time_data, self.sine_data, label='Senoide', color='orange')
+        self.sine_canvas.axes.set_title('Gráfico Senoide')
+        self.sine_canvas.axes.set_xlabel('Tempo (s)')
+        self.sine_canvas.axes.set_ylabel('Amplitude')
+        self.sine_canvas.axes.legend()
+        self.sine_canvas.draw()
         
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
@@ -277,3 +341,5 @@ def start_application():
 
 if __name__ == "__main__":
     start_application()
+    
+    
