@@ -13,6 +13,8 @@ def apply_stylesheet(app, stylesheet_path):
     with open(stylesheet_path, "r") as f:
         stylesheet = f.read()
     app.setStyleSheet(stylesheet)
+
+#Main window of pid control
 class Pid_Control(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -133,6 +135,7 @@ class Pid_Control(QMainWindow):
         #Central widget
         self.setCentralWidget(self.central_frame)
         
+    #Function that choose who interface open 
     def open_controller_interface(self):
         controller_type = self.controller_type_combo.currentText()
         if controller_type == "P":
@@ -144,34 +147,42 @@ class Pid_Control(QMainWindow):
             
         self.controller_window.exec()
 
+    #Change the labels of the main window
     def set_parameters(self, parameters, equation):
         self.parameters_label.setText(f"Parameters selected: {parameters}")
         self.label_equation.setText(f"PID Equation: u(t):{equation}")
-        
+    
+    #Function that show the graphic window
     def show_graph_window(self):
         self.graph_window = GraphWindow()
         self.graph_window.show()
     
-class PControllerWindow(QDialog):
+
+class PControllerWindow(QDialog):  #P controller Interface
     def __init__(self, parent=None):
+        #why they use parent? for what?
         super().__init__(parent)
         self.parent = parent
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('P Controller Configuration ')
-        layout = QFormLayout()
+        layout = QFormLayout() #Study the QformLayout
 
+        #create the label and the line edit
         self.kp_input = QLineEdit()
         layout.addRow("Kp:", self.kp_input)
 
+        #create the button and link the function
         create_button = QPushButton("Confirm")
         create_button.clicked.connect(self.create_p_controller)
-
+        
+        #add the button in the main layout
         layout.addWidget(create_button)
         self.setLayout(layout)
 
     def create_p_controller(self):
+        #Read the kp and set the label of the parameters and equation, and then, call the function
         kp = float(self.kp_input.text())
         parameters = f"Kp: {kp}"
         equation = f"{kp} * e(t)"
@@ -243,7 +254,7 @@ class PIDControllerWindow(QDialog):
         
 
 class MplCanvas(FigureCanvas):
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
+    def __init__(self, parent=Pid_Control, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
