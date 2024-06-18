@@ -22,15 +22,15 @@ class Pid_Control(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-        self.setMinimumSize(800, 350)
+        self.setMinimumSize(800, 250)
         
         #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
         
         #Layout principal
         self.main_layout = QVBoxLayout(self.central_frame)
-        self.main_layout.setContentsMargins(0,0,0,0) #Para retirar as bordas
-        self.main_layout.setSpacing(0) #Para retirar o espacamento central
+        self.main_layout.setContentsMargins(0,0,0,0) #To remove margins
+        self.main_layout.setSpacing(0) #To remove central spacing
 
         #CREATE TOP LAYOUT FRAME
         self.top_layout = QFrame()
@@ -150,7 +150,7 @@ class Pid_Control(QMainWindow):
     #Change the labels of the main window
     def set_parameters(self, parameters, equation):
         self.parameters_label.setText(f"Parameters selected: {parameters}")
-        self.label_equation.setText(f"PID Equation: u(t):{equation}")
+        self.label_equation.setText(f"PID Equation: u(t): {equation}")
     
     #Function that show the graphic window
     def show_graph_window(self):
@@ -160,14 +160,13 @@ class Pid_Control(QMainWindow):
 
 class PControllerWindow(QDialog):  #P controller Interface
     def __init__(self, parent=None):
-        #why they use parent? for what?
         super().__init__(parent)
         self.parent = parent
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('P Controller Configuration ')
-        layout = QFormLayout() #Study the QformLayout
+        layout = QFormLayout()
 
         #create the label and the line edit
         self.kp_input = QLineEdit()
@@ -251,10 +250,9 @@ class PIDControllerWindow(QDialog):
         equation = f"{kp} * e(t) + {ki} * ∫e(t) dt + {kd} * de(t)/dt"
         self.parent.set_parameters(parameters,equation)
         self.accept()
-        
-
+    
 class MplCanvas(FigureCanvas):
-    def __init__(self, parent=Pid_Control, width=5, height=4, dpi=100):
+    def __init__(self, parent=Pid_Control, width=4, height=3, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
@@ -263,29 +261,59 @@ class GraphWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Graphics')
-        self.setMinimumSize(800, 350)
+        self.setMinimumSize(1000, 300)
+        
+        #CREATE CENTRAL WIDGET (THE MAIN)
+        self.central_frame = QFrame()
+        
+        #main layout
+        self.main_layout = QVBoxLayout(self.central_frame)
+        self.main_layout.setContentsMargins(0,0,0,0) #to remove margins
+        self.main_layout.setSpacing(0) #to remove central spacing
 
-        #Criação dos canvases
-        self.exponential_canvas = MplCanvas(self, width=5, height=4, dpi=100)
-        self.sine_canvas = MplCanvas(self, width=5, height=4, dpi=100)
+        #Create the top layout
+        self.top_layout = QFrame()
+        self.top_layout_content = QHBoxLayout(self.top_layout)
+        
+        #Create the canvas
+        self.exponential_canvas = MplCanvas(self, width=3, height=4, dpi=80)
+        self.sine_canvas = MplCanvas(self, width=3, height=4, dpi=80)
 
+        #Add widget to top layouts
+        self.top_layout_content.addWidget(self.exponential_canvas)
+        self.top_layout_content.addWidget(self.sine_canvas)
+        
+        #create the bottom line separator
+        self.bottom_horizontal_line = QFrame()
+        self.bottom_horizontal_line.setFrameShape(QFrame.HLine)
+        self.bottom_horizontal_line.setFrameShadow(QFrame.Sunken)
+        
+        #create the bottom layout
+        self.bottom_layout = QFrame()
+        self.bottom_layout_content = QHBoxLayout(self.bottom_layout)
+        
         #ADD Stop button
         self.stop_button = QPushButton("Stop")
         self.stop_button.clicked.connect(self.stop_and_close)
         self.stop_button.setMinimumWidth(150)
         self.stop_button.setMaximumWidth(150)
+        
+        #ADD widget to bottom layout
+        self.bottom_layout_content.addWidget(self.stop_button)
 
-        #Layouts
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.exponential_canvas)
-        main_layout.addWidget(self.sine_canvas)
-        main_layout.addWidget(self.stop_button)
+        #ADD to main layout
+        self.main_layout.addWidget(self.top_layout)
+        self.main_layout.addWidget(self.bottom_layout)
+        
+        #Add the content to main layout
+        self.main_layout.addWidget(self.top_layout)
+        self.main_layout.addWidget(self.bottom_horizontal_line)
+        self.main_layout.addWidget(self.bottom_layout)
 
-        widget = QWidget()
-        widget.setLayout(main_layout)
-        self.setCentralWidget(widget)
+        #Central widget
+        self.setCentralWidget(self.central_frame)
 
-        #Dados para os gráficos
+        #Data to graphics
         self.time_data = np.linspace(0, 100, 500)
         self.exponential_data = np.exp(self.time_data / 10)  # Exponencial
         self.sine_data = np.sin(self.time_data / 10)  # Senoide
@@ -293,21 +321,21 @@ class GraphWindow(QMainWindow):
         self.plot_graphs()
 
     def plot_graphs(self):
-        # Plotar gráfico exponencial
+        #To Plot the exponencial graph
         self.exponential_canvas.axes.cla()
-        self.exponential_canvas.axes.plot(self.time_data, self.exponential_data, label='Exponencial')
-        self.exponential_canvas.axes.set_title('Gráfico Exponencial')
-        self.exponential_canvas.axes.set_xlabel('Tempo (s)')
-        self.exponential_canvas.axes.set_ylabel('Amplitude')
+        self.exponential_canvas.axes.plot(self.time_data, self.exponential_data, label='Exponential')
+        self.exponential_canvas.axes.set_title('Graphic Exponential')
+        self.exponential_canvas.axes.set_xlabel('Time (s)')
+        self.exponential_canvas.axes.set_ylabel('Voltage (V)')
         self.exponential_canvas.axes.legend()
         self.exponential_canvas.draw()
 
-        # Plotar gráfico senoide
+        #To plot te wave graph
         self.sine_canvas.axes.cla()
-        self.sine_canvas.axes.plot(self.time_data, self.sine_data, label='Senoide', color='orange')
-        self.sine_canvas.axes.set_title('Gráfico Senoide')
-        self.sine_canvas.axes.set_xlabel('Tempo (s)')
-        self.sine_canvas.axes.set_ylabel('Amplitude')
+        self.sine_canvas.axes.plot(self.time_data, self.sine_data, label='Sen', color='orange')
+        self.sine_canvas.axes.set_title('Wave Graph')
+        self.sine_canvas.axes.set_xlabel('Time (s)')
+        self.sine_canvas.axes.set_ylabel('Voltage (V)')
         self.sine_canvas.axes.legend()
         self.sine_canvas.draw()
         
@@ -328,5 +356,3 @@ def start_application():
 
 if __name__ == "__main__":
     start_application()
-    
-    
