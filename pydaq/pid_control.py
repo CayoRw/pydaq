@@ -47,21 +47,16 @@ class Pid_Control(QMainWindow):
         self.left_menu.setMinimumWidth(200)
         self.left_menu_content_layout = QGridLayout(self.left_menu)
         
-        #Label setpoint
-        self.label1 = QLabel("Setpoint:")
-        self.left_menu_content_layout.addWidget(self.label1, 0, 0, Qt.AlignLeft)
+        #Labels setpoint
+        self.label0 = QLabel("Setpoint:")
+        self.label1 = QLabel("Controller type:")
+        self.label2 = QLabel("Parameters:")
+        self.labelEmpty1 = QLabel(" ")
         
-        #Label controler type
-        self.label2 = QLabel("Controller type:")
-        self.left_menu_content_layout.addWidget(self.label2, 1, 0, Qt.AlignLeft)
-        
-        #Empty Label
-        self.label4 = QLabel(" ")
-        self.left_menu_content_layout.addWidget(self.label4, 2, 0, Qt.AlignLeft)
-        
-        #Empty Label
-        self.label5 = QLabel(" ")
-        self.left_menu_content_layout.addWidget(self.label5, 3, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label0, 0, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label1, 1, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label2, 2, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.labelEmpty1, 3, 0, Qt.AlignLeft)
 
         #RIGHT LAYOUT
         self.right_menu = QFrame()
@@ -70,31 +65,34 @@ class Pid_Control(QMainWindow):
         
         # WIDGETS OF THE RIGHT LAYOUT
         self.setpoint_input = QLineEdit()
-        self.setpoint_input.setMaximumSize(300,25)
         
         # Controller type       
         self.controller_type_combo = QComboBox()
-        self.controller_type_combo.addItems(["P", "PI", "PID"])
+        self.controller_type_combo.addItems(["P", "PI", "PD", "PID"])
+        self.controller_type_combo.currentIndexChanged.connect(self.on_type_combo_changed)
         self.controller_type_combo.setStyleSheet("background-color: #988782")
         self.controller_type_combo.setMaximumSize(100,25)
-        
-        #SELECT PARAMETERS BUTTON
-        self.open_button = QPushButton("Select Parameters")
-        self.open_button.clicked.connect(self.open_controller_interface)
-        self.open_button.setMinimumWidth(150)
-        self.open_button.setMaximumWidth(150)
-        
-        # Label to show the select parameters
-        self.parameters_label = QLabel("Parameters Selected: None")
-        #Label to show the PID equation
-        self.label_equation = QLabel("PID Equation: u(t) = Kp * e(t) + Ki * ∫e(t) dt + Kd * de(t)/dt", self)
 
+        # input of pid parameters
+        self.p_label = QLabel("Kp:")
+        self.p_input = QLineEdit()
+        self.i_label = QLabel("Ki:")
+        self.i_input = QLineEdit()
+        self.d_label = QLabel("Kd:")
+        self.d_input = QLineEdit()
+        self.create_button = QPushButton("Confirm")
+        self.create_button.released.connect(self.show_pid_equation)
+        
         #ADDING WIDGETS TO THE RIGHT LAYOUT
         self.right_content_layout.addWidget(self.setpoint_input, 0, 1, alignment=Qt.AlignLeft)
         self.right_content_layout.addWidget(self.controller_type_combo, 1, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.open_button, 2, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.parameters_label, 3, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.label_equation, 4, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.p_label, 2, 1, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.p_input, 2, 2, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.i_label, 2, 3, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.i_input, 2, 4, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.d_label, 2, 5, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.d_input, 2, 6, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.create_button, 3, 1, 1, 6, alignment=Qt.AlignLeft)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
@@ -105,6 +103,10 @@ class Pid_Control(QMainWindow):
         self.content_top_layout.addWidget(self.left_menu)
         self.content_top_layout.addWidget(self.vertical_line)
         self.content_top_layout.addWidget(self.right_menu)
+        
+        #create the central QFrame
+        self.central_layout = QFrame(self)
+        self.central_content_layout = QHBoxLayout(self.central_layout)
        
         #create the bottom line separator
         self.bottom_horizontal_line = QFrame()
@@ -129,128 +131,82 @@ class Pid_Control(QMainWindow):
 
         #Add the content to main layout
         self.main_layout.addWidget(self.top_layout)
+        self.main_layout.addWidget(self.central_layout)
         self.main_layout.addWidget(self.bottom_horizontal_line)
         self.main_layout.addWidget(self.bottom_layout)
 
         #Central widget
         self.setCentralWidget(self.central_frame)
-        
-    #Function that choose who interface open 
-    def open_controller_interface(self):
-        controller_type = self.controller_type_combo.currentText()
-        if controller_type == "P":
-           self.controller_window = PControllerWindow(self)
-        elif controller_type == "PI":
-            self.controller_window = PIControllerWindow(self)
-        elif controller_type == "PID":
-            self.controller_window = PIDControllerWindow(self)
-            
-        self.controller_window.exec()
 
-    #Change the labels of the main window
-    def set_parameters(self, parameters, equation):
-        self.parameters_label.setText(f"Parameters selected: {parameters}")
-        self.label_equation.setText(f"PID Equation: u(t): {equation}")
+        self.on_type_combo_changed(0)
+        
+    def on_type_combo_changed(self, index):
+        # Habilita ou desabilita os line edits baseado no tipo de controle selecionado
+        if index == 0:  # P
+            self.enable_pid_parameters(True, False, False)
+        elif index == 1:  # PI
+            self.enable_pid_parameters(True, True, False)
+        elif index == 2:  # PD
+            self.enable_pid_parameters(True, False, True)
+        elif index == 3:  # PID
+            self.enable_pid_parameters(True, True, True)
+    
+    def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
+        # Define o estado de habilitação dos line edits
+        self.p_input.setEnabled(kp_enabled)
+        self.i_input.setEnabled(ki_enabled)
+        self.d_input.setEnabled(kd_enabled)
     
     #Function that show the graphic window
     def show_graph_window(self):
         self.graph_window = GraphWindow()
         self.graph_window.show()
-    
-
-class PControllerWindow(QDialog):  #P controller Interface
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent = parent
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle('P Controller Configuration ')
-        layout = QFormLayout()
-
-        #create the label and the line edit
-        self.kp_input = QLineEdit()
-        layout.addRow("Kp:", self.kp_input)
-
-        #create the button and link the function
-        create_button = QPushButton("Confirm")
-        create_button.clicked.connect(self.create_p_controller)
         
-        #add the button in the main layout
-        layout.addWidget(create_button)
-        self.setLayout(layout)
+    def show_pid_equation(self):
+        #condição para apenas ler os inputs habilitados e aplicar o None em inputs que não são habilitados
+        if self.p_input.isEnabled():
+            kp_text = self.p_input.text()
+            kp = float(kp_text) if kp_text else None
+        else:
+            kp = None
 
-    def create_p_controller(self):
-        #Read the kp and set the label of the parameters and equation, and then, call the function
-        kp = float(self.kp_input.text())
-        parameters = f"Kp: {kp}"
-        equation = f"{kp} * e(t)"
-        self.parent.set_parameters(parameters,equation)
-        self.accept()
+        if self.i_input.isEnabled():
+            ki_text = self.i_input.text()
+            ki = float(ki_text) if ki_text else None
+        else:
+            ki = None
 
-class PIControllerWindow(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent = parent
-        self.initUI()
+        if self.d_input.isEnabled():
+            kd_text = self.d_input.text()
+            kd = float(kd_text) if kd_text else None
+        else:
+            kd = None
+        equation_parts = []
+        
+        
+        if kp is not None:
+            equation_parts.append(rf"{kp} \cdot e(t)")
+        if ki is not None:
+            equation_parts.append(rf"{ki} \int_{{0}}^{{t}} e(\tau) \, d\tau")
+        if kd is not None:
+            equation_parts.append(rf"{kd} \frac{{d}}{{dt}} e(t)")
+        if not equation_parts:
+            return
+        latex = "u(t) = " + " + ".join(equation_parts)
+        
+        fig = Figure(figsize=(9, 3), facecolor='#434544')
+        ax = fig.add_subplot(111, facecolor='#434544')
+        ax.text(0.5, 0.5, f"${latex}$", fontsize=15, ha='center', va='center', color='white')
+        ax.axis('off')
+        canvas = FigureCanvas(fig)
 
-    def initUI(self):
-        self.setWindowTitle('PI Controller Configuration')
-        layout = QFormLayout()
+        for i in reversed(range(self.central_content_layout.count())):
+            widget_to_remove = self.central_content_layout.itemAt(i).widget()
+            self.central_content_layout.removeWidget(widget_to_remove)
+            widget_to_remove.setParent(None)
 
-        self.kp_input = QLineEdit()
-        self.ki_input = QLineEdit()
-
-        layout.addRow("Kp:", self.kp_input)
-        layout.addRow("Ki:", self.ki_input)
-
-        create_button = QPushButton("Confirm")
-        create_button.clicked.connect(self.create_pi_controller)
-
-        layout.addWidget(create_button)
-        self.setLayout(layout)
-
-    def create_pi_controller(self):
-        kp = float(self.kp_input.text())
-        ki = float(self.ki_input.text())
-        parameters = f"Kp: {kp}, Ki: {ki}"
-        equation = f"{kp} * e(t) + {ki} * ∫e(t) dt"
-        self.parent.set_parameters(parameters,equation)
-        self.accept()
-
-class PIDControllerWindow(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent = parent
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle('PID Controler Configuration')
-        layout = QFormLayout()
-
-        self.kp_input = QLineEdit()
-        self.ki_input = QLineEdit()
-        self.kd_input = QLineEdit()
-
-        layout.addRow("Kp:", self.kp_input)
-        layout.addRow("Ki:", self.ki_input)
-        layout.addRow("Kd:", self.kd_input)
-
-        create_button = QPushButton("Confirm")
-        create_button.clicked.connect(self.create_pid_controller)
-
-        layout.addWidget(create_button)
-        self.setLayout(layout)
-
-    def create_pid_controller(self):
-        kp = float(self.kp_input.text())
-        ki = float(self.ki_input.text())
-        kd = float(self.kd_input.text())
-        parameters = f"Kp: {kp}, Ki: {ki}, Kd: {kd}"
-        equation = f"{kp} * e(t) + {ki} * ∫e(t) dt + {kd} * de(t)/dt"
-        self.parent.set_parameters(parameters,equation)
-        self.accept()
-    
+        self.central_content_layout.addWidget(canvas)
+       
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=Pid_Control, width=4, height=3, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -313,37 +269,37 @@ class GraphWindow(QMainWindow):
         #Central widget
         self.setCentralWidget(self.central_frame)
 
-        #Data to graphics
+        #Data of graphics
         self.time_data = np.linspace(0, 100, 500)
-        self.exponential_data = np.exp(self.time_data / 10)  # Exponencial
-        self.sine_data = np.sin(self.time_data / 10)  # Senoide
+        self.output_data = 1 - np.exp(-self.time_data / 10)  # Output
+        self.error_data = np.sin(self.time_data / 10)  # Error
 
         self.plot_graphs()
 
     def plot_graphs(self):
-        #To Plot the exponencial graph
+        #To Plot the output graph
         self.exponential_canvas.axes.cla()
-        self.exponential_canvas.axes.plot(self.time_data, self.exponential_data, label='Exponential')
-        self.exponential_canvas.axes.set_title('Graphic Exponential')
+        self.exponential_canvas.axes.plot(self.time_data, self.output_data, label='Exponential')
+        self.exponential_canvas.axes.set_title('Output Graph')
         self.exponential_canvas.axes.set_xlabel('Time (s)')
         self.exponential_canvas.axes.set_ylabel('Voltage (V)')
         self.exponential_canvas.axes.legend()
         self.exponential_canvas.draw()
 
-        #To plot te wave graph
+        #To plot the error graph
         self.sine_canvas.axes.cla()
-        self.sine_canvas.axes.plot(self.time_data, self.sine_data, label='Sen', color='orange')
-        self.sine_canvas.axes.set_title('Wave Graph')
+        self.sine_canvas.axes.plot(self.time_data, self.error_data, label='Sen', color='orange')
+        self.sine_canvas.axes.set_title('Error Graph')
         self.sine_canvas.axes.set_xlabel('Time (s)')
         self.sine_canvas.axes.set_ylabel('Voltage (V)')
         self.sine_canvas.axes.legend()
         self.sine_canvas.draw()
-        
+
     def stop_and_close(self):
         self.close()
         window = Pid_Control()  # Create Windows
         window.show()  # Show Windows
-        
+
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
     apply_stylesheet(app,"pydaq/style.qss") #Apply the css
