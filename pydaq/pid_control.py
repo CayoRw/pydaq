@@ -49,14 +49,20 @@ class Pid_Control(QMainWindow):
         
         #Labels setpoint
         self.label0 = QLabel("Setpoint:")
-        self.label1 = QLabel("Controller type:")
-        self.label2 = QLabel("Parameters:")
+        self.label_unit = QLabel("Unit:")
+        self.label_unit.hide()
+        self.label_equation = QLabel("Equation (a,b):")
+        self.label_equation.hide()
+        self.label3 = QLabel("Controller type:")
+        self.label4 = QLabel("Parameters:")
         self.labelEmpty1 = QLabel(" ")
         
         self.left_menu_content_layout.addWidget(self.label0, 0, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label1, 1, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label2, 2, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.labelEmpty1, 3, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_unit, 1, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_equation, 2, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label3, 3, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label4, 4, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.labelEmpty1, 5, 0, Qt.AlignLeft)
 
         #RIGHT LAYOUT
         self.right_menu = QFrame()
@@ -65,14 +71,20 @@ class Pid_Control(QMainWindow):
         
         # WIDGETS OF THE RIGHT LAYOUT
         self.setpoint_input = QLineEdit()
-        
-        # Controller type       
+        self.unit_combo = QComboBox()
+        self.unit_combo.addItems(['Voltage (V)','Temperature (°C)', 'Speed (m/s)', 'Pressure (Pa)', 'Rotation (rad/s)', 'Other'])    
+        self.unit_combo.currentIndexChanged.connect(self.on_unit_change)
+        self.unit_input = QLineEdit()
+        self.unit_input.hide()
+        self.equationa_input = QLineEdit()
+        self.equationa_input.hide()
+        self.equationb_input = QLineEdit()
+        self.equationb_input.hide()
         self.controller_type_combo = QComboBox()
         self.controller_type_combo.addItems(["P", "PI", "PD", "PID"])
         self.controller_type_combo.currentIndexChanged.connect(self.on_type_combo_changed)
         self.controller_type_combo.setStyleSheet("background-color: #988782")
         self.controller_type_combo.setMaximumSize(100,25)
-
         # input of pid parameters
         self.p_label = QLabel("Kp:")
         self.p_input = QLineEdit()
@@ -80,31 +92,36 @@ class Pid_Control(QMainWindow):
         self.i_input = QLineEdit()
         self.d_label = QLabel("Kd:")
         self.d_input = QLineEdit()
+        self.on_type_combo_changed(0)
         self.create_button = QPushButton("Confirm")
         self.create_button.released.connect(self.show_pid_equation)
         
         #ADDING WIDGETS TO THE RIGHT LAYOUT
-        self.right_content_layout.addWidget(self.setpoint_input, 0, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.controller_type_combo, 1, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.p_label, 2, 1, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.p_input, 2, 2, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.i_label, 2, 3, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.i_input, 2, 4, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.d_label, 2, 5, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.d_input, 2, 6, alignment=Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.create_button, 3, 1, 1, 6, alignment=Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.setpoint_input, 0, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.unit_combo, 0, 2, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.unit_input, 1, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.equationa_input, 2, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.equationb_input, 2, 2, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.controller_type_combo, 3, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.p_label, 4, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.p_input, 4, 2, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.i_label, 4, 3, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.i_input, 4, 4, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.d_label, 4, 5, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.d_input, 4, 6, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.create_button, 5, 1,  Qt.AlignLeft)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
         self.vertical_line.setFrameShape(QFrame.VLine)
         self.vertical_line.setFrameShadow(QFrame.Sunken)
 
-        #ADD the content to layout
+        #ADD the content to the top layout
         self.content_top_layout.addWidget(self.left_menu)
         self.content_top_layout.addWidget(self.vertical_line)
         self.content_top_layout.addWidget(self.right_menu)
         
-        #create the central QFrame
+        #create the central QFrame to be changed for the equation
         self.central_layout = QFrame(self)
         self.central_content_layout = QHBoxLayout(self.central_layout)
        
@@ -119,7 +136,6 @@ class Pid_Control(QMainWindow):
         #create the bottom content layout
         self.bottom_content_layout = QHBoxLayout(self.bottom_layout)
         self.bottom_content_layout.setContentsMargins(10,0,10,0)
-        
         #ADD start Button
         self.start_button = QPushButton("Start")
         self.start_button.clicked.connect(self.show_graph_window)
@@ -137,9 +153,29 @@ class Pid_Control(QMainWindow):
 
         #Central widget
         self.setCentralWidget(self.central_frame)
+    
+    def on_unit_change(self):
+        selected_unit = self.unit_combo.currentText()
+        if selected_unit == 'Other':
+            self.unit_input.show()
+            self.label_unit.show()
+            self.label_equation.show()
+            self.equationa_input.show()
+            self.equationb_input.show()
+        elif selected_unit == 'Voltage (V)':
+            self.unit_input.hide()
+            self.label_unit.hide()
+            self.label_equation.hide()
+            self.equationa_input.hide()
+            self.equationb_input.hide()
+        else:
+            self.unit_input.hide()
+            self.label_unit.hide()
+            self.label_equation.show()
+            self.equationa_input.show()
+            self.equationb_input.show()
 
-        self.on_type_combo_changed(0)
-        
+    
     def on_type_combo_changed(self, index):
         # Habilita ou desabilita os line edits baseado no tipo de controle selecionado
         if index == 0:  # P
@@ -306,7 +342,7 @@ def create_and_show_window():
     window = Pid_Control()  # Create Windows
     window.show()  # Show Windows
     sys.exit(app.exec())  # Execute application loop 
-    
+
 def start_application():
     create_and_show_window()
 
