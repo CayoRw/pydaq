@@ -5,6 +5,8 @@ import numpy as np
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -26,7 +28,6 @@ class Pid_Control(QMainWindow):
         
         #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
-        
         #Layout principal
         self.main_layout = QVBoxLayout(self.central_frame)
         self.main_layout.setContentsMargins(0,0,0,0) #To remove margins
@@ -34,8 +35,6 @@ class Pid_Control(QMainWindow):
 
         #CREATE TOP LAYOUT FRAME
         self.top_layout = QFrame()
-
-        #CONTENT LAYOUT
         self.content_top_layout = QHBoxLayout(self.top_layout)
         self.content_top_layout.setContentsMargins(0,0,0,0)
         self.content_top_layout.setSpacing(0)
@@ -46,7 +45,7 @@ class Pid_Control(QMainWindow):
         self.left_menu.setMaximumWidth(200)
         self.left_menu.setMinimumWidth(200)
         self.left_menu_content_layout = QGridLayout(self.left_menu)
-        
+
         #Labels setpoint
         self.label0 = QLabel("Setpoint:")
         self.label_unit = QLabel("Unit:")
@@ -56,7 +55,8 @@ class Pid_Control(QMainWindow):
         self.label3 = QLabel("Controller type:")
         self.label4 = QLabel("Parameters:")
         self.labelEmpty1 = QLabel(" ")
-        
+
+        #Adding widgets to left menu layout
         self.left_menu_content_layout.addWidget(self.label0, 0, 0, Qt.AlignLeft)
         self.left_menu_content_layout.addWidget(self.label_unit, 1, 0, Qt.AlignLeft)
         self.left_menu_content_layout.addWidget(self.label_equation, 2, 0, Qt.AlignLeft)
@@ -70,7 +70,7 @@ class Pid_Control(QMainWindow):
         self.right_content_layout = QGridLayout(self.right_menu)
         
         # WIDGETS OF THE RIGHT LAYOUT
-        self.setpoint_input = QLineEdit()
+        self.setpoint_input = QLineEdit("5")
         self.unit_combo = QComboBox()
         self.unit_combo.addItems(['Voltage (V)','Temperature (°C)', 'Speed (m/s)', 'Pressure (Pa)', 'Rotation (rad/s)', 'Other'])    
         self.unit_combo.currentIndexChanged.connect(self.on_unit_change)
@@ -87,11 +87,11 @@ class Pid_Control(QMainWindow):
         self.controller_type_combo.setMaximumSize(100,25)
         # input of pid parameters
         self.p_label = QLabel("Kp:")
-        self.p_input = QLineEdit()
+        self.p_input = QLineEdit("1")
         self.i_label = QLabel("Ki:")
-        self.i_input = QLineEdit()
+        self.i_input = QLineEdit("0.2")
         self.d_label = QLabel("Kd:")
-        self.d_input = QLineEdit()
+        self.d_input = QLineEdit("0.05")
         self.on_type_combo_changed(0)
         self.create_button = QPushButton("Confirm")
         self.create_button.released.connect(self.show_pid_equation)
@@ -116,7 +116,7 @@ class Pid_Control(QMainWindow):
         self.vertical_line.setFrameShape(QFrame.VLine)
         self.vertical_line.setFrameShadow(QFrame.Sunken)
 
-        #ADD the content to the top layout
+        #ADD all the content to the top layout
         self.content_top_layout.addWidget(self.left_menu)
         self.content_top_layout.addWidget(self.vertical_line)
         self.content_top_layout.addWidget(self.right_menu)
@@ -132,7 +132,6 @@ class Pid_Control(QMainWindow):
 
         #create bottom layout
         self.bottom_layout = QFrame()
-
         #create the bottom content layout
         self.bottom_content_layout = QHBoxLayout(self.bottom_layout)
         self.bottom_content_layout.setContentsMargins(10,0,10,0)
@@ -154,6 +153,7 @@ class Pid_Control(QMainWindow):
         #Central widget
         self.setCentralWidget(self.central_frame)
     
+    #Condiction to show the labels when necessary
     def on_unit_change(self):
         selected_unit = self.unit_combo.currentText()
         if selected_unit == 'Other':
@@ -175,43 +175,36 @@ class Pid_Control(QMainWindow):
             self.equationa_input.show()
             self.equationb_input.show()
 
-    
+    #call the 'enable pid parameters' and set the 'enable or disable' setup
     def on_type_combo_changed(self, index):
-        # Habilita ou desabilita os line edits baseado no tipo de controle selecionado
-        if index == 0:  # P
+        if index == 0:  
             self.enable_pid_parameters(True, False, False)
-        elif index == 1:  # PI
+        elif index == 1:  
             self.enable_pid_parameters(True, True, False)
-        elif index == 2:  # PD
+        elif index == 2: 
             self.enable_pid_parameters(True, False, True)
-        elif index == 3:  # PID
+        elif index == 3:  
             self.enable_pid_parameters(True, True, True)
-    
+
+    #Enable the pid parameters inputs 
     def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
-        # Define o estado de habilitação dos line edits
         self.p_input.setEnabled(kp_enabled)
         self.i_input.setEnabled(ki_enabled)
         self.d_input.setEnabled(kd_enabled)
-    
-    #Function that show the graphic window
-    def show_graph_window(self):
-        self.graph_window = GraphWindow()
-        self.graph_window.show()
         
+    #Method who create a image and show the pid equation
     def show_pid_equation(self):
-        #condição para apenas ler os inputs habilitados e aplicar o None em inputs que não são habilitados
+        #Condiction who read only the inputs enable and set 'None' at desable inputs
         if self.p_input.isEnabled():
             kp_text = self.p_input.text()
             kp = float(kp_text) if kp_text else None
         else:
             kp = None
-
         if self.i_input.isEnabled():
             ki_text = self.i_input.text()
             ki = float(ki_text) if ki_text else None
         else:
             ki = None
-
         if self.d_input.isEnabled():
             kd_text = self.d_input.text()
             kd = float(kd_text) if kd_text else None
@@ -219,7 +212,7 @@ class Pid_Control(QMainWindow):
             kd = None
         equation_parts = []
         
-        
+        #Create a pid equation based on parameters readed
         if kp is not None:
             equation_parts.append(rf"{kp} \cdot e(t)")
         if ki is not None:
@@ -228,113 +221,134 @@ class Pid_Control(QMainWindow):
             equation_parts.append(rf"{kd} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
+        #Equation on latex
         latex = "u(t) = " + " + ".join(equation_parts)
         
+        #Figure created showing the equation, without axes
         fig = Figure(figsize=(9, 3), facecolor='#434544')
         ax = fig.add_subplot(111, facecolor='#434544')
         ax.text(0.5, 0.5, f"${latex}$", fontsize=15, ha='center', va='center', color='white')
         ax.axis('off')
         canvas = FigureCanvas(fig)
 
+        #Remove the widgets from central content layout in reverse and reset the widget from parents too        
         for i in reversed(range(self.central_content_layout.count())):
             widget_to_remove = self.central_content_layout.itemAt(i).widget()
             self.central_content_layout.removeWidget(widget_to_remove)
             widget_to_remove.setParent(None)
 
         self.central_content_layout.addWidget(canvas)
-       
-class MplCanvas(FigureCanvas):
-    def __init__(self, parent=Pid_Control, width=4, height=3, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-        super(MplCanvas, self).__init__(fig)
+    
+    #Method who call the graph window
+    def show_graph_window(self):
+        kp_text = self.p_input.text()
+        ki_text = self.i_input.text()
+        kd_text = self.d_input.text()
+        setpoint_text = self.setpoint_input.text()
         
-class GraphWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle('Graphics')
-        self.setMinimumSize(1000, 300)
+        try:
+            kp = float(kp_text) if kp_text else 0.0
+            ki = float(ki_text) if ki_text else 0.0
+            kd = float(kd_text) if kd_text else 0.0
+            setpoint = float(setpoint_text) if setpoint_text else 0.0
+
+            plot_window = PlotWindow()
+            plot_window.start_control(setpoint, kp, ki, kd)
+            plot_window.exec_()  
+            
+        except ValueError:
+            print("Please enter valid numbers for Kp, Ki, and Kd.")
+class PID:
+    def __init__(self, Kp, Ki, Kd, setpoint=0):
+        self.Kp = Kp
+        self.Ki = Ki
+        self.Kd = Kd
+        self.setpoint = setpoint
+        self.integral = 0
+        self.previous_error = 0
+
+    def update(self, feedback_value):
+        error = self.setpoint - feedback_value
+        self.integral += error
+        derivative = error - self.previous_error
+        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        self.previous_error = error
+        return output, error
+
+class PlotWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("PID Control Plot")
+        self.setGeometry(200, 200, 1000, 600)
+
+        self.layout = QVBoxLayout()
+        self.figure = plt.figure()
+
+        self.ax1 = self.figure.add_subplot(121)  # Gráfico de saída e setpoint
+        self.ax2 = self.figure.add_subplot(122)  # Gráfico de erro
+
+        self.canvas = FigureCanvas(self.figure)
+        self.layout.addWidget(self.canvas)
+        self.setLayout(self.layout)
+
+        self.system_value = 0
+        self.setpoints = []
+        self.system_values = []
+        self.errors = []
+        self.pid = None
+
+    def start_control(self, setpoint, Kp, Ki, Kd):
+        try:
+            setpoint = float(setpoint)
+            Kp = float(Kp)
+            Ki = float(Ki)
+            Kd = float(Kd)
+
+            self.pid = PID(Kp, Ki, Kd, setpoint)
+            self.setpoints = []
+            self.system_values = []
+            self.errors = []
+
+            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True)
+            self.ax1.set_xlim(0, 100)
+            self.ax1.set_ylim(0, 10)
+            self.ax1.set_xlabel('Time (s)')
+            self.ax1.set_ylabel('Voltage (V)')
+            self.ax1.legend(['System Output', 'Setpoint'])
+
+            self.ax2.set_xlim(0, 100)
+            self.ax2.set_ylim(-2, 2)
+            self.ax2.set_xlabel('Time (s)')
+            self.ax2.set_ylabel('Error')
+            self.ax2.legend(['Error'])
+
+            plt.suptitle('PID Control')
+
+            self.canvas.draw()
+        except ValueError:
+            print("Please enter valid numbers for setpoint and PID parameters.")
+
+    def init_plot(self):
+        self.line1, = self.ax1.plot([], [], label='System Output')
+        self.line2, = self.ax1.plot([], [], label='Setpoint')
+        self.line3, = self.ax2.plot([], [], label='Error')
+        return self.line1, self.line2, self.line3
+
+    def update_plot(self, frame):
+        if self.pid is None:
+            return self.line1, self.line2, self.line3
+
+        control, error = self.pid.update(self.system_value)
+        self.system_value += control * 0.1  # Simplificação do sistema
+        self.setpoints.append(self.pid.setpoint)
+        self.system_values.append(self.system_value)
+        self.errors.append(error)
+
+        self.line1.set_data(range(len(self.system_values)), self.system_values)
+        self.line2.set_data(range(len(self.setpoints)), self.setpoints)
+        self.line3.set_data(range(len(self.errors)), self.errors)
         
-        #CREATE CENTRAL WIDGET (THE MAIN)
-        self.central_frame = QFrame()
-        
-        #main layout
-        self.main_layout = QVBoxLayout(self.central_frame)
-        self.main_layout.setContentsMargins(0,0,0,0) #to remove margins
-        self.main_layout.setSpacing(0) #to remove central spacing
-
-        #Create the top layout
-        self.top_layout = QFrame()
-        self.top_layout_content = QHBoxLayout(self.top_layout)
-        
-        #Create the canvas
-        self.exponential_canvas = MplCanvas(self, width=3, height=4, dpi=80)
-        self.sine_canvas = MplCanvas(self, width=3, height=4, dpi=80)
-
-        #Add widget to top layouts
-        self.top_layout_content.addWidget(self.exponential_canvas)
-        self.top_layout_content.addWidget(self.sine_canvas)
-        
-        #create the bottom line separator
-        self.bottom_horizontal_line = QFrame()
-        self.bottom_horizontal_line.setFrameShape(QFrame.HLine)
-        self.bottom_horizontal_line.setFrameShadow(QFrame.Sunken)
-        
-        #create the bottom layout
-        self.bottom_layout = QFrame()
-        self.bottom_layout_content = QHBoxLayout(self.bottom_layout)
-        
-        #ADD Stop button
-        self.stop_button = QPushButton("Stop")
-        self.stop_button.clicked.connect(self.stop_and_close)
-        self.stop_button.setMinimumWidth(150)
-        self.stop_button.setMaximumWidth(150)
-        
-        #ADD widget to bottom layout
-        self.bottom_layout_content.addWidget(self.stop_button)
-
-        #ADD to main layout
-        self.main_layout.addWidget(self.top_layout)
-        self.main_layout.addWidget(self.bottom_layout)
-        
-        #Add the content to main layout
-        self.main_layout.addWidget(self.top_layout)
-        self.main_layout.addWidget(self.bottom_horizontal_line)
-        self.main_layout.addWidget(self.bottom_layout)
-
-        #Central widget
-        self.setCentralWidget(self.central_frame)
-
-        #Data of graphics
-        self.time_data = np.linspace(0, 100, 500)
-        self.output_data = 1 - np.exp(-self.time_data / 10)  # Output
-        self.error_data = np.sin(self.time_data / 10)  # Error
-
-        self.plot_graphs()
-
-    def plot_graphs(self):
-        #To Plot the output graph
-        self.exponential_canvas.axes.cla()
-        self.exponential_canvas.axes.plot(self.time_data, self.output_data, label='Exponential')
-        self.exponential_canvas.axes.set_title('Output Graph')
-        self.exponential_canvas.axes.set_xlabel('Time (s)')
-        self.exponential_canvas.axes.set_ylabel('Voltage (V)')
-        self.exponential_canvas.axes.legend()
-        self.exponential_canvas.draw()
-
-        #To plot the error graph
-        self.sine_canvas.axes.cla()
-        self.sine_canvas.axes.plot(self.time_data, self.error_data, label='Sen', color='orange')
-        self.sine_canvas.axes.set_title('Error Graph')
-        self.sine_canvas.axes.set_xlabel('Time (s)')
-        self.sine_canvas.axes.set_ylabel('Voltage (V)')
-        self.sine_canvas.axes.legend()
-        self.sine_canvas.draw()
-
-    def stop_and_close(self):
-        self.close()
-        window = Pid_Control()  # Create Windows
-        window.show()  # Show Windows
+        return self.line1, self.line2, self.line3
 
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
