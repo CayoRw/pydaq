@@ -20,7 +20,7 @@ def apply_stylesheet(app, stylesheet_path):
 class Pid_Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Controle PID")
+        self.setWindowTitle("PID Control Interface")
         self.setup_ui()
 
     def setup_ui(self):
@@ -282,10 +282,23 @@ class PlotWindow(QDialog):
         self.setGeometry(200, 200, 1000, 600)
 
         self.layout = QVBoxLayout()
-        self.figure = plt.figure()
+        self.figure = plt.figure(facecolor='#434544')
+        
+        # Create a sublayout for setpoint control
+        self.control_layout = QHBoxLayout()
+        self.label0 = QLabel("Setpoint:")
+        self.setpoint_input = QLineEdit()
+        self.setpoint_input.setText("5")
+        self.update_button = QPushButton("Update Setpoint")
+        self.update_button.clicked.connect(self.update_setpoint)
+        self.control_layout.addWidget(self.label0)
+        self.control_layout.addWidget(self.setpoint_input)
+        self.control_layout.addWidget(self.update_button)
+        
+        self.layout.addLayout(self.control_layout)
 
-        self.ax1 = self.figure.add_subplot(121)  # Gráfico de saída e setpoint
-        self.ax2 = self.figure.add_subplot(122)  # Gráfico de erro
+        self.ax1 = self.figure.add_subplot(121, facecolor='#434544')  # Gráfico de saída e setpoint
+        self.ax2 = self.figure.add_subplot(122, facecolor='#434544')  # Gráfico de erro
 
         self.canvas = FigureCanvas(self.figure)
         self.layout.addWidget(self.canvas)
@@ -297,6 +310,14 @@ class PlotWindow(QDialog):
         self.errors = []
         self.pid = None
 
+    def update_setpoint(self):
+        try:
+            new_setpoint = float(self.setpoint_input.text())
+            if self.pid:
+                self.pid.setpoint = new_setpoint
+        except ValueError:
+            pass  # Ignore invalid input
+    
     def start_control(self, setpoint, Kp, Ki, Kd):
         try:
             setpoint = float(setpoint)
@@ -309,15 +330,11 @@ class PlotWindow(QDialog):
             self.system_values = []
             self.errors = []
 
-            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True)
-            self.ax1.set_xlim(0, 100)
-            self.ax1.set_ylim(0, 10)
+            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=100)
             self.ax1.set_xlabel('Time (s)')
             self.ax1.set_ylabel('Voltage (V)')
             self.ax1.legend(['System Output', 'Setpoint'])
 
-            self.ax2.set_xlim(0, 100)
-            self.ax2.set_ylim(-2, 2)
             self.ax2.set_xlabel('Time (s)')
             self.ax2.set_ylabel('Error')
             self.ax2.legend(['Error'])
@@ -326,12 +343,17 @@ class PlotWindow(QDialog):
 
             self.canvas.draw()
         except ValueError:
-            print("Please enter valid numbers for setpoint and PID parameters.")
+            print("Error")  
 
     def init_plot(self):
+        
         self.line1, = self.ax1.plot([], [], label='System Output')
         self.line2, = self.ax1.plot([], [], label='Setpoint')
         self.line3, = self.ax2.plot([], [], label='Error')
+        self.ax1.set_xlim(0, 100)
+        self.ax1.set_ylim(-10, 10)
+        self.ax2.set_xlim(0, 100)
+        self.ax2.set_ylim(-10, 10)
         return self.line1, self.line2, self.line3
 
     def update_plot(self, frame):
@@ -339,7 +361,7 @@ class PlotWindow(QDialog):
             return self.line1, self.line2, self.line3
 
         control, error = self.pid.update(self.system_value)
-        self.system_value += control * 0.1  # Simplificação do sistema
+        self.system_value += control * 0.1
         self.setpoints.append(self.pid.setpoint)
         self.system_values.append(self.system_value)
         self.errors.append(error)
@@ -347,6 +369,14 @@ class PlotWindow(QDialog):
         self.line1.set_data(range(len(self.system_values)), self.system_values)
         self.line2.set_data(range(len(self.setpoints)), self.setpoints)
         self.line3.set_data(range(len(self.errors)), self.errors)
+
+        # Atualizar os limites dos eixos dinamicamente
+        self.ax1.set_xlim(0, max(100, len(self.system_values)))
+        self.ax1.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
+        self.ax2.set_xlim(0, max(100, len(self.errors)))
+        self.ax2.set_ylim(min(self.errors) - 1, max(self.errors) + 1)
+
+        self.canvas.draw()
         
         return self.line1, self.line2, self.line3
 
