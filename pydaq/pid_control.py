@@ -87,11 +87,11 @@ class Pid_Control(QMainWindow):
         self.controller_type_combo.setMaximumSize(100,25)
         # input of pid parameters
         self.p_label = QLabel("Kp:")
-        self.p_input = QLineEdit("1")
+        self.p_input = QLineEdit()
         self.i_label = QLabel("Ki:")
-        self.i_input = QLineEdit("0.2")
+        self.i_input = QLineEdit()
         self.d_label = QLabel("Kd:")
-        self.d_input = QLineEdit("0.05")
+        self.d_input = QLineEdit()
         self.on_type_combo_changed(0)
         self.create_button = QPushButton("Confirm")
         self.create_button.released.connect(self.show_pid_equation)
@@ -280,30 +280,51 @@ class PlotWindow(QDialog):
         super().__init__(parent)
         self.setWindowTitle("PID Control Plot")
         self.setGeometry(200, 200, 1000, 600)
+        self.paused = False
 
-        self.layout = QVBoxLayout()
-        self.figure = plt.figure(facecolor='#434544')
+        self.central_layout = QVBoxLayout(self)
         
+        #create a top_layout frame
+        self.top_layout = QFrame ()
+        self.top_layout_content = QHBoxLayout(self.top_layout)
         # Create a sublayout for setpoint control
-        self.control_layout = QHBoxLayout()
         self.label0 = QLabel("Setpoint:")
         self.setpoint_input = QLineEdit()
         self.setpoint_input.setText("5")
         self.update_button = QPushButton("Update Setpoint")
         self.update_button.clicked.connect(self.update_setpoint)
-        self.control_layout.addWidget(self.label0)
-        self.control_layout.addWidget(self.setpoint_input)
-        self.control_layout.addWidget(self.update_button)
-        
-        self.layout.addLayout(self.control_layout)
+        #Add widgets to top layout
+        self.top_layout_content.addWidget(self.label0)
+        self.top_layout_content.addWidget(self.setpoint_input)
+        self.top_layout_content.addWidget(self.update_button)
 
-        self.ax1 = self.figure.add_subplot(121, facecolor='#434544')  # Gráfico de saída e setpoint
-        self.ax2 = self.figure.add_subplot(122, facecolor='#434544')  # Gráfico de erro
-
+        #create a mid_layout frame for the images
+        self.mid_layout = QFrame()
+        self.mid_layout_content = QHBoxLayout(self.mid_layout)
+        self.figure = plt.figure(facecolor='#434544')
+        self.ax1 = self.figure.add_subplot(121, facecolor='#434544')  # Output graph
+        self.ax2 = self.figure.add_subplot(122, facecolor='#434544')  # Error graph
         self.canvas = FigureCanvas(self.figure)
-        self.layout.addWidget(self.canvas)
-        self.setLayout(self.layout)
-
+        #Add widget to layout
+        self.mid_layout_content.addWidget(self.canvas)
+        
+        #create a bottom layout
+        self.botton_layout = QFrame()
+        self.bottom_layout_content = QHBoxLayout(self.botton_layout)
+        #botton layout content
+        self.stopstart_button = QPushButton("Stop / Start")
+        self.stopstart_button.clicked.connect(self.stopstart)
+        self.back_button = QPushButton("Back")
+        self.back_button.clicked.connect(self.go_back)
+        #add widget
+        self.bottom_layout_content.addWidget(self.stopstart_button)
+        self.bottom_layout_content.addWidget(self.back_button)
+        
+        self.central_layout.addWidget(self.top_layout)
+        self.central_layout.addWidget(self.mid_layout)
+        self.central_layout.addWidget(self.botton_layout)
+        
+        #variable for control
         self.system_value = 0
         self.setpoints = []
         self.system_values = []
@@ -375,11 +396,21 @@ class PlotWindow(QDialog):
         self.ax1.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
         self.ax2.set_xlim(0, max(100, len(self.errors)))
         self.ax2.set_ylim(min(self.errors) - 1, max(self.errors) + 1)
-
         self.canvas.draw()
-        
         return self.line1, self.line2, self.line3
+    
+    def stopstart (self):
+        self.paused = not self.paused
+        if self.paused:
+            self.ani.event_source.stop()
+            self.stopstart_button.setText("Start")
+        else:
+            self.ani.event_source.start()
+            self.stopstart_button.setText("Stop")
 
+    def go_back(self):
+        self.close()
+        
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
     apply_stylesheet(app,"pydaq/style.qss") #Apply the css
