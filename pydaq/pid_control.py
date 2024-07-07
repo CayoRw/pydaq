@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import serial
+import serial.tools.list_ports
 
 #Load the style.qss    
 def apply_stylesheet(app, stylesheet_path):
@@ -24,7 +26,7 @@ class Pid_Control(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-        self.setMinimumSize(800, 250)
+        self.setMinimumSize(300, 450)
         
         #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
@@ -47,22 +49,28 @@ class Pid_Control(QMainWindow):
         self.left_menu_content_layout = QGridLayout(self.left_menu)
 
         #Labels setpoint
+        self.label_device = QLabel("Choose your device:")
         self.label0 = QLabel("Setpoint:")
         self.label_unit = QLabel("Unit:")
         self.label_unit.hide()
         self.label_equation = QLabel("Equation (a,b):")
         self.label_equation.hide()
-        self.label3 = QLabel("Controller type:")
-        self.label4 = QLabel("Parameters:")
+        self.label4 = QLabel("Controller type:")
+        self.p_label = QLabel("Kp:")
+        self.i_label = QLabel("Ki:")
+        self.d_label = QLabel("Kd:")
         self.labelEmpty1 = QLabel(" ")
 
         #Adding widgets to left menu layout
-        self.left_menu_content_layout.addWidget(self.label0, 0, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label_unit, 1, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label_equation, 2, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label3, 3, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_device, 0, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label0, 1, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_unit, 2, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_equation, 3, 0, Qt.AlignLeft)
         self.left_menu_content_layout.addWidget(self.label4, 4, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.labelEmpty1, 5, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.p_label, 5, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.i_label, 6, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.d_label, 7, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.labelEmpty1, 8, 0, Qt.AlignLeft)
 
         #RIGHT LAYOUT
         self.right_menu = QFrame()
@@ -70,6 +78,10 @@ class Pid_Control(QMainWindow):
         self.right_content_layout = QGridLayout(self.right_menu)
         
         # WIDGETS OF THE RIGHT LAYOUT
+        self.device_combo = QComboBox()
+        self.locate_arduino()
+        self.button_reload = QPushButton()
+        self.button_reload.clicked.connect(self.locate_arduino)
         self.setpoint_input = QLineEdit("5")
         self.unit_combo = QComboBox()
         self.unit_combo.addItems(['Voltage (V)','Temperature (°C)', 'Speed (m/s)', 'Pressure (Pa)', 'Rotation (rad/s)', 'Other'])    
@@ -83,33 +95,28 @@ class Pid_Control(QMainWindow):
         self.controller_type_combo = QComboBox()
         self.controller_type_combo.addItems(["P", "PI", "PD", "PID"])
         self.controller_type_combo.currentIndexChanged.connect(self.on_type_combo_changed)
-        self.controller_type_combo.setStyleSheet("background-color: #988782")
-        self.controller_type_combo.setMaximumSize(100,25)
         # input of pid parameters
-        self.p_label = QLabel("Kp:")
+        self.labelEmpty2 = QLabel(" ")
         self.p_input = QLineEdit()
-        self.i_label = QLabel("Ki:")
         self.i_input = QLineEdit()
-        self.d_label = QLabel("Kd:")
         self.d_input = QLineEdit()
         self.on_type_combo_changed(0)
         self.create_button = QPushButton("Confirm")
         self.create_button.released.connect(self.show_pid_equation)
         
         #ADDING WIDGETS TO THE RIGHT LAYOUT
-        self.right_content_layout.addWidget(self.setpoint_input, 0, 1, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.unit_combo, 0, 2, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.unit_input, 1, 1, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.equationa_input, 2, 1, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.equationb_input, 2, 2, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.controller_type_combo, 3, 1, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.p_label, 4, 1, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.p_input, 4, 2, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.i_label, 4, 3, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.i_input, 4, 4, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.d_label, 4, 5, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.d_input, 4, 6, Qt.AlignLeft)
-        self.right_content_layout.addWidget(self.create_button, 5, 1,  Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.device_combo, 0, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.button_reload, 0, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.setpoint_input, 1, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.unit_combo, 1, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.unit_input, 2, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.equationa_input, 3, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.equationb_input, 3, 1, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.controller_type_combo, 4, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.p_input, 5, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.i_input, 6, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.d_input, 7, 0, Qt.AlignLeft)
+        self.right_content_layout.addWidget(self.create_button, 8, 0,  Qt.AlignLeft)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
@@ -153,6 +160,20 @@ class Pid_Control(QMainWindow):
         #Central widget
         self.setCentralWidget(self.central_frame)
     
+    #get arduino device
+    def locate_arduino(self):  # function that locate arduino 
+        current_selection = self.device_combo.currentText()
+        self.device_combo.clear()
+        ports = serial.tools.list_ports.comports()
+
+        for port in ports:
+            self.device_combo.addItem(f"{port.device} - {port.description}")
+        
+        if current_selection:
+            index = self.device_combo.findText(current_selection)
+            if index != -1:
+                self.device_combo.setCurrentIndex(index)
+    
     #Condiction to show the labels when necessary
     def on_unit_change(self):
         selected_unit = self.unit_combo.currentText()
@@ -191,7 +212,7 @@ class Pid_Control(QMainWindow):
         self.p_input.setEnabled(kp_enabled)
         self.i_input.setEnabled(ki_enabled)
         self.d_input.setEnabled(kd_enabled)
-        
+
     #Method who create a image and show the pid equation
     def show_pid_equation(self):
         #Condiction who read only the inputs enable and set 'None' at desable inputs
