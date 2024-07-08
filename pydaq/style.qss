@@ -1,22 +1,22 @@
 QWidget {
-    font-size: 14px;
+    font-size: 15px;
     background-color: #434544;
 }
 QLabel {
-    font: 100 15pt 'Helvetica';
+    font: 100 12pt 'Helvetica';
     color: white;
 }
 QLineEdit, QComboBox, QPushButton {
     padding: 2px;
     border: 0.5px solid #ccc;
-    border-radius: 1.5px;
+    border-radius: 4px;
 }
 
 QLineEdit {
     background-color: #988782;
 }
 QLineEdit:disabled {
-    background-color: #656565; /* Altere para a cor desejada quando estiver desabilitado */
+    background-color: #656565; 
 }
 QPushButton {
     background-color: #4CAF50;
@@ -31,8 +31,8 @@ QPushButton:hover {
 }
 
 QComboBox {
-    padding: 5px;
-    border: 1px solid #ccc;
+    padding: 2px;
+    border: 0.5px solid #ccc;
     border-radius: 4px;
     background-color: #988782;
 }
