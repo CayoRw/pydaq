@@ -6,6 +6,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 import matplotlib.pyplot as plt
+from qt_material import apply_stylesheet
 import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -27,7 +28,7 @@ class Pid_Control(QMainWindow):
 
     def setup_ui(self):
         self.setMinimumSize(500, 650)
-        self.setMaximumSize(700, 950)
+        self.setMaximumSize(700, 850)
         
         #CREATE CENTRAL WIDGET (THE MAIN)
         self.central_frame = QFrame()
@@ -96,16 +97,19 @@ class Pid_Control(QMainWindow):
         self.right_menu_line8_layout = QHBoxLayout(self.right_menu_line8)
         self.right_menu_line9 = QFrame()
         self.right_menu_line9_layout = QHBoxLayout(self.right_menu_line9)
-        
+
         # WIDGETS OF THE RIGHT LAYOUT
         self.device_combo = QComboBox()
+        self.device_combo.setMinimumWidth(205)
         self.locate_arduino()
         self.button_reload = QPushButton()
         self.button_reload.clicked.connect(self.locate_arduino)
+        icon = QIcon("pydaq/imgs/reload.png")
+        self.button_reload.setIcon(icon)
         self.setpoint_input = QLineEdit("5")
         self.setpoint_input.setFixedWidth(50)
         self.unit_combo = QComboBox()
-        self.unit_combo.addItems(['Voltage (V)','Temperature (°C)', 'Speed (m/s)', 'Pressure (Pa)', 'Rotation (rad/s)', 'Other'])    
+        self.unit_combo.addItems(['Voltage (V)','Temperature (°C)', 'Speed (m/s)', 'Pressure (Pa)', 'Rotation (rad/s)', 'Other'])
         self.unit_combo.currentIndexChanged.connect(self.on_unit_change)
         self.unit_combo.setFixedWidth(150)
         self.unit_input = QLineEdit()
