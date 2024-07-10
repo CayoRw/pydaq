@@ -3,13 +3,12 @@ QWidget {
     background-color: #434544;
 }
 QLabel {
-    font: 100 12pt 'Helvetica';
+    font: 140 12pt 'Helvetica';
     color: white;
 }
 QLineEdit, QComboBox, QPushButton {
-    padding: 2px;
     border: 0.5px solid #ccc;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 QLineEdit {
@@ -25,6 +24,13 @@ QPushButton {
     border: none;
     border-radius: 4px;
 }
+QPushButton#reload_devices{
+    qproperty-icon: url(imgs/reload.png);
+    qproperty-iconSize: 24px 24px;
+    width: 11px;
+
+    font: 12pt \"Helvetica\;
+}
 
 QPushButton:hover {
     background-color: #45a049;
@@ -36,7 +42,6 @@ QComboBox {
     border-radius: 4px;
     background-color: #988782;
 }
-
 QDialog {
     background-color: #434544;
 }
