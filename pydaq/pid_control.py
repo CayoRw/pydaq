@@ -2,11 +2,12 @@
 import sys 
 import os 
 import numpy as np
+import time
+from sympy import symbols, sympify, lambdify, solve
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 import matplotlib.pyplot as plt
-from qt_material import apply_stylesheet
 import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -15,9 +16,16 @@ import serial.tools.list_ports
 
 #Load the style.qss    
 def apply_stylesheet(app, stylesheet_path):
-    with open(stylesheet_path, "r") as f:
-        stylesheet = f.read()
-    app.setStyleSheet(stylesheet)
+    print(f"Attempting to apply stylesheet from: {stylesheet_path}")
+    try:
+        with open(stylesheet_path, "r") as f:
+            stylesheet = f.read()
+        app.setStyleSheet(stylesheet)
+        print("Stylesheet applied successfully.")
+    except FileNotFoundError:
+        print(f"Error: The file '{stylesheet_path}' was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 #Main window of pid control
 class Pid_Control(QMainWindow):
@@ -55,8 +63,9 @@ class Pid_Control(QMainWindow):
         self.label0 = QLabel("Setpoint:")
         self.label_unit = QLabel("Unit:")
         self.label_unit.hide()
-        self.label_equation = QLabel("Equation (a,b):")
+        self.label_equation = QLabel("Equation (x^2+1*x):")
         self.label_equation.hide()
+        self.label_frequence = QLabel("Sampling frequency")
         self.label4 = QLabel("Controller type:")
         self.p_label = QLabel("Kp:")
         self.i_label = QLabel("Ki:")
@@ -68,11 +77,12 @@ class Pid_Control(QMainWindow):
         self.left_menu_content_layout.addWidget(self.label0, 1, 0, Qt.AlignLeft)
         self.left_menu_content_layout.addWidget(self.label_unit, 2, 0, Qt.AlignLeft)
         self.left_menu_content_layout.addWidget(self.label_equation, 3, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.label4, 4, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.p_label, 5, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.i_label, 6, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.d_label, 7, 0, Qt.AlignLeft)
-        self.left_menu_content_layout.addWidget(self.labelEmpty1, 8, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label_frequence, 4, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.label4, 5, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.p_label, 6, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.i_label, 7, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.d_label, 8, 0, Qt.AlignLeft)
+        self.left_menu_content_layout.addWidget(self.labelEmpty1, 9, 0, Qt.AlignLeft)
 
         #RIGHT LAYOUT
         self.right_menu = QFrame()
@@ -97,6 +107,8 @@ class Pid_Control(QMainWindow):
         self.right_menu_line8_layout = QHBoxLayout(self.right_menu_line8)
         self.right_menu_line9 = QFrame()
         self.right_menu_line9_layout = QHBoxLayout(self.right_menu_line9)
+        self.right_menu_line10 = QFrame()
+        self.right_menu_line10_layout = QHBoxLayout(self.right_menu_line10)
 
         # WIDGETS OF THE RIGHT LAYOUT
         self.device_combo = QComboBox()
@@ -104,7 +116,7 @@ class Pid_Control(QMainWindow):
         self.locate_arduino()
         self.button_reload = QPushButton()
         self.button_reload.clicked.connect(self.locate_arduino)
-        icon = QIcon("pydaq/imgs/reload.png")
+        icon = QIcon("pydaq/pydaq/imgs/reload.png")
         self.button_reload.setIcon(icon)
         self.setpoint_input = QLineEdit("5")
         self.setpoint_input.setFixedWidth(50)
@@ -114,11 +126,11 @@ class Pid_Control(QMainWindow):
         self.unit_combo.setFixedWidth(150)
         self.unit_input = QLineEdit()
         self.unit_input.setFixedWidth(205)
-        self.equationa_input = QLineEdit()
-        self.equationa_input.setFixedWidth(100)
-        self.equationb_input = QLineEdit()
-        self.equationb_input.setFixedWidth(100)
+        self.equation_input = QLineEdit()
+        self.equation_input.setMinimumWidth(205)
         self.line_spacer = QSpacerItem(20,20,QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.frequence_input = QLineEdit()
+        self.frequence_input.setFixedWidth(50)
         self.controller_type_combo = QComboBox()
         self.controller_type_combo.addItems(["P", "PI", "PD", "PID"])
         self.controller_type_combo.setFixedWidth(60)
@@ -144,15 +156,15 @@ class Pid_Control(QMainWindow):
         self.right_menu_line2_layout.addItem(self.line_spacer)
         self.right_menu_line3_layout.addWidget(self.unit_input, alignment= Qt.AlignLeft)
         self.right_menu_line3.hide()
-        self.right_menu_line4_layout.addWidget(self.equationa_input)
-        self.right_menu_line4_layout.addWidget(self.equationb_input)
+        self.right_menu_line4_layout.addWidget(self.equation_input)
         self.right_menu_line4_layout.addItem(self.line_spacer)
         self.right_menu_line4.hide()
-        self.right_menu_line5_layout.addWidget(self.controller_type_combo, alignment= Qt.AlignLeft)
-        self.right_menu_line6_layout.addWidget(self.p_input, alignment= Qt.AlignLeft)
-        self.right_menu_line7_layout.addWidget(self.i_input, alignment= Qt.AlignLeft)
-        self.right_menu_line8_layout.addWidget(self.d_input, alignment= Qt.AlignLeft)
-        self.right_menu_line9_layout.addWidget(self.create_button, alignment= Qt.AlignLeft)
+        self.right_menu_line5_layout.addWidget(self.frequence_input, alignment= Qt.AlignLeft)
+        self.right_menu_line6_layout.addWidget(self.controller_type_combo, alignment= Qt.AlignLeft)
+        self.right_menu_line7_layout.addWidget(self.p_input, alignment= Qt.AlignLeft)
+        self.right_menu_line8_layout.addWidget(self.i_input, alignment= Qt.AlignLeft)
+        self.right_menu_line9_layout.addWidget(self.d_input, alignment= Qt.AlignLeft)
+        self.right_menu_line10_layout.addWidget(self.create_button, alignment= Qt.AlignLeft)
 
         self.right_menu_layout.addWidget(self.right_menu_line1)
         self.right_menu_layout.addWidget(self.right_menu_line2)
@@ -163,6 +175,7 @@ class Pid_Control(QMainWindow):
         self.right_menu_layout.addWidget(self.right_menu_line7)
         self.right_menu_layout.addWidget(self.right_menu_line8)
         self.right_menu_layout.addWidget(self.right_menu_line9)
+        self.right_menu_layout.addWidget(self.right_menu_line10)
 
         # create a vertical line as separator between left and right side
         self.vertical_line = QFrame()
@@ -278,13 +291,17 @@ class Pid_Control(QMainWindow):
         
         #Create a pid equation based on parameters readed
         if kp is not None:
-            equation_parts.append(rf"{kp} \cdot e(t)")
+            kp_display = f"{kp:.2f}"
+            equation_parts.append(rf"{kp_display} \cdot e(t)")
         if ki is not None:
-            equation_parts.append(rf"{ki} \int_{{0}}^{{t}} e(\tau) \, d\tau")
+            ki_display = f"{ki:.2f}"
+            equation_parts.append(rf"{ki_display} \int_{{0}}^{{t}} e(\tau) \, d\tau")
         if kd is not None:
-            equation_parts.append(rf"{kd} \frac{{d}}{{dt}} e(t)")
+            kd_display = f"{kd:.2f}"
+            equation_parts.append(rf"{kd_display} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
+        
         #Equation on latex
         latex = "u(t) = " + " + ".join(equation_parts)
         
@@ -302,12 +319,18 @@ class Pid_Control(QMainWindow):
             widget_to_remove.setParent(None)
 
         self.central_content_layout.addWidget(canvas)
+
+    def get_selected_unit(self):
+        return self.unit_combo.currentText()
+    def get_calibration_equation(self):
+        return self.equation_input.text()
     
     #Method who call the graph window
     def show_graph_window(self):
         kp_text = self.p_input.text()
         ki_text = self.i_input.text()
         kd_text = self.d_input.text()
+        frequency_text = self.frequence_input.text()
         setpoint_text = self.setpoint_input.text()
         
         try:
@@ -315,24 +338,59 @@ class Pid_Control(QMainWindow):
             ki = float(ki_text) if ki_text else 0.0
             kd = float(kd_text) if kd_text else 0.0
             setpoint = float(setpoint_text) if setpoint_text else 0.0
-
-            plot_window = PlotWindow()
-            plot_window.start_control(setpoint, kp, ki, kd)
-            plot_window.exec_()  
+            frequency = float(frequency_text) if frequency_text else 1.0  # Default to 1 Hz if empty
+            unit = self.unit_input.text() if self.unit_combo.currentText() == 'Other' else self.unit_combo.currentText()
+            calibration_equation = self.get_calibration_equation()
+            plot_window = PlotWindow(unit, calibration_equation)
+            plot_window.start_control(kp, ki, kd, setpoint, calibration_equation, unit, frequency)
+            plot_window.exec()
             
         except ValueError:
             print("Please enter valid numbers for Kp, Ki, and Kd.")
 class PID:
-    def __init__(self, Kp, Ki, Kd, setpoint=0):
+    def __init__(self, Kp, Ki, Kd, setpoint=0, calibration_equation=None, unit='Voltage (V)'):
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
         self.setpoint = setpoint
+        self.unit = unit
+        self.calibration_equation = calibration_equation
         self.integral = 0
         self.previous_error = 0
 
+        if self.calibration_equation:
+            try:
+                self.calibration_func = lambdify(symbols('x'), sympify(self.calibration_equation.replace("^", "**")), 'numpy')
+                self.inverse_calibration_func = lambdify(symbols('y'), solve(sympify(self.calibration_equation.replace("^", "**")) - symbols('y'), symbols('x'))[0], 'numpy')
+            except Exception as e:
+                print(f"Error initializing calibration equation: {e}")
+                self.calibration_func = lambda x: x  # Função identidade se não houver equação válida
+                self.inverse_calibration_func = lambda y: y  # Função identidade se não houver equação válida
+        else:
+            self.calibration_func = lambda x: x  # Função identidade se não houver equação
+            self.inverse_calibration_func = lambda y: y  # Função identidade se não houver equação
+
+    def apply_calibration(self, value):
+        if self.unit == 'Voltage (V)':
+            return value
+        try:
+            return self.calibration_func(value)
+        except Exception as e:
+            print(f"Error applying calibration: {e}")
+            return value  # Retorna o valor original em caso de erro
+
+    def apply_inverse_calibration(self, value):
+        if self.unit == 'Voltage (V)':
+            return value
+        try:
+            return self.inverse_calibration_func(value)
+        except Exception as e:
+            print(f"Error applying inverse calibration: {e}")
+            return value  # Retorna o valor original em caso de erro
+        
     def update(self, feedback_value):
-        error = self.setpoint - feedback_value
+        setpoint_adjusted = self.apply_calibration(self.setpoint)
+        error = setpoint_adjusted - feedback_value
         self.integral += error
         derivative = error - self.previous_error
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
@@ -340,12 +398,14 @@ class PID:
         return output, error
 
 class PlotWindow(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, unit, calibration_equation, parent=None):
         super().__init__(parent)
+        self.unit = unit
+        self.calibration_equation = calibration_equation
         self.setWindowTitle("PID Control Plot")
         self.setGeometry(200, 200, 1000, 600)
         self.paused = False
-
+        self.start_time = time.time()
         self.central_layout = QVBoxLayout(self)
         
         #create a top_layout frame
@@ -371,7 +431,7 @@ class PlotWindow(QDialog):
         self.canvas = FigureCanvas(self.figure)
         #Add widget to layout
         self.mid_layout_content.addWidget(self.canvas)
-        
+
         #create a bottom layout
         self.botton_layout = QFrame()
         self.bottom_layout_content = QHBoxLayout(self.botton_layout)
@@ -383,11 +443,11 @@ class PlotWindow(QDialog):
         #add widget
         self.bottom_layout_content.addWidget(self.stopstart_button)
         self.bottom_layout_content.addWidget(self.back_button)
-        
+
         self.central_layout.addWidget(self.top_layout)
         self.central_layout.addWidget(self.mid_layout)
         self.central_layout.addWidget(self.botton_layout)
-        
+
         #variable for control
         self.system_value = 0
         self.setpoints = []
@@ -400,24 +460,28 @@ class PlotWindow(QDialog):
             new_setpoint = float(self.setpoint_input.text())
             if self.pid:
                 self.pid.setpoint = new_setpoint
+                self.setpoints.extend([new_setpoint] * (len(self.system_values) - len(self.setpoints)))
         except ValueError:
             pass  # Ignore invalid input
-    
-    def start_control(self, setpoint, Kp, Ki, Kd):
+
+    def start_control(self,  Kp, Ki, Kd, setpoint, calibration_equation, unit, frequency):
         try:
             setpoint = float(setpoint)
             Kp = float(Kp)
             Ki = float(Ki)
             Kd = float(Kd)
-
-            self.pid = PID(Kp, Ki, Kd, setpoint)
+            self.unit = unit
+            self.pid = PID(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
             self.setpoints = []
             self.system_values = []
             self.errors = []
 
-            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=100)
+            self.period = 1/float(frequency)
+            self.time_elapsed = 0.0
+
+            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=1000*self.period)
             self.ax1.set_xlabel('Time (s)')
-            self.ax1.set_ylabel('Voltage (V)')
+            self.ax1.set_ylabel(self.unit)
             self.ax1.legend(['System Output', 'Setpoint'])
 
             self.ax2.set_xlabel('Time (s)')
@@ -431,10 +495,14 @@ class PlotWindow(QDialog):
             print("Error")  
 
     def init_plot(self):
-        
-        self.line1, = self.ax1.plot([], [], label='System Output')
-        self.line2, = self.ax1.plot([], [], label='Setpoint')
-        self.line3, = self.ax2.plot([], [], label='Error')
+        self.line1_color = '#FFFFFF'  # Branco
+        self.line2_color = '#FFFF00'  # Amarelo Claro
+        self.line3_color = 'red'  
+
+        self.line1, = self.ax1.plot([], [], 'o', color=self.line1_color, label='System Output')  # Usar 'o' para pontos
+        self.line2, = self.ax1.plot([], [], '-', color=self.line2_color, label='Setpoint')  # Usar '- para linhas
+        self.line3, = self.ax2.plot([], [], 'o', color=self.line3_color, label='Error')  # Usar 'o' para pontos
+
         self.ax1.set_xlim(0, 100)
         self.ax1.set_ylim(-10, 10)
         self.ax2.set_xlim(0, 100)
@@ -446,23 +514,55 @@ class PlotWindow(QDialog):
             return self.line1, self.line2, self.line3
 
         control, error = self.pid.update(self.system_value)
-        self.system_value += control * 0.1
-        self.setpoints.append(self.pid.setpoint)
-        self.system_values.append(self.system_value)
-        self.errors.append(error)
+        self.control_adjusted = self.pid.apply_inverse_calibration(control)
+        self.error_adjusted = self.pid.apply_inverse_calibration(error)
 
-        self.line1.set_data(range(len(self.system_values)), self.system_values)
-        self.line2.set_data(range(len(self.setpoints)), self.setpoints)
-        self.line3.set_data(range(len(self.errors)), self.errors)
+        #_____________________________________________________________________________________________#
+        #Para simular uma dinamica de atuador lento, apenas 10% do valor de saída do controle
+        damping_factor = 0.1  # Valor entre 0 e 1 que representa o fator de amortecimento
+        self.system_value += (self.control_adjusted * damping_factor)
+
+        self.system_values.append(self.system_value)
+        self.errors.append(self.error_adjusted)
+
+        if len(self.setpoints) < len(self.system_values):
+            self.setpoints.extend([self.pid.setpoint] * (len(self.system_values) - len(self.setpoints)))
+
+        # Atualizar o tempo 
+        self.time_elapsed += self.period
+        self.ax1.set_xlim(0, self.time_elapsed)
+        self.ax2.set_xlim(0, self.time_elapsed)
+
+        self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
+        self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
+        self.line3.set_data(np.arange(len(self.errors)) * self.period, self.errors)
 
         # Atualizar os limites dos eixos dinamicamente
-        self.ax1.set_xlim(0, max(100, len(self.system_values)))
         self.ax1.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
-        self.ax2.set_xlim(0, max(100, len(self.errors)))
         self.ax2.set_ylim(min(self.errors) - 1, max(self.errors) + 1)
+
         self.canvas.draw()
         return self.line1, self.line2, self.line3
+        
+    def apply_inverse_calibration(self, value):
+        if self.unit == 'Voltage (V)':
+            return value
+        try:
+            return self.inverse_calibration_func(value)
+        except Exception as e:
+            print(f"Error applying inverse calibration: {e}")
+            return value  # Retorna o valor original em caso de erro
     
+    def _compute_inverse_calibration_func(self):
+        x, y = symbols('x y')
+        calibration_expr = sympify(self.calibration_equation.replace("^", "**"))
+        inverse_expr = solve(calibration_expr - y, x)
+        if len(inverse_expr) > 0:
+            return lambdify(y, inverse_expr[0], 'numpy')
+        else:
+            print("Error computing inverse calibration function")
+            return lambda y: y  # Função identidade em caso de erro
+        
     def stopstart (self):
         self.paused = not self.paused
         if self.paused:
@@ -477,7 +577,7 @@ class PlotWindow(QDialog):
         
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
-    apply_stylesheet(app,"pydaq/style.qss") #Apply the css
+    apply_stylesheet(app,"pydaq/pydaq/style.qss") #Apply the css
     window = Pid_Control()  # Create Windows
     window.show()  # Show Windows
     sys.exit(app.exec())  # Execute application loop 
