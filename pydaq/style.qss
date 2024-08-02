@@ -192,6 +192,16 @@ QLineEdit{
 	border-right: 1.5px solid rgb(166, 166, 166);
 }
 
+QLineEdit:disabled {
+	background-color: rgb(29, 28, 28);
+	border-top: 1.5px solid rgb(46, 46, 46);
+	border-left: 1.5px solid rgb(46, 46, 46);
+
+	border-bottom: 1.5px solid rgb(166, 166, 166);
+	border-right: 1.5px solid rgb(166, 166, 166);
+	font-style: italic;
+}
+
 QRadioButton::indicator{
 	border-radius: 6px;
 	border-top: 1.5px solid rgb(0, 0, 0);

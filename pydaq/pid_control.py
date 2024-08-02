@@ -146,6 +146,7 @@ class Pid_Control(QMainWindow):
         self.on_type_combo_changed(0)
         self.create_button = QPushButton("Confirm")
         self.create_button.released.connect(self.show_pid_equation)
+        self.create_button.setFixedWidth(150)
         
         #ADDING WIDGETS TO THE RIGHT LAYOUT
         self.right_menu_line1_layout.addWidget(self.device_combo, alignment= Qt.AlignLeft)
@@ -288,7 +289,7 @@ class Pid_Control(QMainWindow):
         else:
             kd = None
         equation_parts = []
-        
+
         #Create a pid equation based on parameters readed
         if kp is not None:
             kp_display = f"{kp:.2f}"
@@ -301,10 +302,10 @@ class Pid_Control(QMainWindow):
             equation_parts.append(rf"{kd_display} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
-        
+
         #Equation on latex
         latex = "u(t) = " + " + ".join(equation_parts)
-        
+
         #Figure created showing the equation, without axes
         fig = Figure(figsize=(9, 3), facecolor='#434544')
         ax = fig.add_subplot(111, facecolor='#434544')
@@ -357,6 +358,7 @@ class PID:
         self.calibration_equation = calibration_equation
         self.integral = 0
         self.previous_error = 0
+        self.disturbance = 0
 
         if self.calibration_equation:
             try:
@@ -388,12 +390,18 @@ class PID:
             print(f"Error applying inverse calibration: {e}")
             return value  # Retorna o valor original em caso de erro
         
+    def apply_disturbance(self, disturbance):
+        # Adicione o distúrbio ao sinal ou sistema
+        self.disturbance = disturbance
+
     def update(self, feedback_value):
         setpoint_adjusted = self.apply_calibration(self.setpoint)
         error = setpoint_adjusted - feedback_value
+        #print('erro = ', setpoint_adjusted, ' - ',feedback_value)
         self.integral += error
         derivative = error - self.previous_error
-        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        disturbance_effect = self.disturbance if self.disturbance else 0
+        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative + disturbance_effect
         self.previous_error = error
         return output, error
 
@@ -407,6 +415,7 @@ class PlotWindow(QDialog):
         self.paused = False
         self.start_time = time.time()
         self.central_layout = QVBoxLayout(self)
+        self.settling_time_reached = False #para mudar de cor com o tempo de acomodação
         
         #create a top_layout frame
         self.top_layout = QFrame ()
@@ -415,12 +424,25 @@ class PlotWindow(QDialog):
         self.label0 = QLabel("Setpoint:")
         self.setpoint_input = QLineEdit()
         self.setpoint_input.setText("5")
-        self.update_button = QPushButton("Update Setpoint")
+        self.update_button = QPushButton("Update")
         self.update_button.clicked.connect(self.update_setpoint)
         #Add widgets to top layout
         self.top_layout_content.addWidget(self.label0)
         self.top_layout_content.addWidget(self.setpoint_input)
         self.top_layout_content.addWidget(self.update_button)
+
+        #disturbe layout
+        self.top2_layout = QFrame ()
+        self.top2_layout_content = QHBoxLayout(self.top2_layout)
+        # Create a sublayout for setpoint control
+        self.label_disturbe = QLabel("Disturbe:")
+        self.disturbe_input = QLineEdit()
+        self.disturbe_button = QPushButton("Update")
+        self.disturbe_button.clicked.connect(self.update_disturbe)
+        #Add widgets to top layout
+        self.top2_layout_content.addWidget(self.label_disturbe)
+        self.top2_layout_content.addWidget(self.disturbe_input)
+        self.top2_layout_content.addWidget(self.disturbe_button)
 
         #create a mid_layout frame for the images
         self.mid_layout = QFrame()
@@ -445,6 +467,7 @@ class PlotWindow(QDialog):
         self.bottom_layout_content.addWidget(self.back_button)
 
         self.central_layout.addWidget(self.top_layout)
+        self.central_layout.addWidget(self.top2_layout)
         self.central_layout.addWidget(self.mid_layout)
         self.central_layout.addWidget(self.botton_layout)
 
@@ -455,12 +478,34 @@ class PlotWindow(QDialog):
         self.errors = []
         self.pid = None
 
+    def init_plot(self):
+        self.line1_color = '#FFFFFF'  # Branco
+        self.line2_color = '#FFFF00'  # Amarelo Claro
+        self.line3_color = 'red'  
+
+        self.line1, = self.ax1.plot([], [], 'o', color=self.line1_color, label='System Output')  # Usar 'o' para pontos
+        self.line2, = self.ax1.plot([], [], '-', color=self.line2_color, label='Setpoint')  # Usar '- para linhas
+        self.line3, = self.ax2.plot([], [], 'o', color=self.line3_color, label='Error')  # Usar 'o' para pontos
+
+        self.ax1.set_xlim(0, 100)
+        self.ax1.set_ylim(-10, 10)
+        self.ax2.set_xlim(0, 100)
+        self.ax2.set_ylim(-10, 10)
+        return self.line1, self.line2, self.line3
+    
     def update_setpoint(self):
         try:
             new_setpoint = float(self.setpoint_input.text())
             if self.pid:
                 self.pid.setpoint = new_setpoint
                 self.setpoints.extend([new_setpoint] * (len(self.system_values) - len(self.setpoints)))
+        except ValueError:
+            pass  # Ignore invalid input
+    
+    def update_disturbe(self,disturbance):
+        try:
+            self.disturbance = float(self.disturbe_input.text())
+            self.pid.apply_disturbance(self.disturbance)
         except ValueError:
             pass  # Ignore invalid input
 
@@ -494,21 +539,6 @@ class PlotWindow(QDialog):
         except ValueError:
             print("Error")  
 
-    def init_plot(self):
-        self.line1_color = '#FFFFFF'  # Branco
-        self.line2_color = '#FFFF00'  # Amarelo Claro
-        self.line3_color = 'red'  
-
-        self.line1, = self.ax1.plot([], [], 'o', color=self.line1_color, label='System Output')  # Usar 'o' para pontos
-        self.line2, = self.ax1.plot([], [], '-', color=self.line2_color, label='Setpoint')  # Usar '- para linhas
-        self.line3, = self.ax2.plot([], [], 'o', color=self.line3_color, label='Error')  # Usar 'o' para pontos
-
-        self.ax1.set_xlim(0, 100)
-        self.ax1.set_ylim(-10, 10)
-        self.ax2.set_xlim(0, 100)
-        self.ax2.set_ylim(-10, 10)
-        return self.line1, self.line2, self.line3
-
     def update_plot(self, frame):
         if self.pid is None:
             return self.line1, self.line2, self.line3
@@ -527,6 +557,11 @@ class PlotWindow(QDialog):
 
         if len(self.setpoints) < len(self.system_values):
             self.setpoints.extend([self.pid.setpoint] * (len(self.system_values) - len(self.setpoints)))
+
+        if abs(self.system_values[-1] - self.setpoints[-1]) <= 0.05 * self.setpoints[-1]:
+            self.line1.set_color('blue')
+        else:
+            self.line1.set_color('#FFFFFF')
 
         # Atualizar o tempo 
         self.time_elapsed += self.period
@@ -562,7 +597,7 @@ class PlotWindow(QDialog):
         else:
             print("Error computing inverse calibration function")
             return lambda y: y  # Função identidade em caso de erro
-        
+
     def stopstart (self):
         self.paused = not self.paused
         if self.paused:
@@ -574,7 +609,7 @@ class PlotWindow(QDialog):
 
     def go_back(self):
         self.close()
-        
+
 def create_and_show_window():
     app = QApplication(sys.argv)  # Create Aplicacion
     apply_stylesheet(app,"pydaq/pydaq/style.qss") #Apply the css
