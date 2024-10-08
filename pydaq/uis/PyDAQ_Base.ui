@@ -36,7 +36,7 @@
    </size>
   </property>
   <property name="tabShape">
-   <enum>QTabWidget::Rounded</enum>
+   <enum>QTabWidget::TabShape::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
@@ -359,7 +359,7 @@ QScrollArea{
 </string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item alignment="Qt::AlignHCenter">
+    <item alignment="Qt::AlignmentFlag::AlignHCenter">
      <widget class="QPushButton" name="logo">
       <property name="minimumSize">
        <size>
@@ -435,10 +435,10 @@ QScrollArea{
        <item row="0" column="1">
         <widget class="QTabWidget" name="nidaq_tabs">
          <property name="tabPosition">
-          <enum>QTabWidget::North</enum>
+          <enum>QTabWidget::TabPosition::North</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <property name="documentMode">
           <bool>false</bool>
@@ -468,7 +468,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
@@ -497,7 +497,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_10">
@@ -526,7 +526,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
@@ -539,6 +539,11 @@ QScrollArea{
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>PID Control</string>
+          </attribute>
+         </widget>
         </widget>
        </item>
        <item row="0" column="0">
@@ -547,13 +552,13 @@ QScrollArea{
           <string notr="true"/>
          </property>
          <property name="tabShape">
-          <enum>QTabWidget::Rounded</enum>
+          <enum>QTabWidget::TabShape::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <property name="elideMode">
-          <enum>Qt::ElideNone</enum>
+          <enum>Qt::TextElideMode::ElideNone</enum>
          </property>
          <widget class="QWidget" name="get_data_arduino_tab">
           <attribute name="title">
@@ -571,7 +576,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_11">
@@ -600,7 +605,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_12">
@@ -615,7 +620,7 @@ QScrollArea{
          </widget>
          <widget class="QWidget" name="step_response_arduino_tab">
           <attribute name="title">
-           <string>Step Response</string>
+           <string>Step Respons</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_5">
            <item row="0" column="0">
@@ -629,7 +634,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>599</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_14">
@@ -637,6 +642,43 @@ QScrollArea{
                 <widget class="StepResponse_Arduino_Widget" name="step_ino_placeholder" native="true"/>
                </item>
               </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pid_control_arduino_tab">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="title">
+           <string>PID Control</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_7">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>599</width>
+                <height>391</height>
+               </rect>
+              </property>
+              <widget class="PID_Control_Arduino_Widget" name="pid_ino_placeholder" native="true">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>591</width>
+                 <height>381</height>
+                </rect>
+               </property>
+              </widget>
              </widget>
             </widget>
            </item>
@@ -655,7 +697,7 @@ QScrollArea{
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>
@@ -698,6 +740,12 @@ QScrollArea{
    <header>..guis.getdata_nidaq_widget</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>PID_Control_Arduino_Widget</class>
+   <extends>QWidget</extends>
+   <header>..guis.pid_control_arduino_widget</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="resources_1.qrc"/>
@@ -706,32 +754,48 @@ QScrollArea{
   <connection>
    <sender>radioButton</sender>
    <signal>toggled(bool)</signal>
-   <receiver>arduino_tabs</receiver>
+   <receiver>nidaq_tabs</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>169</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1103</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>nidaq_tabs</receiver>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>48</x>
-     <y>51</y>
+     <x>1160</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>90</x>
-     <y>161</y>
+     <x>1162</x>
+     <y>335</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>radioButton</sender>
    <signal>toggled(bool)</signal>
-   <receiver>nidaq_tabs</receiver>
-   <slot>hide()</slot>
+   <receiver>arduino_tabs</receiver>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>53</y>
+     <x>66</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>460</x>
-     <y>114</y>
+     <x>108</x>
+     <y>408</y>
     </hint>
    </hints>
   </connection>
@@ -742,28 +806,12 @@ QScrollArea{
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>424</x>
-     <y>46</y>
+     <x>1067</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>242</x>
-     <y>107</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>nidaq_tabs</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>517</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>519</x>
-     <y>88</y>
+     <x>260</x>
+     <y>354</y>
     </hint>
    </hints>
   </connection>
