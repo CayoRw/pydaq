@@ -1,7 +1,7 @@
 import sys, os
 
 from PySide6.QtWidgets import QFileDialog, QWidget
-from ..uis.ui_PyDAQ_PID_Control_widget import Ui_Arduino_PID_Control
+from ..uis.ui_PyDAQ_pid_control_arduino_widget import Ui_Arduino_PID_Control
 
 class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
     def __init__(self, *args):
