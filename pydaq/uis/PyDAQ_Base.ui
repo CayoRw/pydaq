@@ -358,8 +358,8 @@ QScrollArea{
 }
 </string>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item alignment="Qt::AlignmentFlag::AlignHCenter">
+   <layout class="QGridLayout" name="gridLayout_15">
+    <item row="0" column="1">
      <widget class="QPushButton" name="logo">
       <property name="minimumSize">
        <size>
@@ -394,7 +394,7 @@ QScrollArea{
       </property>
      </widget>
     </item>
-    <item>
+    <item row="1" column="0">
      <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
        <string notr="true"/>
@@ -429,9 +429,144 @@ QScrollArea{
       </layout>
      </widget>
     </item>
-    <item>
+    <item row="2" column="0">
      <widget class="QWidget" name="widget_2" native="true">
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="arduino_tabs">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="tabShape">
+          <enum>QTabWidget::TabShape::Rounded</enum>
+         </property>
+         <property name="currentIndex">
+          <number>3</number>
+         </property>
+         <property name="elideMode">
+          <enum>Qt::TextElideMode::ElideNone</enum>
+         </property>
+         <widget class="QWidget" name="get_data_arduino_tab">
+          <attribute name="title">
+           <string>Get Data</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_4">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_6">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>503</width>
+                <height>402</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_11">
+               <item row="0" column="0">
+                <widget class="GetData_Arduino_Widget" name="get_ino_placeholder" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="send_data_arduino_tab">
+          <attribute name="title">
+           <string>Send Data</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_5">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_7">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>503</width>
+                <height>402</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_12">
+               <item row="0" column="0">
+                <widget class="SendData_Arduino_Widget" name="send_ino_placeholder" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="step_response_arduino_tab">
+          <attribute name="title">
+           <string>Step Respons</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_6">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_11">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>503</width>
+                <height>402</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_14">
+               <item row="0" column="0">
+                <widget class="StepResponse_Arduino_Widget" name="step_ino_placeholder" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pid_control_arduino_tab">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="title">
+           <string>PID Control</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_7">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>503</width>
+                <height>402</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_16">
+               <item row="0" column="0">
+                <widget class="PID_Control_Arduino_Widget" name="pid_ino_placeholder" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QTabWidget" name="nidaq_tabs">
          <property name="tabPosition">
@@ -467,8 +602,8 @@ QScrollArea{
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>599</width>
-                <height>391</height>
+                <width>503</width>
+                <height>402</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
@@ -496,8 +631,8 @@ QScrollArea{
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>599</width>
-                <height>391</height>
+                <width>503</width>
+                <height>402</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_10">
@@ -525,8 +660,8 @@ QScrollArea{
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>599</width>
-                <height>391</height>
+                <width>503</width>
+                <height>402</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
@@ -546,146 +681,6 @@ QScrollArea{
          </widget>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QTabWidget" name="arduino_tabs">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="tabShape">
-          <enum>QTabWidget::TabShape::Rounded</enum>
-         </property>
-         <property name="currentIndex">
-          <number>2</number>
-         </property>
-         <property name="elideMode">
-          <enum>Qt::TextElideMode::ElideNone</enum>
-         </property>
-         <widget class="QWidget" name="get_data_arduino_tab">
-          <attribute name="title">
-           <string>Get Data</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="scrollArea_4">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_6">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>599</width>
-                <height>391</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_11">
-               <item row="0" column="0">
-                <widget class="GetData_Arduino_Widget" name="get_ino_placeholder" native="true"/>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="send_data_arduino_tab">
-          <attribute name="title">
-           <string>Send Data</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="scrollArea_5">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_7">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>599</width>
-                <height>391</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_12">
-               <item row="0" column="0">
-                <widget class="SendData_Arduino_Widget" name="send_ino_placeholder" native="true"/>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="step_response_arduino_tab">
-          <attribute name="title">
-           <string>Step Respons</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="scrollArea_6">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_11">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>599</width>
-                <height>391</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_14">
-               <item row="0" column="0">
-                <widget class="StepResponse_Arduino_Widget" name="step_ino_placeholder" native="true"/>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="pid_control_arduino_tab">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <attribute name="title">
-           <string>PID Control</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_13">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="scrollArea_7">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>599</width>
-                <height>391</height>
-               </rect>
-              </property>
-              <widget class="PID_Control_Arduino_Widget" name="pid_ino_placeholder" native="true">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>591</width>
-                 <height>381</height>
-                </rect>
-               </property>
-              </widget>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -697,7 +692,7 @@ QScrollArea{
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>33</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
