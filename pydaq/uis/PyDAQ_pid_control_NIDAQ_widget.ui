@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>NIDAQ_PID_Control</class>
+ <widget class="QWidget" name="NIDAQ_PID_Control">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -253,6 +253,56 @@ QPushButton#reload_devices:pressed{
 	border: 2px solid rgb(255, 255, 255);
 }
 
+
+QDoubleSpinBox{
+	background-color: rgb(77, 77, 77);
+	
+	border-top: 1.5px solid rgb(46, 46, 46);
+	border-left: 1.5px solid rgb(46, 46, 46);
+
+	border-bottom: 1.5px solid rgb(166, 166, 166);
+	border-right: 1.5px solid rgb(166, 166, 166);
+}
+
+QDoubleSpinBox::up-button{
+    image: url(:/imgs/imgs/drop_up_arrow.png);
+	width: 11px;
+
+	background-color: rgb(0, 79, 0);
+	border-top: 1.5px solid rgb(127, 167, 127);
+	border-left: 1.5px solid rgb(127, 167, 127);
+
+	border-bottom: 1.5px solid rgb(0, 0, 0);
+	border-right: 1.5px solid rgb(0, 0, 0);
+}
+
+QDoubleSpinBox::up-button:pressed{
+	border: 2px solid rgb(255, 255, 255);
+}
+
+QDoubleSpinBox::up-button:hover{
+	background-color: rgb(0, 50, 0);
+}
+
+QDoubleSpinBox::down-button{
+    image: url(:/imgs/imgs/drop_down_arrow.png);
+	width: 11px;
+
+	background-color: rgb(0, 79, 0);
+	border-top: 1.5px solid rgb(127, 167, 127);
+	border-left: 1.5px solid rgb(127, 167, 127);
+
+	border-bottom: 1.5px solid rgb(0, 0, 0);
+	border-right: 1.5px solid rgb(0, 0, 0);
+}
+
+QDoubleSpinBox::down-button:pressed{
+	border: 2px solid rgb(255, 255, 255);
+}
+
+QDoubleSpinBox::down-button:hover{
+	background-color: rgb(0, 50, 0);
+}
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -308,24 +358,21 @@ QPushButton#reload_devices:pressed{
        <widget class="QWidget" name="widget_setpoint" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLineEdit" name="lineEdit_setpoint">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_setpoint">
            <property name="maximumSize">
             <size>
-             <width>90</width>
-             <height>22</height>
+             <width>100</width>
+             <height>16777215</height>
             </size>
+           </property>
+           <property name="maximum">
+            <double>9999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>5.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -408,12 +455,12 @@ QPushButton#reload_devices:pressed{
        <widget class="QWidget" name="widget_ki" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLineEdit" name="lineEdit_kd">
-           <property name="maximumSize">
-            <size>
-             <width>9999999</width>
-             <height>16777215</height>
-            </size>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_ki">
+           <property name="maximum">
+            <double>999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
            </property>
           </widget>
          </item>
@@ -450,12 +497,15 @@ QPushButton#reload_devices:pressed{
        <widget class="QWidget" name="widget_kp" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLineEdit" name="lineEdit_kp">
-           <property name="maximumSize">
-            <size>
-             <width>9000000</width>
-             <height>16777215</height>
-            </size>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_kp">
+           <property name="maximum">
+            <double>999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -634,12 +684,15 @@ QPushButton#reload_devices:pressed{
        <widget class="QWidget" name="widget_period" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLineEdit" name="lineEdit_period">
-           <property name="maximumSize">
-            <size>
-             <width>9000000</width>
-             <height>16777215</height>
-            </size>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_period">
+           <property name="maximum">
+            <double>9999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>10.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -672,12 +725,12 @@ QPushButton#reload_devices:pressed{
        <widget class="QWidget" name="widget_kd" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLineEdit" name="lineEdit_ki">
-           <property name="maximumSize">
-            <size>
-             <width>9000000</width>
-             <height>16777215</height>
-            </size>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_kd">
+           <property name="maximum">
+            <double>9999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
            </property>
           </widget>
          </item>
@@ -704,7 +757,7 @@ QPushButton#reload_devices:pressed{
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_reload">
+          <widget class="QPushButton" name="reload_devices">
            <property name="minimumSize">
             <size>
              <width>22</width>
