@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widgetrDvggc.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QSizePolicy, QWidget)
 
-class Ui_Arduino_PID_Control(object):
+class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")

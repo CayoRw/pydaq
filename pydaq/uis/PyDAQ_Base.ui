@@ -359,41 +359,6 @@ QScrollArea{
 </string>
    </property>
    <layout class="QGridLayout" name="gridLayout_15">
-    <item row="0" column="1">
-     <widget class="QPushButton" name="logo">
-      <property name="minimumSize">
-       <size>
-        <width>186</width>
-        <height>147</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>186</width>
-        <height>147</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="toolTip">
-       <string>Go to PYDAQ Documentation</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="resources_1.qrc">
-        <normaloff>:/imgs/imgs/logo.png</normaloff>:/imgs/imgs/logo.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>182</width>
-        <height>143</height>
-       </size>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
@@ -462,7 +427,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_11">
@@ -491,7 +456,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_12">
@@ -506,7 +471,7 @@ QScrollArea{
          </widget>
          <widget class="QWidget" name="step_response_arduino_tab">
           <attribute name="title">
-           <string>Step Respons</string>
+           <string>Step Response</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_5">
            <item row="0" column="0">
@@ -520,7 +485,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_14">
@@ -552,7 +517,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_16">
@@ -603,7 +568,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
@@ -632,7 +597,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_10">
@@ -661,7 +626,7 @@ QScrollArea{
                 <x>0</x>
                 <y>0</y>
                 <width>503</width>
-                <height>402</height>
+                <height>391</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
@@ -674,14 +639,73 @@ QScrollArea{
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="pid_control_nidaq_tab">
           <attribute name="title">
            <string>PID Control</string>
           </attribute>
+          <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_8">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>503</width>
+                <height>391</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_18">
+               <item row="0" column="0">
+                <widget class="PID_Control_NIDAQ_Widget" name="pid_nidaq_placeholder" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="logo">
+      <property name="minimumSize">
+       <size>
+        <width>186</width>
+        <height>147</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>186</width>
+        <height>147</height>
+       </size>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="toolTip">
+       <string>Go to PYDAQ Documentation</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="resources_1.qrc">
+        <normaloff>:/imgs/imgs/logo.png</normaloff>:/imgs/imgs/logo.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>182</width>
+        <height>143</height>
+       </size>
+      </property>
      </widget>
     </item>
    </layout>
@@ -692,7 +716,7 @@ QScrollArea{
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>
@@ -739,6 +763,12 @@ QScrollArea{
    <class>PID_Control_Arduino_Widget</class>
    <extends>QWidget</extends>
    <header>..guis.pid_control_arduino_widget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PID_Control_NIDAQ_Widget</class>
+   <extends>QWidget</extends>
+   <header>..guis.pid_control_nidaq_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
