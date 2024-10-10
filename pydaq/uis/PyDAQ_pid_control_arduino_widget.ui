@@ -780,7 +780,7 @@ QDoubleSpinBox::down-button:hover{
      <property name="minimumSize">
       <size>
        <width>400</width>
-       <height>70</height>
+       <height>120</height>
       </size>
      </property>
      <property name="frameShape">
@@ -792,6 +792,12 @@ QDoubleSpinBox::down-button:hover{
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QWidget" name="widget_image" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
         <layout class="QHBoxLayout" name="image_layout"/>
        </widget>
       </item>

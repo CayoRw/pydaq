@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
+    <width>810</width>
     <height>795</height>
    </rect>
   </property>
@@ -619,7 +619,7 @@ QDoubleSpinBox::down-button:hover{
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_channel">
         <property name="text">
          <string>Choose channel:</string>
         </property>
@@ -805,7 +805,7 @@ QDoubleSpinBox::down-button:hover{
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_terminal">
         <property name="text">
          <string>Terminal config.</string>
         </property>
@@ -850,7 +850,7 @@ QDoubleSpinBox::down-button:hover{
      <property name="minimumSize">
       <size>
        <width>400</width>
-       <height>70</height>
+       <height>120</height>
       </size>
      </property>
      <property name="frameShape">
@@ -862,6 +862,12 @@ QDoubleSpinBox::down-button:hover{
      <layout class="QGridLayout" name="gridLayout_5">
       <item row="0" column="0">
        <widget class="QWidget" name="widget_image" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
         <layout class="QVBoxLayout" name="image_layout"/>
        </widget>
       </item>
