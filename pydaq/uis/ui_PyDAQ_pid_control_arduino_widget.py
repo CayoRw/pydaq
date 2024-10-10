@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetafZorS.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widgetrbenhi.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,7 +23,7 @@ class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
         if not Arduino_PID_Control.objectName():
             Arduino_PID_Control.setObjectName(u"Arduino_PID_Control")
-        Arduino_PID_Control.resize(582, 697)
+        Arduino_PID_Control.resize(582, 747)
         Arduino_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -278,13 +278,25 @@ class Ui_Arduino_PID_Control(object):
 "	border-right: 1.5px solid rgb(166, 166, 166);\n"
 "}\n"
 "\n"
+"QDoubleSpinBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px s"
+                        "olid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"\n"
 "QDoubleSpinBox::up-button{\n"
 "    image: url(:/imgs/imgs/drop_up_arrow.png);\n"
 "	width: 11px;\n"
 "\n"
 "	background-color: rgb(0, 79, 0);\n"
-"	border-top:"
-                        " 1.5px solid rgb(127, 167, 127);\n"
+"	border-top: 1.5px solid rgb(127, 167, 127);\n"
 "	border-left: 1.5px solid rgb(127, 167, 127);\n"
 "\n"
 "	border-bottom: 1.5px solid rgb(0, 0, 0);\n"
@@ -308,7 +320,8 @@ class Ui_Arduino_PID_Control(object):
 "	border-left: 1.5px solid rgb(127, 167, 127);\n"
 "\n"
 "	border-bottom: 1.5px solid rgb(0, 0, 0);\n"
-"	border-right: 1.5px solid rgb(0, 0, 0);\n"
+"	"
+                        "border-right: 1.5px solid rgb(0, 0, 0);\n"
 "}\n"
 "\n"
 "QDoubleSpinBox::down-button:pressed{\n"

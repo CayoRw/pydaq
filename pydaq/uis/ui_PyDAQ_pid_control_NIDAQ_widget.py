@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetAWFezo.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetSWfqts.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,7 +23,7 @@ class Ui_NIDAQ_PID_Control(object):
     def setupUi(self, NIDAQ_PID_Control):
         if not NIDAQ_PID_Control.objectName():
             NIDAQ_PID_Control.setObjectName(u"NIDAQ_PID_Control")
-        NIDAQ_PID_Control.resize(810, 795)
+        NIDAQ_PID_Control.resize(810, 845)
         NIDAQ_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -292,6 +292,18 @@ class Ui_NIDAQ_PID_Control(object):
 "	border-right: 1.5px solid rgb(0, 0, 0);\n"
 "}\n"
 "\n"
+"QDoubleSpinBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px solid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"\n"
 "QDoubleSpinBox::up-button:pressed{\n"
 "	border: 2px solid rgb(255, 255, 255);\n"
 "}\n"
@@ -309,7 +321,8 @@ class Ui_NIDAQ_PID_Control(object):
 "	border-left: 1.5px solid rgb(127, 167, 127);\n"
 "\n"
 "	border-bottom: 1.5px solid rgb(0, 0, 0);\n"
-"	border-right: 1.5px solid rgb(0, 0, 0);\n"
+""
+                        "	border-right: 1.5px solid rgb(0, 0, 0);\n"
 "}\n"
 "\n"
 "QDoubleSpinBox::down-button:pressed{\n"

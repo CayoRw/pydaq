@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>582</width>
-    <height>697</height>
+    <height>747</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -261,6 +261,18 @@ QDoubleSpinBox{
 
 	border-bottom: 1.5px solid rgb(166, 166, 166);
 	border-right: 1.5px solid rgb(166, 166, 166);
+}
+
+QDoubleSpinBox:disabled {
+    background-color: rgb(50, 50, 50);
+    
+    border-top: 1.5px solid rgb(30, 30, 30);
+    border-left: 1.5px solid rgb(30, 30, 30);
+    
+    border-bottom: 1.5px solid rgb(100, 100, 100);
+    border-right: 1.5px solid rgb(100, 100, 100);
+    
+    color: rgb(150, 150, 150);
 }
 
 QDoubleSpinBox::up-button{
