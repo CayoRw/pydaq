@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
+    <width>582</width>
     <height>697</height>
    </rect>
   </property>
@@ -665,7 +665,7 @@ QDoubleSpinBox::down-button:hover{
            </item>
            <item>
             <property name="text">
-             <string>Others</string>
+             <string>Other</string>
             </property>
            </item>
           </widget>
@@ -789,12 +789,10 @@ QDoubleSpinBox::down-button:hover{
      <property name="frameShadow">
       <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-       <widget class="QLabel" name="label_pidequation">
-        <property name="text">
-         <string>Equacao</string>
-        </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QWidget" name="widget_image" native="true">
+        <layout class="QHBoxLayout" name="image_layout"/>
        </widget>
       </item>
      </layout>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetAWFezo.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -23,7 +23,7 @@ class Ui_NIDAQ_PID_Control(object):
     def setupUi(self, NIDAQ_PID_Control):
         if not NIDAQ_PID_Control.objectName():
             NIDAQ_PID_Control.setObjectName(u"NIDAQ_PID_Control")
-        NIDAQ_PID_Control.resize(810, 795)
+        NIDAQ_PID_Control.resize(725, 795)
         NIDAQ_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -483,10 +483,10 @@ class Ui_NIDAQ_PID_Control(object):
 
         self.gridLayout_2.addWidget(self.label_ki, 10, 0, 1, 1)
 
-        self.label_channel = QLabel(self.widget_top)
-        self.label_channel.setObjectName(u"label_channel")
+        self.label = QLabel(self.widget_top)
+        self.label.setObjectName(u"label")
 
-        self.gridLayout_2.addWidget(self.label_channel, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
 
         self.widget_path = QWidget(self.widget_top)
         self.widget_path.setObjectName(u"widget_path")
@@ -598,10 +598,10 @@ class Ui_NIDAQ_PID_Control(object):
 
         self.gridLayout_2.addWidget(self.label_unit, 5, 0, 1, 1)
 
-        self.label_terminal = QLabel(self.widget_top)
-        self.label_terminal.setObjectName(u"label_terminal")
+        self.label_2 = QLabel(self.widget_top)
+        self.label_2.setObjectName(u"label_2")
 
-        self.gridLayout_2.addWidget(self.label_terminal, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_2, 3, 0, 1, 1)
 
         self.widget = QWidget(self.widget_top)
         self.widget.setObjectName(u"widget")
@@ -640,14 +640,13 @@ class Ui_NIDAQ_PID_Control(object):
 
         self.frame_equation = QFrame(NIDAQ_PID_Control)
         self.frame_equation.setObjectName(u"frame_equation")
-        self.frame_equation.setMinimumSize(QSize(400, 120))
+        self.frame_equation.setMinimumSize(QSize(400, 70))
         self.frame_equation.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_equation.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout_5 = QGridLayout(self.frame_equation)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.widget_image = QWidget(self.frame_equation)
         self.widget_image.setObjectName(u"widget_image")
-        self.widget_image.setMinimumSize(QSize(0, 100))
         self.image_layout = QVBoxLayout(self.widget_image)
         self.image_layout.setObjectName(u"image_layout")
 
@@ -682,12 +681,12 @@ class Ui_NIDAQ_PID_Control(object):
         self.pushButton_confirm.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Confirm", None))
         self.label_arduino.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Choose your device:", None))
         self.label_ki.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Ki", None))
-        self.label_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Choose channel:", None))
+        self.label.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Choose channel:", None))
         self.pushButton_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
         self.label_periody.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Sampling period (s)", None))
         self.reload_devices.setText("")
         self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type?", None))
         self.label_unit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Unit:", None))
-        self.label_terminal.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Terminal config.", None))
+        self.label_2.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Terminal config.", None))
     # retranslateUi
 

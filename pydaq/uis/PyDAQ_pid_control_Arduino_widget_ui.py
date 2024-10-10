@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetafZorS.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -593,14 +593,13 @@ class Ui_Arduino_PID_Control(object):
 
         self.frame_equation = QFrame(Arduino_PID_Control)
         self.frame_equation.setObjectName(u"frame_equation")
-        self.frame_equation.setMinimumSize(QSize(400, 120))
+        self.frame_equation.setMinimumSize(QSize(400, 70))
         self.frame_equation.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_equation.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout = QVBoxLayout(self.frame_equation)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.widget_image = QWidget(self.frame_equation)
         self.widget_image.setObjectName(u"widget_image")
-        self.widget_image.setMinimumSize(QSize(0, 100))
         self.image_layout = QHBoxLayout(self.widget_image)
         self.image_layout.setObjectName(u"image_layout")
 
