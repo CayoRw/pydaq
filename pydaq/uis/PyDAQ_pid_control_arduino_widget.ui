@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
+    <width>519</width>
     <height>747</height>
    </rect>
   </property>
@@ -466,7 +466,7 @@ QDoubleSpinBox::down-button:hover{
        <widget class="QWidget" name="widget_path" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <widget class="QLineEdit" name="lineEdit_path">
+          <widget class="QLineEdit" name="path_line_edit">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -476,7 +476,7 @@ QDoubleSpinBox::down-button:hover{
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_browse">
+          <widget class="QPushButton" name="path_folder_browse">
            <property name="minimumSize">
             <size>
              <width>70</width>

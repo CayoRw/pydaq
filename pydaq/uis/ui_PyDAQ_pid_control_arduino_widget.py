@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widgetrbenhi.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widgetmFyepF.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -23,7 +23,7 @@ class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
         if not Arduino_PID_Control.objectName():
             Arduino_PID_Control.setObjectName(u"Arduino_PID_Control")
-        Arduino_PID_Control.resize(582, 747)
+        Arduino_PID_Control.resize(519, 747)
         Arduino_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -426,17 +426,17 @@ class Ui_Arduino_PID_Control(object):
         self.widget_path.setObjectName(u"widget_path")
         self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.lineEdit_path = QLineEdit(self.widget_path)
-        self.lineEdit_path.setObjectName(u"lineEdit_path")
-        self.lineEdit_path.setMinimumSize(QSize(0, 22))
+        self.path_line_edit = QLineEdit(self.widget_path)
+        self.path_line_edit.setObjectName(u"path_line_edit")
+        self.path_line_edit.setMinimumSize(QSize(0, 22))
 
-        self.horizontalLayout_10.addWidget(self.lineEdit_path)
+        self.horizontalLayout_10.addWidget(self.path_line_edit)
 
-        self.pushButton_browse = QPushButton(self.widget_path)
-        self.pushButton_browse.setObjectName(u"pushButton_browse")
-        self.pushButton_browse.setMinimumSize(QSize(70, 30))
+        self.path_folder_browse = QPushButton(self.widget_path)
+        self.path_folder_browse.setObjectName(u"path_folder_browse")
+        self.path_folder_browse.setMinimumSize(QSize(70, 30))
 
-        self.horizontalLayout_10.addWidget(self.pushButton_browse)
+        self.horizontalLayout_10.addWidget(self.path_folder_browse)
 
 
         self.gridLayout_2.addWidget(self.widget_path, 10, 2, 1, 1, Qt.AlignmentFlag.AlignVCenter)
@@ -637,7 +637,7 @@ class Ui_Arduino_PID_Control(object):
         self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path", None))
         self.label_ki.setText(QCoreApplication.translate("Arduino_PID_Control", u"Ki", None))
         self.label_periody.setText(QCoreApplication.translate("Arduino_PID_Control", u"Sampling period (s)", None))
-        self.pushButton_browse.setText(QCoreApplication.translate("Arduino_PID_Control", u"Browse", None))
+        self.path_folder_browse.setText(QCoreApplication.translate("Arduino_PID_Control", u"Browse", None))
         self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type?", None))
         self.comboBox_type.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"P", None))
         self.comboBox_type.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"PI", None))

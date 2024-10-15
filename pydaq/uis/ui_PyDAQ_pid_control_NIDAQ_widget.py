@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetSWfqts.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgettxyXzP.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -23,7 +23,7 @@ class Ui_NIDAQ_PID_Control(object):
     def setupUi(self, NIDAQ_PID_Control):
         if not NIDAQ_PID_Control.objectName():
             NIDAQ_PID_Control.setObjectName(u"NIDAQ_PID_Control")
-        NIDAQ_PID_Control.resize(810, 845)
+        NIDAQ_PID_Control.resize(519, 845)
         NIDAQ_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -505,17 +505,17 @@ class Ui_NIDAQ_PID_Control(object):
         self.widget_path.setObjectName(u"widget_path")
         self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.lineEdit_path = QLineEdit(self.widget_path)
-        self.lineEdit_path.setObjectName(u"lineEdit_path")
-        self.lineEdit_path.setMinimumSize(QSize(0, 22))
+        self.path_line_edit = QLineEdit(self.widget_path)
+        self.path_line_edit.setObjectName(u"path_line_edit")
+        self.path_line_edit.setMinimumSize(QSize(0, 22))
 
-        self.horizontalLayout_10.addWidget(self.lineEdit_path)
+        self.horizontalLayout_10.addWidget(self.path_line_edit)
 
-        self.pushButton_browse = QPushButton(self.widget_path)
-        self.pushButton_browse.setObjectName(u"pushButton_browse")
-        self.pushButton_browse.setMinimumSize(QSize(70, 30))
+        self.path_folder_browse = QPushButton(self.widget_path)
+        self.path_folder_browse.setObjectName(u"path_folder_browse")
+        self.path_folder_browse.setMinimumSize(QSize(70, 30))
 
-        self.horizontalLayout_10.addWidget(self.pushButton_browse)
+        self.horizontalLayout_10.addWidget(self.path_folder_browse)
 
 
         self.gridLayout_2.addWidget(self.widget_path, 12, 2, 1, 1, Qt.AlignmentFlag.AlignVCenter)
@@ -696,7 +696,7 @@ class Ui_NIDAQ_PID_Control(object):
         self.label_arduino.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Choose your device:", None))
         self.label_ki.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Ki", None))
         self.label_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Choose channel:", None))
-        self.pushButton_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
+        self.path_folder_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
         self.label_periody.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Sampling period (s)", None))
         self.reload_devices.setText("")
         self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type?", None))
