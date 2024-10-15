@@ -24,7 +24,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.on_type_combo_changed(0)
         self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
-    
+
 #Fuctions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
@@ -57,7 +57,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             self.label_unit.hide()
             self.label_equation.show()
             self.widget_equation.show()
-    
+
 #Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):
         if index == 0:  
@@ -73,19 +73,23 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.doubleSpinBox_kp.setEnabled(kp_enabled)
         self.doubleSpinBox_ki.setEnabled(ki_enabled)
         self.doubleSpinBox_kd.setEnabled(kd_enabled)
-    
+        if ki_enabled == False:
+            self.doubleSpinBox_ki.setValue(0)
+        if kd_enabled == False:
+            self.doubleSpinBox_kd.setValue(0)
+
 #Method to create a image and show the pid equation
     def show_pid_equation(self):
 #Condiction to read only the inputs enable and set 'None' on desable inputs
-        if self.widget_kp.isEnabled():
+        if self.doubleSpinBox_kp.isEnabled():
             kp = self.doubleSpinBox_kp.value()
         else:
             kp = None
-        if self.widget_ki.isEnabled():
+        if self.doubleSpinBox_ki.isEnabled():
             ki = self.doubleSpinBox_ki.value()
         else:
             ki = None
-        if self.widget_kd.isEnabled():
+        if self.doubleSpinBox_kd.isEnabled():
             kd = self.doubleSpinBox_kd.value()
         else:
             kd = None
@@ -117,8 +121,6 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             widget_to_remove.setParent(None)
             
         self.image_layout.addWidget(canvas)
-
-        
 
 '''app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()

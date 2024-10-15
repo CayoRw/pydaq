@@ -80,19 +80,23 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.doubleSpinBox_kp.setEnabled(kp_enabled)
         self.doubleSpinBox_ki.setEnabled(ki_enabled)
         self.doubleSpinBox_kd.setEnabled(kd_enabled)
+        if ki_enabled == False:
+            self.doubleSpinBox_ki.setValue(0)
+        if kd_enabled == False:
+            self.doubleSpinBox_kd.setValue(0)
     
     #Method to create a image and show the pid equation
     def show_pid_equation(self):
 #Condiction to read only the inputs enable and set 'None' on desable inputs
-        if self.widget_kp.isEnabled():
+        if self.doubleSpinBox_kp.isEnabled():
             kp = self.doubleSpinBox_kp.value()
         else:
             kp = None
-        if self.widget_ki.isEnabled():
+        if self.doubleSpinBox_ki.isEnabled():
             ki = self.doubleSpinBox_ki.value()
         else:
             ki = None
-        if self.widget_kd.isEnabled():
+        if self.doubleSpinBox_kd.isEnabled():
             kd = self.doubleSpinBox_kd.value()
         else:
             kd = None
