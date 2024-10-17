@@ -4,10 +4,12 @@ import serial.tools.list_ports
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+from PySide6 import QtWidgets
 from PySide6.QtWidgets import QFileDialog, QApplication, QWidget, QVBoxLayout, QPushButton
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 from ..uis.ui_PyDAQ_pid_control_Arduino_widget import Ui_Arduino_PID_Control
+from ..uis.ui_PyDAQ_pid_window_widget import Ui_Plot_PID_Window
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -24,6 +26,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.on_type_combo_changed(0)
         self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
+        self.pushButton_start.clicked.connect(self.show_graph_window)
 
 #Fuctions
     def locate_arduino(self):
@@ -121,6 +124,20 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             widget_to_remove.setParent(None)
             
         self.image_layout.addWidget(canvas)
+
+    def show_graph_window(self):
+        # Criar uma nova instância da janela para a segunda interface
+        self.plot_window = QtWidgets.QMainWindow()  # Janela principal para a segunda interface
+        self.plot_ui = Ui_Plot_PID_Window()  # Instância da segunda interface
+        self.plot_ui.setupUi(self.plot_window)  # Configurar a segunda interface
+
+        # Definir o centralWidget para a janela
+        central_widget = QtWidgets.QWidget(self.plot_window)  # Cria um widget central
+        self.plot_window.setCentralWidget(central_widget)  # Define o centralWidget na janela
+        self.plot_ui.setupUi(central_widget)  # Agora configuramos a interface nesse widget
+
+        # Exibir a segunda janela
+        self.plot_window.show()
 
 '''app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()

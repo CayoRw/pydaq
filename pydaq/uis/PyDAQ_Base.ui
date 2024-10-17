@@ -498,7 +498,7 @@ QScrollArea{
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pid_control_arduino_tab">
+         <widget class="PID_Control_Arduino_Widget" name="pid_control_arduino_tab">
           <property name="enabled">
            <bool>true</bool>
           </property>
