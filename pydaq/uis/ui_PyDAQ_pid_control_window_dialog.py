@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_window_widgetlFjucy.ui'
+## Form generated from reading UI file 'designerwTbABT.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QPushButton, QSizePolicy,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QDialog, QDoubleSpinBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QPushButton,
+    QSizePolicy, QVBoxLayout, QWidget)
 
-class Ui_Plot_PID_Window(object):
-    def setupUi(self, Plot_PID_Window):
-        if not Plot_PID_Window.objectName():
-            Plot_PID_Window.setObjectName(u"Plot_PID_Window")
-        Plot_PID_Window.resize(526, 439)
-        Plot_PID_Window.setStyleSheet(u"QWidget{\n"
+class Ui_Dialog_Plot_PID_Window(object):
+    def setupUi(self, Dialog_Plot_PID_Window):
+        if not Dialog_Plot_PID_Window.objectName():
+            Dialog_Plot_PID_Window.setObjectName(u"Dialog_Plot_PID_Window")
+        Dialog_Plot_PID_Window.resize(400, 300)
+        Dialog_Plot_PID_Window.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
 "\n"
@@ -333,9 +333,9 @@ class Ui_Plot_PID_Window(object):
 "}\n"
 "\n"
 "")
-        self.verticalLayout = QVBoxLayout(Plot_PID_Window)
+        self.verticalLayout = QVBoxLayout(Dialog_Plot_PID_Window)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.widget = QWidget(Plot_PID_Window)
+        self.widget = QWidget(Dialog_Plot_PID_Window)
         self.widget.setObjectName(u"widget")
         self.verticalLayout_3 = QVBoxLayout(self.widget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -409,16 +409,16 @@ class Ui_Plot_PID_Window(object):
         self.verticalLayout.addWidget(self.widget)
 
 
-        self.retranslateUi(Plot_PID_Window)
+        self.retranslateUi(Dialog_Plot_PID_Window)
 
-        QMetaObject.connectSlotsByName(Plot_PID_Window)
+        QMetaObject.connectSlotsByName(Dialog_Plot_PID_Window)
     # setupUi
 
-    def retranslateUi(self, Plot_PID_Window):
-        Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Plot_PID_Window", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("Plot_PID_Window", u"Disturbe:", None))
-        self.label.setText(QCoreApplication.translate("Plot_PID_Window", u"Setpoint:", None))
-        self.pushButton.setText(QCoreApplication.translate("Plot_PID_Window", u"Apply", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Plot_PID_Window", u"Close", None))
+    def retranslateUi(self, Dialog_Plot_PID_Window):
+        Dialog_Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Dialog", None))
+        self.label_2.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe:", None))
+        self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
+        self.pushButton.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Apply", None))
+        self.pushButton_2.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Close", None))
     # retranslateUi
 

@@ -9,9 +9,10 @@ from PySide6.QtWidgets import QFileDialog, QApplication, QWidget, QVBoxLayout, Q
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 from ..uis.ui_PyDAQ_pid_control_Arduino_widget import Ui_Arduino_PID_Control
-from ..uis.ui_PyDAQ_pid_window_widget import Ui_Plot_PID_Window
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from ..guis.pid_control_window_dialog import PID_Control_Window_Dialog
+
 
 class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
     def __init__(self, *args):
@@ -127,17 +128,27 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 
     def show_graph_window(self):
         # Criar uma nova instância da janela para a segunda interface
-        self.plot_window = QtWidgets.QMainWindow()  # Janela principal para a segunda interface
-        self.plot_ui = Ui_Plot_PID_Window()  # Instância da segunda interface
-        self.plot_ui.setupUi(self.plot_window)  # Configurar a segunda interface
+        plot_window = PID_Control_Window_Dialog()
+        plot_window.exec()
 
-        # Definir o centralWidget para a janela
-        central_widget = QtWidgets.QWidget(self.plot_window)  # Cria um widget central
-        self.plot_window.setCentralWidget(central_widget)  # Define o centralWidget na janela
-        self.plot_ui.setupUi(central_widget)  # Agora configuramos a interface nesse widget
+'''#Method who call the graph window
+    def show_graph_window(self):
+        try:
+            kp = float(kp_text) if kp_text else 0.0
+            ki = float(ki_text) if ki_text else 0.0
+            kd = float(kd_text) if kd_text else 0.0
+            setpoint = float(setpoint_text) if setpoint_text else 0.0
+            frequency = float(frequency_text) if frequency_text else 1.0  # Default to 1 Hz if empty
+            unit = self.get_selected_unit()
+            calibration_equation = self.get_calibration_equation()
+            plot_window = PlotWindow(unit, calibration_equation)
+            plot_window.start_control(kp, ki, kd, setpoint, calibration_equation, unit, frequency)
+            plot_window.exec()
+            
+        except ValueError:
+            print("Please enter valid numbers for Kp, Ki, and Kd.")
+'''
 
-        # Exibir a segunda janela
-        self.plot_window.show()
 
 '''app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()

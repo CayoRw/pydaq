@@ -345,7 +345,7 @@ class Pid_Control(QMainWindow):
             plot_window = PlotWindow(unit, calibration_equation)
             plot_window.start_control(kp, ki, kd, setpoint, calibration_equation, unit, frequency)
             plot_window.exec()
-            
+
         except ValueError:
             print("Please enter valid numbers for Kp, Ki, and Kd.")
 class PID:
