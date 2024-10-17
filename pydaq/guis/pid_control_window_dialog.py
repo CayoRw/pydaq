@@ -10,8 +10,14 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 from ..uis.ui_PyDAQ_pid_control_window_dialog import Ui_Dialog_Plot_PID_Window
 
-
 class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
+        
+#Calling the functions
+        self.pushButton_close.clicked.connect(self.go_back)
+        
+
+    def go_back(self):
+        self.close()

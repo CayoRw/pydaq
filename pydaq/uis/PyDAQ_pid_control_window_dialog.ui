@@ -374,7 +374,7 @@ QDoubleSpinBox::down-button:hover{
        </widget>
       </item>
       <item alignment="Qt::AlignmentFlag::AlignHCenter">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushButton_apply">
         <property name="minimumSize">
          <size>
           <width>60</width>
@@ -404,7 +404,7 @@ QDoubleSpinBox::down-button:hover{
        </widget>
       </item>
       <item alignment="Qt::AlignmentFlag::AlignHCenter">
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="pushButton_close">
         <property name="minimumSize">
          <size>
           <width>60</width>

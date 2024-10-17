@@ -98,7 +98,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         else:
             kd = None
         equation_parts = []
-#Create a pid equation
+#Create a pid equation to show
         if kp is not None:
             kp_display = f"{kp:.2f}"
             equation_parts.append(rf"{kp_display} \cdot e(t)")
@@ -110,9 +110,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             equation_parts.append(rf"{kd_display} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
-        #Equation on latex
+#Equation on latex
         latex = "u(t) = " + " + ".join(equation_parts)
-        #Figure created showing the equation, without axes
+#Figure created showing the equation, without axes
         fig = Figure(figsize=(9, 3), facecolor='#404040')
         ax = fig.add_subplot(111, facecolor='#404040')
         ax.text(0.5, 0.5, f"${latex}$", fontsize=15, ha='center', va='center', color='white')
@@ -126,8 +126,8 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             
         self.image_layout.addWidget(canvas)
 
+#Create the pid control window
     def show_graph_window(self):
-        # Criar uma nova instância da janela para a segunda interface
         plot_window = PID_Control_Window_Dialog()
         plot_window.exec()
 
@@ -148,7 +148,6 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         except ValueError:
             print("Please enter valid numbers for Kp, Ki, and Kd.")
 '''
-
 
 '''app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()

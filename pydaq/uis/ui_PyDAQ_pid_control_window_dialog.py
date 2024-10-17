@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'designerwTbABT.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogiDMHbn.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -376,11 +376,11 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.verticalLayout_3.addWidget(self.widget_2)
 
-        self.pushButton = QPushButton(self.widget)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setMinimumSize(QSize(60, 0))
+        self.pushButton_apply = QPushButton(self.widget)
+        self.pushButton_apply.setObjectName(u"pushButton_apply")
+        self.pushButton_apply.setMinimumSize(QSize(60, 0))
 
-        self.verticalLayout_3.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout_3.addWidget(self.pushButton_apply, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.frame_image = QFrame(self.widget)
         self.frame_image.setObjectName(u"frame_image")
@@ -398,12 +398,12 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.verticalLayout_3.addWidget(self.frame_image)
 
-        self.pushButton_2 = QPushButton(self.widget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setMinimumSize(QSize(60, 0))
-        self.pushButton_2.setMaximumSize(QSize(100, 16777215))
+        self.pushButton_close = QPushButton(self.widget)
+        self.pushButton_close.setObjectName(u"pushButton_close")
+        self.pushButton_close.setMinimumSize(QSize(60, 0))
+        self.pushButton_close.setMaximumSize(QSize(100, 16777215))
 
-        self.verticalLayout_3.addWidget(self.pushButton_2, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout_3.addWidget(self.pushButton_close, 0, Qt.AlignmentFlag.AlignHCenter)
 
 
         self.verticalLayout.addWidget(self.widget)
@@ -418,7 +418,7 @@ class Ui_Dialog_Plot_PID_Window(object):
         Dialog_Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Dialog", None))
         self.label_2.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe:", None))
         self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
-        self.pushButton.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Apply", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Close", None))
+        self.pushButton_apply.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Apply", None))
+        self.pushButton_close.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Close", None))
     # retranslateUi
 
