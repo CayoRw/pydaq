@@ -15,4 +15,20 @@ from nidaqmx.constants import TerminalConfiguration
 
 
 class PIDControl(Base):
-    print('ola')
+    def __init__(self, Kp, Ki, Kd, setpoint=0, calibration_equation=None, unit='Voltage (V)'):
+        self.Kp = Kp
+        self.Ki = Ki
+        self.Kd = Kd
+        self.setpoint = setpoint
+        self.unit = unit
+        self.calibration_equation = calibration_equation
+        self.integral = 0
+        self.previous_error = 0
+
+    def update(self, feedback_value):
+        error = self.setpoint - feedback_value
+        self.integral += error
+        derivative = error - self.previous_error
+        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        self.previous_error = error
+        return output, error

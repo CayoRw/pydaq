@@ -359,30 +359,8 @@ class PID:
         self.integral = 0
         self.previous_error = 0
 
-        if self.calibration_equation:
-            try:
-                self.calibration_func = lambdify(symbols('x'), sympify(self.calibration_equation.replace("^", "**")), 'numpy')
-            except Exception as e:
-                print(f"Error initializing calibration equation: {e}")
-                self.calibration_func = lambda x: x  # Função identidade se não houver equação válida
-        else:
-            self.calibration_func = lambda x: x  # Função identidade se não houver equação
-
-        if self.unit != 'Voltage (V)':
-            self.setpoint = self.apply_calibration(self.setpoint)
-
-    def apply_calibration(self, value):
-        if self.unit == 'Voltage (V)':
-            return value
-        try:
-            return self.calibration_func(value)
-        except Exception as e:
-            print(f"Error applying calibration: {e}")
-            return value  # Retorna o valor original em caso de erro
-
     def update(self, feedback_value):
-        setpoint_adjusted = self.apply_calibration(self.setpoint)
-        error = setpoint_adjusted - feedback_value
+        error = self.setpoint - feedback_value
         self.integral += error
         derivative = error - self.previous_error
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
@@ -418,8 +396,7 @@ class PlotWindow(QDialog):
         self.mid_layout = QFrame()
         self.mid_layout_content = QHBoxLayout(self.mid_layout)
         self.figure = plt.figure(facecolor='#434544')
-        self.ax1 = self.figure.add_subplot(121, facecolor='#434544')  # Output graph
-        self.ax2 = self.figure.add_subplot(122, facecolor='#434544')  # Error graph
+        self.ax = self.figure.add_subplot(111, facecolor='#434544')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         #Add widget to layout
         self.mid_layout_content.addWidget(self.canvas)
@@ -471,13 +448,9 @@ class PlotWindow(QDialog):
             self.time_elapsed = 0.0
 
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
-            self.ax1.set_xlabel('Time (s)')
-            self.ax1.set_ylabel(self.unit)
-            self.ax1.legend(['System Output', 'Setpoint'])
-
-            self.ax2.set_xlabel('Time (s)')
-            self.ax2.set_ylabel('Error')
-            self.ax2.legend(['Error'])
+            self.ax.set_xlabel('Time (s)')
+            self.ax.set_ylabel(self.unit)
+            self.ax.legend(['System Output', 'Setpoint'])
 
             plt.suptitle('PID Control')
 
@@ -487,18 +460,15 @@ class PlotWindow(QDialog):
 
     def init_plot(self):
 
-        self.line1, = self.ax1.plot([], [], 'o', label='System Output')  # Usar 'o' para pontos
-        self.line2, = self.ax1.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
-        self.line3, = self.ax2.plot([], [], 'o', label='Error')  # Usar 'o' para pontos
-        self.ax1.set_xlim(0, 100)
-        self.ax1.set_ylim(-10, 10)
-        self.ax2.set_xlim(0, 100)
-        self.ax2.set_ylim(-10, 10)
-        return self.line1, self.line2, self.line3
+        self.line1, = self.ax.plot([], [], 'o', label='System Output')  # Usar 'o' para pontos
+        self.line2, = self.ax.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
+        self.ax.set_xlim(0, 100)
+        self.ax.set_ylim(-10, 10)
+        return self.line1, self.line2
 
     def update_plot(self, frame):
         if self.pid is None:
-            return self.line1, self.line2, self.line3
+            return self.line1, self.line2
 
         control, error = self.pid.update(self.system_value)
         self.system_value += control * 0.1
@@ -507,19 +477,16 @@ class PlotWindow(QDialog):
 
         # Atualizar o tempo
         self.time_elapsed += self.period
-        self.ax1.set_xlim(0, self.time_elapsed)
-        self.ax2.set_xlim(0, self.time_elapsed)
+        self.ax.set_xlim(0, self.time_elapsed)
 
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
-        self.line3.set_data(np.arange(len(self.errors)) * self.period, self.errors)
 
         # Atualizar os limites dos eixos dinamicamente
-        self.ax1.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
-        self.ax2.set_ylim(min(self.errors) - 1, max(self.errors) + 1)
+        self.ax.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
         
         self.canvas.draw()
-        return self.line1, self.line2, self.line3
+        return self.line1, self.line2
 
     def stopstart (self):
         self.paused = not self.paused

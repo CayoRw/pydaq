@@ -13,7 +13,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from ..guis.pid_control_window_dialog import PID_Control_Window_Dialog
 
-
 class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
     def __init__(self, *args):
         super(PID_Control_Arduino_Widget, self).__init__()
@@ -86,27 +85,27 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
     def show_pid_equation(self):
 #Condiction to read only the inputs enable and set 'None' on desable inputs
         if self.doubleSpinBox_kp.isEnabled():
-            kp = self.doubleSpinBox_kp.value()
+            self.kp = self.doubleSpinBox_kp.value()
         else:
-            kp = None
+            self.kp = None
         if self.doubleSpinBox_ki.isEnabled():
-            ki = self.doubleSpinBox_ki.value()
+            self.ki = self.doubleSpinBox_ki.value()
         else:
-            ki = None
+            self.ki = None
         if self.doubleSpinBox_kd.isEnabled():
-            kd = self.doubleSpinBox_kd.value()
+            self.kd = self.doubleSpinBox_kd.value()
         else:
-            kd = None
+            self.kd = None
         equation_parts = []
 #Create a pid equation to show
-        if kp is not None:
-            kp_display = f"{kp:.2f}"
+        if self.kp is not None:
+            kp_display = f"{self.kp:.2f}"
             equation_parts.append(rf"{kp_display} \cdot e(t)")
-        if ki is not None:
-            ki_display = f"{ki:.2f}"
+        if self.ki is not None:
+            ki_display = f"{self.ki:.2f}"
             equation_parts.append(rf"{ki_display} \int_{{0}}^{{t}} e(\tau) \, d\tau")
-        if kd is not None:
-            kd_display = f"{kd:.2f}"
+        if self.kd is not None:
+            kd_display = f"{self.kd:.2f}"
             equation_parts.append(rf"{kd_display} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
@@ -128,7 +127,13 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 
 #Create the pid control window
     def show_graph_window(self):
+        self.setpoint = self.doubleSpinBox_setpoint.value()
+        self.unit = self.lineEdit_unit.text()
+        self.equation = self.lineEdit_equation.text()
+        self.period = self.doubleSpinBox_period.value()
+        self.duration = self.doubleSpinBox_duration.value()
         plot_window = PID_Control_Window_Dialog()
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.setpoint, self.unit, self.equation, self.period, self.duration)
         plot_window.exec()
 
 '''#Method who call the graph window
