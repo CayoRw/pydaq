@@ -687,8 +687,11 @@ QDoubleSpinBox::down-button:hover{
            <property name="maximum">
             <double>9999999.000000000000000</double>
            </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
            <property name="value">
-            <double>10.000000000000000</double>
+            <double>1.000000000000000</double>
            </property>
           </widget>
          </item>

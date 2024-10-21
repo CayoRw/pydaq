@@ -15,21 +15,32 @@ from nidaqmx.constants import TerminalConfiguration
 
 
 class PIDControl(Base):
-    def __init__(self, Kp, Ki, Kd, setpoint=0.0, calibration_equation=None, unit='Voltage (V)'):
+    def __init__(self, Kp, Ki, Kd, setpoint=0.0, calibration_equation=None, unit='Voltage (V)', period=1):
         self.Kp = float(Kp)
         self.Ki = float(Ki)
         self.Kd = float(Kd)
         self.setpoint = float(setpoint)
         self.integral = 0.0
         self.previous_error = 0.0
+        self.previous_output = 0.0
+        self.T = period
+
+    def zero_order_hold(self, current_time_step, hold_time):
+        if current_time_step % hold_time == 0:
+            return self.previous_output
+        else:
+            return self.previous_output
 
 #need to review
-    def update(self, feedback_value):
+    def update(self, feedback_value, current_time, hold_time = 1):
         error = self.setpoint - feedback_value
-        self.integral += error
-        derivative = error - self.previous_error
+        self.integral += error * self.T
+        derivative = (error - self.previous_error) / self.T
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        output = self.zero_order_hold(current_time, hold_time)
         self.previous_error = error
+        self.previous_output = output
+        
         return output
 
 '''Implementação do PID em tempo discreto

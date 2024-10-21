@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_arduino_widgetVsHvQA.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetqrctiM.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -534,7 +534,8 @@ class Ui_Arduino_PID_Control(object):
         self.doubleSpinBox_period = QDoubleSpinBox(self.widget_period)
         self.doubleSpinBox_period.setObjectName(u"doubleSpinBox_period")
         self.doubleSpinBox_period.setMaximum(9999999.000000000000000)
-        self.doubleSpinBox_period.setValue(10.000000000000000)
+        self.doubleSpinBox_period.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_period.setValue(1.000000000000000)
 
         self.horizontalLayout_8.addWidget(self.doubleSpinBox_period)
 

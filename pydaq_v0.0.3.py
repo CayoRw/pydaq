@@ -427,6 +427,7 @@ class PlotWindow(QDialog):
     def update_setpoint(self):
         try:
             new_setpoint = float(self.setpoint_input.text())
+            self.setpoint = new_setpoint
             if self.pid:
                 self.pid.setpoint = new_setpoint
         except ValueError:
@@ -435,6 +436,7 @@ class PlotWindow(QDialog):
     def start_control(self,  Kp, Ki, Kd, setpoint, calibration_equation, unit, frequency):
         try:
             setpoint = float(setpoint)
+            self.setpoint = setpoint
             Kp = float(Kp)
             Ki = float(Ki)
             Kd = float(Kd)
@@ -468,18 +470,17 @@ class PlotWindow(QDialog):
     def update_plot(self, frame):
         if self.pid is None:
             return self.line1, self.line2
-
+        self.time_elapsed += self.period
+        
         control = self.pid.update(self.system_value)
         self.system_value += control * 0.1
         self.system_values.append(self.system_value)
-
+        self.setpoints.append(self.setpoint)
+        
         # Atualizar o tempo
-        self.time_elapsed += self.period
         self.ax.set_xlim(0, self.time_elapsed)
-
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
-
         # Atualizar os limites dos eixos dinamicamente
         self.ax.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
         

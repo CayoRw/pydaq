@@ -20,7 +20,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.setupUi(self)
         self.setGeometry(200, 200, 1000, 600)
 #Calling the functions
+        self.pushButton_startstop.clicked.connect(self.stopstart)
         self.pushButton_close.clicked.connect(self.go_back)
+        self.pushButton_apply.clicked.connect(self.apply_parameters)
 
 #variable for control
         self.system_value = 0.0
@@ -41,16 +43,19 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
-        self.unit = unit
-        self.calibration_equation = equation
         self.setpoint = setpoint if setpoint else 0.0
+        self.unit = unit if unit else 'Voltage (V)'
+        self.calibration_equation = equation
         self.period = period if period else 1 
+        self.duration = duration if duration else 10
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
+        print('Setpoint ', self.setpoint)
         print('unit ', self.unit)
         print('equation ', self.calibration_equation)
-        print('period', self.period)
+        print('period ', self.period)
+        print('Duration ', self.duration)
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
     def go_back(self):
@@ -65,16 +70,20 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
             self.ani.event_source.start()
             self.pushButton_startstop.setText("Stop")
     
-    def update_setpoint(self):
+    def apply_parameters(self):
         try:
             new_setpoint = self.doubleSpinBox_SetpointDialog.value()
+            self.setpoint = new_setpoint
+            print ('O Setpoint recebeu o valor novo de ', new_setpoint)
             if self.pid:
                 self.pid.setpoint = new_setpoint
+                print ('O valor de setpoint foi enviado ao controle pid')
         except ValueError:
             pass  # Ignore invalid input
 
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
+            self.setpoint = setpoint
             self.unit = unit
             self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
             self.setpoints = []
@@ -104,9 +113,10 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
             return self.line1, self.line2
 
         control = self.pid.update(self.system_value)
-        print(f"Tipo de self.system_value: {type(self.system_value)}")
+        #print(f" self.system_value type: {type(self.system_value)}")
         self.system_value += control * 0.1
         self.system_values.append(self.system_value)
+        self.setpoints.append(self.setpoint)
 #clock
         self.time_elapsed += self.period
         self.ax.set_xlim(0, self.time_elapsed)
