@@ -136,23 +136,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         plot_window.set_parameters(self.kp, self.ki, self.kd, self.setpoint, self.unit, self.equation, self.period, self.duration)
         plot_window.exec()
 
-'''#Method who call the graph window
-    def show_graph_window(self):
-        try:
-            kp = float(kp_text) if kp_text else 0.0
-            ki = float(ki_text) if ki_text else 0.0
-            kd = float(kd_text) if kd_text else 0.0
-            setpoint = float(setpoint_text) if setpoint_text else 0.0
-            frequency = float(frequency_text) if frequency_text else 1.0  # Default to 1 Hz if empty
-            unit = self.get_selected_unit()
-            calibration_equation = self.get_calibration_equation()
-            plot_window = PlotWindow(unit, calibration_equation)
-            plot_window.start_control(kp, ki, kd, setpoint, calibration_equation, unit, frequency)
-            plot_window.exec()
-            
-        except ValueError:
-            print("Please enter valid numbers for Kp, Ki, and Kd.")
-'''
+#starting the control
+    
+
 
 '''app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()

@@ -365,7 +365,7 @@ class PID:
         derivative = error - self.previous_error
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
         self.previous_error = error
-        return output, error
+        return output
 
 class PlotWindow(QDialog):
     def __init__(self, unit, calibration_equation, parent=None):
@@ -377,7 +377,7 @@ class PlotWindow(QDialog):
         self.paused = False
         self.start_time = time.time()
         self.central_layout = QVBoxLayout(self)
-        
+
         #create a top_layout frame
         self.top_layout = QFrame ()
         self.top_layout_content = QHBoxLayout(self.top_layout)
@@ -442,7 +442,6 @@ class PlotWindow(QDialog):
             self.pid = PID(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
             self.setpoints = []
             self.system_values = []
-            self.errors = []
 
             self.period = 1/float(frequency)
             self.time_elapsed = 0.0
@@ -470,10 +469,9 @@ class PlotWindow(QDialog):
         if self.pid is None:
             return self.line1, self.line2
 
-        control, error = self.pid.update(self.system_value)
+        control = self.pid.update(self.system_value)
         self.system_value += control * 0.1
         self.system_values.append(self.system_value)
-        self.errors.append(error)
 
         # Atualizar o tempo
         self.time_elapsed += self.period

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogiDMHbn.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogUECznM.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -343,28 +343,28 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.widget_2.setObjectName(u"widget_2")
         self.gridLayout = QGridLayout(self.widget_2)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.doubleSpinBox_2 = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
+        self.doubleSpinBox_DisturbeDialog = QDoubleSpinBox(self.widget_2)
+        self.doubleSpinBox_DisturbeDialog.setObjectName(u"doubleSpinBox_DisturbeDialog")
 
-        self.gridLayout.addWidget(self.doubleSpinBox_2, 1, 3, 1, 1)
+        self.gridLayout.addWidget(self.doubleSpinBox_DisturbeDialog, 1, 3, 1, 1)
 
-        self.label_2 = QLabel(self.widget_2)
-        self.label_2.setObjectName(u"label_2")
+        self.label_Disturbe = QLabel(self.widget_2)
+        self.label_Disturbe.setObjectName(u"label_Disturbe")
 
-        self.gridLayout.addWidget(self.label_2, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_Disturbe, 1, 1, 1, 1)
 
-        self.label = QLabel(self.widget_2)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(100, 30))
-        self.label.setMaximumSize(QSize(70, 16777215))
+        self.label_Setpoint = QLabel(self.widget_2)
+        self.label_Setpoint.setObjectName(u"label_Setpoint")
+        self.label_Setpoint.setMinimumSize(QSize(100, 30))
+        self.label_Setpoint.setMaximumSize(QSize(70, 16777215))
 
-        self.gridLayout.addWidget(self.label, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_Setpoint, 0, 1, 1, 1)
 
-        self.doubleSpinBox = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        self.doubleSpinBox.setMinimumSize(QSize(200, 0))
+        self.doubleSpinBox_SetpointDialog = QDoubleSpinBox(self.widget_2)
+        self.doubleSpinBox_SetpointDialog.setObjectName(u"doubleSpinBox_SetpointDialog")
+        self.doubleSpinBox_SetpointDialog.setMinimumSize(QSize(200, 0))
 
-        self.gridLayout.addWidget(self.doubleSpinBox, 0, 3, 1, 1)
+        self.gridLayout.addWidget(self.doubleSpinBox_SetpointDialog, 0, 3, 1, 1)
 
         self.line = QFrame(self.widget_2)
         self.line.setObjectName(u"line")
@@ -378,7 +378,8 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.pushButton_apply = QPushButton(self.widget)
         self.pushButton_apply.setObjectName(u"pushButton_apply")
-        self.pushButton_apply.setMinimumSize(QSize(60, 0))
+        self.pushButton_apply.setMinimumSize(QSize(100, 0))
+        self.pushButton_apply.setMaximumSize(QSize(100, 16777215))
 
         self.verticalLayout_3.addWidget(self.pushButton_apply, 0, Qt.AlignmentFlag.AlignHCenter)
 
@@ -398,12 +399,26 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.verticalLayout_3.addWidget(self.frame_image)
 
-        self.pushButton_close = QPushButton(self.widget)
+        self.widget_3 = QWidget(self.widget)
+        self.widget_3.setObjectName(u"widget_3")
+        self.horizontalLayout = QHBoxLayout(self.widget_3)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.pushButton_startstop = QPushButton(self.widget_3)
+        self.pushButton_startstop.setObjectName(u"pushButton_startstop")
+        self.pushButton_startstop.setMinimumSize(QSize(0, 0))
+        self.pushButton_startstop.setMaximumSize(QSize(100, 16777215))
+
+        self.horizontalLayout.addWidget(self.pushButton_startstop)
+
+        self.pushButton_close = QPushButton(self.widget_3)
         self.pushButton_close.setObjectName(u"pushButton_close")
         self.pushButton_close.setMinimumSize(QSize(60, 0))
         self.pushButton_close.setMaximumSize(QSize(100, 16777215))
 
-        self.verticalLayout_3.addWidget(self.pushButton_close, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.horizontalLayout.addWidget(self.pushButton_close)
+
+
+        self.verticalLayout_3.addWidget(self.widget_3)
 
 
         self.verticalLayout.addWidget(self.widget)
@@ -416,9 +431,10 @@ class Ui_Dialog_Plot_PID_Window(object):
 
     def retranslateUi(self, Dialog_Plot_PID_Window):
         Dialog_Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Dialog", None))
-        self.label_2.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe:", None))
-        self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
+        self.label_Disturbe.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe:", None))
+        self.label_Setpoint.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
         self.pushButton_apply.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Apply", None))
+        self.pushButton_startstop.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Stop", None))
         self.pushButton_close.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Close", None))
     # retranslateUi
 

@@ -32,19 +32,9 @@ def main():
     # ----------------------------
     # 3. Entrada do Usuário
     # ----------------------------
-    try:
-        setpoint = float(input("Digite o valor do setpoint desejado: "))
-    except ValueError:
-        print("Entrada inválida para o setpoint. Usando setpoint padrão = 1.0")
-        setpoint = 1.0
 
-    try:
-        sim_time = float(input("Digite o tempo de simulação em segundos: "))
-        if sim_time <= 0:
-            raise ValueError
-    except ValueError:
-        print("Entrada inválida para o tempo de simulação. Usando tempo padrão = 10 segundos")
-        sim_time = 10.0
+    setpoint = 1.0
+    sim_time = 10.0
 
     # ----------------------------
     # 4. Parâmetros de Simulação
@@ -63,7 +53,7 @@ def main():
     # Configuração inicial do gráfico
     plt.ion()  # Ativa o modo interativo
     fig, ax = plt.subplots()
-    line1, = ax.plot([], [], label="Saída do sistema")
+    line1, = ax.plot([], [], 'o', label="Saída do sistema")
     line2, = ax.plot([], [], '--', label="Setpoint", color='red')
     ax.set_xlim(0, sim_time)
     ax.set_ylim(0, max(setpoint*1.2, 1.2))  # Ajusta o limite y com base no setpoint

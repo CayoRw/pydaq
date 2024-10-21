@@ -1,60 +1,86 @@
 import sys, os
 import serial
 import serial.tools.list_ports
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-
+import numpy as np
+import time
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QDialog, QFileDialog, QApplication, QWidget, QVBoxLayout, QPushButton
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from ..guis.pid_control_arduino_widget import PID_Control_Arduino_Widget
 from ..uis.ui_PyDAQ_pid_control_window_dialog import Ui_Dialog_Plot_PID_Window
 from ..pid_control import PIDControl
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
+        self.setGeometry(200, 200, 1000, 600)
+#Calling the functions
+        self.pushButton_close.clicked.connect(self.go_back)
+
+#variable for control
+        self.system_value = 0.0
+        self.paused = False
+        self.setpoints = []
+        self.system_values = []
+        self.start_time = time.time()
+        self.pid = None
 
 #Starting the canvas
-        self.figure = plt.figure(facecolor='#434544')
+        self.figure = plt.figure(facecolor='#404040')
+        self.ax = self.figure.add_subplot(111, facecolor='#434544')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         self.image_layout.addWidget(self.canvas)
 
-#Calling the functions
-        self.pushButton_close.clicked.connect(self.go_back)
-    
-    def set_parameters(self, kp, ki, kd, setpoint, unit, equation, period, duration,):
-        self.kp = kp
-        self.ki = ki
-        self.kd = kd
-
 #Defining the fuctions
+    def set_parameters(self, kp, ki, kd, setpoint, unit, equation, period, duration):
+        self.kp = kp if kp else 1
+        self.ki = ki if ki else 0
+        self.kd = kd if kd else 0
+        self.unit = unit
+        self.calibration_equation = equation
+        self.setpoint = setpoint if setpoint else 0.0
+        self.period = period if period else 1 
+        print('kp ', self.kp)
+        print('ki ', self.ki)
+        print('kd ', self.kd)
+        print('unit ', self.unit)
+        print('equation ', self.calibration_equation)
+        print('period', self.period)
+        self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
+
     def go_back(self):
         self.close()
+
+    def stopstart (self):
+        self.paused = not self.paused
+        if self.paused:
+            self.ani.event_source.stop()
+            self.pushButton_startstop.setText("Start")
+        else:
+            self.ani.event_source.start()
+            self.pushButton_startstop.setText("Stop")
     
     def update_setpoint(self):
         try:
-            new_setpoint = float(self.setpoint_input.text())
+            new_setpoint = self.doubleSpinBox_SetpointDialog.value()
             if self.pid:
                 self.pid.setpoint = new_setpoint
         except ValueError:
             pass  # Ignore invalid input
 
-    def start_control(self,  Kp, Ki, Kd, setpoint, calibration_equation, unit, frequency):
+    def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
-            setpoint = float(setpoint)
-            Kp = float(Kp)
-            Ki = float(Ki)
-            Kd = float(Kd)
             self.unit = unit
-            self.pid = PID(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
             self.setpoints = []
             self.system_values = []
             self.errors = []
-            self.period = 1/float(frequency)
+            self.period = period
             self.time_elapsed = 0.0
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
@@ -74,17 +100,19 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
 
     def update_plot(self, frame):
         if self.pid is None:
+            print ('self.pid is none')
             return self.line1, self.line2
-        control, error = self.pid.update(self.system_value)
+
+        control = self.pid.update(self.system_value)
+        print(f"Tipo de self.system_value: {type(self.system_value)}")
         self.system_value += control * 0.1
         self.system_values.append(self.system_value)
-        self.errors.append(error)
 #clock
         self.time_elapsed += self.period
         self.ax.set_xlim(0, self.time_elapsed)
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
-#reloading the axes 
+#reloading the axes
         self.ax.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
         self.canvas.draw()
         return self.line1, self.line2
