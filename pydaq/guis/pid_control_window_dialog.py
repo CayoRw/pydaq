@@ -83,14 +83,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
 
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
+            self.time_elapsed = 0.0
             self.setpoint = setpoint
             self.unit = unit
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit)
+            self.period = period
             self.setpoints = []
             self.system_values = []
             self.errors = []
-            self.period = period
-            self.time_elapsed = 0.0
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit, self.period)
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
             self.ax.set_ylabel(self.unit)
@@ -111,14 +111,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         if self.pid is None:
             print ('self.pid is none')
             return self.line1, self.line2
-
-        control = self.pid.update(self.system_value)
-        #print(f" self.system_value type: {type(self.system_value)}")
+#clock
+        self.time_elapsed += self.period
+        control = self.pid.update(self.system_value, self.time_elapsed)
+#print(f" self.system_value type: {type(self.system_value)}")
         self.system_value += control * 0.1
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
-#clock
-        self.time_elapsed += self.period
+#updating
         self.ax.set_xlim(0, self.time_elapsed)
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
