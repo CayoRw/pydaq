@@ -467,13 +467,19 @@ class PlotWindow(QDialog):
         self.ax.set_ylim(-10, 10)
         return self.line1, self.line2
 
+    # Função de transferência discreta do sistema (utilizando Euler para discretizar)
+    def system_output(u, y_prev):
+        # Discretização por Euler
+        return (1 * u + y_prev) / (1 + 1 * 2)
+
     def update_plot(self, frame):
         if self.pid is None:
             return self.line1, self.line2
         self.time_elapsed += self.period
         
         control = self.pid.update(self.system_value)
-        self.system_value += control * 0.1
+        y = self.system_output(control)
+        self.system_value += y
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
         

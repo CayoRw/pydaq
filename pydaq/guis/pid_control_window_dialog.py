@@ -31,6 +31,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.system_values = []
         self.start_time = time.time()
         self.pid = None
+#defining the a in H(s) = 1/s+a
+        self.a = 2
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
@@ -101,7 +103,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
             print("Error")
 
     def init_plot(self):
-        self.line1, = self.ax.plot([], [], 'o', label='System Output')  # Usar 'o' para pontos
+        self.line1, = self.ax.plot([], [], '--', label='System Output')  # Usar 'o' para pontos
         self.line2, = self.ax.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
         self.ax.set_xlim(0, 100)
         self.ax.set_ylim(-10, 10)
@@ -115,7 +117,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.time_elapsed += self.period
         control = self.pid.update(self.system_value, self.time_elapsed)
 #print(f" self.system_value type: {type(self.system_value)}")
-        self.system_value += control * 0.1
+        #self.system_value += control * 0.1
+        self.system_value = self.system_output(control,self.system_value)
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
 #updating
@@ -126,3 +129,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.ax.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
         self.canvas.draw()
         return self.line1, self.line2
+
+    def system_output(self, control, y_prev):
+#discretization by euler
+        return (self.period * control + y_prev) / (1 + self.period * self.a)

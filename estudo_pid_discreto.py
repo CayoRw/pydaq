@@ -6,9 +6,9 @@ def main():
     # ----------------------------
     # 1. Configurações do Controlador PID
     # ----------------------------
-    Kp = 2.0  # Ganho proporcional
-    Ki = 0.5  # Ganho integr5
-    Kd = 0.1  # Ganho derivativo
+    Kp = 1.0  # Ganho proporcional
+    Ki = 0  # Ganho integr5
+    Kd = 0  # Ganho derivativo
 
     # ----------------------------
     # 2. Configurações do Sistema Discreto
@@ -33,7 +33,7 @@ def main():
     # 3. Entrada do Usuário
     # ----------------------------
 
-    setpoint = 1.0
+    setpoint = 5
     sim_time = 10.0
 
     # ----------------------------

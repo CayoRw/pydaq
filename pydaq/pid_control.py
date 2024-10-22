@@ -27,15 +27,13 @@ class PIDControl(Base):
 #need to review
     def update(self, feedback_value, current_time):
         error = self.setpoint - feedback_value
-        self.integral += error * self.T
+        self.integral = self.integral + error * self.T
         derivative = (error - self.previous_error) / self.T
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
         #output = self.zero_order_hold(current_time, self.hold_time)
         self.previous_error = error
         self.previous_output = output
-        
         return output
-
 '''
     def zero_order_hold(self, current_time_step, hold_time):
         if current_time_step % hold_time == 0:
@@ -43,7 +41,6 @@ class PIDControl(Base):
         else:
             return self.previous_output
 '''
-
 
 '''Implementação do PID em tempo discreto
     def pid_controller(setpoint, y, Kp, Ki, Kd, integral_prev, error_prev, T):
