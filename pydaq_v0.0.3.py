@@ -333,7 +333,7 @@ class Pid_Control(QMainWindow):
         kd_text = self.d_input.text()
         frequency_text = self.frequence_input.text()
         setpoint_text = self.setpoint_input.text()
-        
+
         try:
             kp = float(kp_text) if kp_text else 0.0
             ki = float(ki_text) if ki_text else 0.0

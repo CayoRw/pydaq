@@ -25,6 +25,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.pushButton_apply.clicked.connect(self.apply_parameters)
 
 #variable for control
+        self.a = 0.2
         self.system_value = 0.0
         self.paused = False
         self.setpoints = []
@@ -36,7 +37,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
-        self.ax = self.figure.add_subplot(111, facecolor='#434544')  # Output graph
+        self.ax = self.figure.add_subplot(111, facecolor='#404040')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         self.image_layout.addWidget(self.canvas)
 
@@ -61,6 +62,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
     def go_back(self):
+        self.ani.event_source.stop()
         self.close()
 
     def stopstart (self):
@@ -71,7 +73,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         else:
             self.ani.event_source.start()
             self.pushButton_startstop.setText("Stop")
-    
+
     def apply_parameters(self):
         try:
             new_setpoint = self.doubleSpinBox_SetpointDialog.value()
@@ -81,7 +83,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
                 self.pid.setpoint = new_setpoint
                 print ('O valor de setpoint foi enviado ao controle pid')
         except ValueError:
-            pass  # Ignore invalid input
+            pass  # Ignore invalid input  
+        self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
+        print ('O Disturbio recebeu um valor de ', self.disturbe)
 
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
@@ -90,8 +94,10 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
             self.unit = unit
             self.period = period
             self.setpoints = []
+            self.disturbe = 0.0
             self.system_values = []
             self.errors = []
+            self.set_text()
             self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit, self.period)
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
@@ -102,8 +108,11 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         except ValueError:
             print("Error")
 
+    def set_text(self):
+        self.doubleSpinBox_SetpointDialog.setValue(self.setpoint)
+
     def init_plot(self):
-        self.line1, = self.ax.plot([], [], '--', label='System Output')  # Usar 'o' para pontos
+        self.line1, = self.ax.plot([], [], 'x', label='System Output')  # Usar 'o' para pontos
         self.line2, = self.ax.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
         self.ax.set_xlim(0, 100)
         self.ax.set_ylim(-10, 10)
@@ -117,8 +126,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.time_elapsed += self.period
         control = self.pid.update(self.system_value, self.time_elapsed)
 #print(f" self.system_value type: {type(self.system_value)}")
-        #self.system_value += control * 0.1
-        self.system_value = self.system_output(control,self.system_value)
+#self.system_value += control * 0.1
+        self.system_value = self.system_output(self.system_value,control)
+        self.system_value = self.system_value - self.disturbe
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
 #updating
@@ -130,6 +140,6 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.canvas.draw()
         return self.line1, self.line2
 
-    def system_output(self, control, y_prev):
+    def system_output(self, y_prev, control):
 #discretization by euler
         return (self.period * control + y_prev) / (1 + self.period * self.a)

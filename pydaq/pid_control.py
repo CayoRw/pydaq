@@ -30,17 +30,18 @@ class PIDControl(Base):
         self.integral = self.integral + error * self.T
         derivative = (error - self.previous_error) / self.T
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
-        #output = self.zero_order_hold(current_time, self.hold_time)
+        #output = self.zero_order_hold(current_time, self.hold_time, output)
         self.previous_error = error
         self.previous_output = output
         return output
 '''
-    def zero_order_hold(self, current_time_step, hold_time):
+    def zero_order_hold(self, current_time_step, hold_time, new_output):
         if current_time_step % hold_time == 0:
-            return self.previous_output
+            return new_output
         else:
             return self.previous_output
 '''
+
 
 '''Implementação do PID em tempo discreto
     def pid_controller(setpoint, y, Kp, Ki, Kd, integral_prev, error_prev, T):
