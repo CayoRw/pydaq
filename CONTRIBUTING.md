@@ -31,7 +31,7 @@ These are some basic steps to help us with coding:
    ```   
 5. Create a new branch.
 6. Make changes following the coding style of the project (or suggesting improvements).
-   - Better understand the structure of the project codes can be found [here](docs/codes_structure.md).
+   - Better understand the structure of the project codes can be found  [here](docs/codes_structure.md).
 7. Run the tests.
 8. Write and/or adapt existing test if needed.
 9. Add documentation if needed.
