@@ -25,7 +25,6 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.pushButton_apply.clicked.connect(self.apply_parameters)
 
 #variable for control
-        self.a = 0.2
         self.system_value = 0.0
         self.paused = False
         self.setpoints = []
@@ -33,7 +32,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.start_time = time.time()
         self.pid = None
 #defining the a in H(s) = 1/s+a
-        self.a = 2
+        self.a = 0.1
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
