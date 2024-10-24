@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetqrctiM.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetfWRgNo.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -649,28 +649,28 @@ class Ui_Arduino_PID_Control(object):
     def retranslateUi(self, Arduino_PID_Control):
         Arduino_PID_Control.setWindowTitle(QCoreApplication.translate("Arduino_PID_Control", u"Form", None))
         self.pushButton_start.setText(QCoreApplication.translate("Arduino_PID_Control", u"PID CONTROL", None))
-        self.label_arduino.setText(QCoreApplication.translate("Arduino_PID_Control", u"Choose your arduino:", None))
+        self.label_arduino.setText(QCoreApplication.translate("Arduino_PID_Control", u"Arduino:", None))
         self.comboBox_setpoint.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"Voltage (V)", None))
         self.comboBox_setpoint.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"Temperature (C\u00b0)", None))
         self.comboBox_setpoint.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"Other", None))
 
         self.label_setpoint.setText(QCoreApplication.translate("Arduino_PID_Control", u"Setpoint:", None))
-        self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path", None))
-        self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"Equation (?)", None))
+        self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
+        self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"Equation (?):", None))
         self.label_unit.setText(QCoreApplication.translate("Arduino_PID_Control", u"Unit:", None))
         self.path_folder_browse.setText(QCoreApplication.translate("Arduino_PID_Control", u"Browse", None))
-        self.label_kd.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kd", None))
+        self.label_kd.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kd:", None))
         self.pushButton_confirm.setText(QCoreApplication.translate("Arduino_PID_Control", u"Confirm", None))
-        self.label_kp.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kp", None))
+        self.label_kp.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kp:", None))
         self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type?", None))
         self.comboBox_type.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"P", None))
         self.comboBox_type.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"PI", None))
         self.comboBox_type.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"PD", None))
         self.comboBox_type.setItemText(3, QCoreApplication.translate("Arduino_PID_Control", u"PID", None))
 
-        self.label_periody.setText(QCoreApplication.translate("Arduino_PID_Control", u"Sampling period (s)", None))
-        self.label_ki.setText(QCoreApplication.translate("Arduino_PID_Control", u"Ki", None))
+        self.label_periody.setText(QCoreApplication.translate("Arduino_PID_Control", u"Sampling period (s):", None))
+        self.label_ki.setText(QCoreApplication.translate("Arduino_PID_Control", u"Ki:", None))
         self.reload_devices.setText("")
-        self.label_duration.setText(QCoreApplication.translate("Arduino_PID_Control", u"Session duration (s)", None))
+        self.label_duration.setText(QCoreApplication.translate("Arduino_PID_Control", u"Session duration (s):", None))
     # retranslateUi
 

@@ -362,7 +362,7 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Kp</string>
+         <string>Kp:</string>
         </property>
        </widget>
       </item>
@@ -488,7 +488,7 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Kd</string>
+         <string>Kd:</string>
         </property>
        </widget>
       </item>
@@ -501,7 +501,7 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Equation (?)</string>
+         <string>Equation (?):</string>
         </property>
        </widget>
       </item>
@@ -527,7 +527,7 @@ QDoubleSpinBox::down-button:hover{
       <item row="12" column="0">
        <widget class="QLabel" name="label_path">
         <property name="text">
-         <string>Data path</string>
+         <string>Data path:</string>
         </property>
        </widget>
       </item>
@@ -613,7 +613,7 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Choose your device:</string>
+         <string>Device:</string>
         </property>
        </widget>
       </item>
@@ -626,14 +626,14 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Ki</string>
+         <string>Ki:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_channel">
         <property name="text">
-         <string>Choose channel:</string>
+         <string>Channel:</string>
         </property>
        </widget>
       </item>
@@ -675,7 +675,7 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Sampling period (s)</string>
+         <string>Sampling period (s):</string>
         </property>
        </widget>
       </item>
@@ -819,7 +819,7 @@ QDoubleSpinBox::down-button:hover{
       <item row="3" column="0">
        <widget class="QLabel" name="label_terminal">
         <property name="text">
-         <string>Terminal config.</string>
+         <string>Terminal config.:</string>
         </property>
        </widget>
       </item>

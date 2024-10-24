@@ -239,7 +239,7 @@ QPushButton#reload_devices:pressed{
          </size>
         </property>
         <property name="text">
-         <string>Sample period (s)</string>
+         <string>Sample period (s):</string>
         </property>
        </widget>
       </item>
@@ -258,7 +258,7 @@ QPushButton#reload_devices:pressed{
          </size>
         </property>
         <property name="text">
-         <string>Data path</string>
+         <string>Data path:</string>
         </property>
        </widget>
       </item>
@@ -393,7 +393,7 @@ QPushButton#reload_devices:pressed{
          </size>
         </property>
         <property name="text">
-         <string>Choose your arduino:</string>
+         <string>Arduino:</string>
         </property>
        </widget>
       </item>
