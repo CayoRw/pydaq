@@ -1,0 +1,44 @@
+Reunião do dia 10/10:                                                          |
+Correcões ortograficas:                                                        | 
+-PADROES                                                                       | 
+-CHOOSE YOUR DEVICE (?)                                                        | 
+-DATA PATH                                                                     | 
+-SIMPLIFICAR LINHAS                                                            | 
+-DEVICE                                                                        | 
+-CHANNEL                                                                       | 
+-DOIS PONTOS EM TODOS                                                          | 
+_______________________________________________________________________________| Progresso:
+Trabalhos:                                                                     | 
+- deixar definidas as funções do controle pid em tempo discreto                | >> feito 
+- limpar os valores quando selecionado o tipo de controlador                   | >> feito 
+- fazer a função do data path                                                  | << não feito 
+- realizar o controle em tempo discreto de um sistema de 1 ordem               | >> feito 
+   - 1 criar o sistema 1 / s+a em discreto                                     | >> feito, utilizando a discretização por euler
+   - 2 ler o intervalo de amostragem                                           | >> feito
+   - 3 fazer o grafico em tempo real                                           | >> feito
+   - 4 label para falar da duração da sessão (s)                               | >> feito, comentar com o samir, mudar a forma de simulação
+   - acrescentar disturbios                                                    | >> feito
+   - verificar matematicamente as respostas com o simulado                     | >> feito para: g(s) = 1/s+a em tempo discreto
+- instalar o nidaq e gerar sinal aleatório                                     | >> feito
+- contribuir com orientações para o pydaq                                      | >> feito
+     -- ver padrões e sugerir adições                                          | >> feito
+- todas as correções ortograficas                                              | >> feito  
+- instalar Nidaq MX                                                            | >> feito
+_______________________________________________________________________________| 
+Reunião dia 24/10                                                              |
+Trabalhos                                                                      |
+-Pegar a nova versão do step response e do get data                            | >> feito
+-Data path                                                                     | 
+-Janelas do controle PID                                                       | 
+-Enviar parametros do dialog para o main                                       |
+-Desenvolver a ideia do (?)                                                    |
+-Mudar a cores nas linhas <0.05                                                |
+-Mudar textos para ingles                                                      |
+-Conferir matematicamente ki e kd                                              |
+-Tirar label de duração                                                        |
+-Grafico com eixo do tempo a direita e o erro no mesmo grafico que o setpoint  |
+-Sugestão de mesclagem do controle PID com o step response                     |
+-Tipos de disturbios                                                           |
+-SOH									                                                 |
+_______________________________________________________________________________|
+Prox data: dia 14/11 15h30                                                     |

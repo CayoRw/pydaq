@@ -11,8 +11,6 @@ from ..uis.ui_PyDAQ_pid_control_NIDAQ_widget import Ui_NIDAQ_PID_Control
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-
-
 class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
     def __init__(self, *args):
         super(PID_Control_NIDAQ_Widget, self).__init__()
