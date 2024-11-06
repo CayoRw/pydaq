@@ -82,7 +82,7 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             self.doubleSpinBox_ki.setValue(0)
         if kd_enabled == False:
             self.doubleSpinBox_kd.setValue(0)
-    
+
     #Method to create a image and show the pid equation
     def show_pid_equation(self):
 #Condiction to read only the inputs enable and set 'None' on desable inputs

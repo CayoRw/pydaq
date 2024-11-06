@@ -15,6 +15,7 @@ from nidaqmx.constants import TerminalConfiguration
 
 class PIDControl(Base):
     def __init__(self, Kp, Ki, Kd, setpoint=0.0, calibration_equation=None, unit='Voltage (V)', period=1):
+        super().__init__()
         self.Kp = float(Kp)
         self.Ki = float(Ki)
         self.Kd = float(Kd)
@@ -24,6 +25,8 @@ class PIDControl(Base):
         self.previous_output = 0.0
         self.T = period
         self.hold_time = period
+        
+        
 #need to review
     def update(self, feedback_value, current_time):
         error = self.setpoint - feedback_value
@@ -34,6 +37,17 @@ class PIDControl(Base):
         self.previous_error = error
         self.previous_output = output
         return output
+    
+'''
+        # Arduino ADC resolution (in bits)
+        self.arduino_ai_bits = 10
+
+        # Arduino analog input max and min
+        self.ard_ai_max, self.ard_ai_min = 5, 0
+
+        # Value per bit - Arduino
+        self.ard_vpb = (self.ard_ai_max - self.ard_ai_min) / ((2 ** self.arduino_ai_bits)-1)
+'''
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):
         if current_time_step % hold_time == 0:

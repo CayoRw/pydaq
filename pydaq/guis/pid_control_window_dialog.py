@@ -3,6 +3,7 @@ import serial
 import serial.tools.list_ports
 import numpy as np
 import time
+from pydaq.utils.base import Base
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QDialog, QFileDialog, QApplication, QWidget, QVBoxLayout, QPushButton
 from PySide6.QtGui import *
@@ -14,7 +15,7 @@ import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
+class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
@@ -33,6 +34,10 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.pid = None
 #defining the a in H(s) = 1/s+a
         self.a = 0.1
+
+#to save the data path
+        self.path = os.path.join(os.path.join(os.path.expanduser("~")), "Desktop") # Defining default path
+        self._check_path()
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
@@ -61,6 +66,12 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
     def go_back(self):
+        if self.save:
+            print("\nSaving data ...")
+            # Saving time_var and data
+            self._save_data(self.time_var, "time.dat")
+            self._save_data(self.data, "data.dat")
+            print("\nData saved ...")
         self.ani.event_source.stop()
         self.close()
 
@@ -77,14 +88,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         try:
             new_setpoint = self.doubleSpinBox_SetpointDialog.value()
             self.setpoint = new_setpoint
-            print ('O Setpoint recebeu o valor novo de ', new_setpoint)
+            print ('The new setpoint is ', new_setpoint)
             if self.pid:
                 self.pid.setpoint = new_setpoint
-                print ('O valor de setpoint foi enviado ao controle pid')
+                print ('The setpoint has been sended to pid control')
         except ValueError:
             pass  # Ignore invalid input  
         self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
-        print ('O Disturbio recebeu um valor de ', self.disturbe)
+        print ('The new disturbe is ', self.disturbe)
 
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
@@ -92,12 +103,16 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
             self.setpoint = setpoint
             self.unit = unit
             self.period = period
+            self.time = []
             self.setpoints = []
             self.disturbe = 0.0
             self.system_values = []
             self.errors = []
+            self.save = True
+            self.data = []
+            self.time_var = [] 
             self.set_text()
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit, self.period)
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit, self.period, self.save)          
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
             self.ax.set_ylabel(self.unit)
@@ -130,6 +145,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window):
         self.system_value = self.system_value - self.disturbe
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
+        
+        self.data.append(self.system_value)
+        self.time_var.append(self.time_elapsed)
 #updating
         self.ax.set_xlim(0, self.time_elapsed)
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)

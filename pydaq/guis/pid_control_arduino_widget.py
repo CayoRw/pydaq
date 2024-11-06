@@ -28,6 +28,11 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.pushButton_confirm.released.connect(self.show_pid_equation)
         self.pushButton_start.clicked.connect(self.show_graph_window)
 
+        # Setting the starting values for some widgets
+        self.path_line_edit.setText(
+            os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
+        )
+        
 #Fuctions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
@@ -42,6 +47,15 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             if index != -1:
                 self.comboBox_arduino.setCurrentIndex(index)
 
+    def locate_path(self):  # Calling the Folder Browser Widget
+        output_folder_path = QFileDialog.getExistingDirectory(
+            self, caption="Choose a folder to save the data file"
+        )
+        if output_folder_path == "":
+            pass
+        else:
+            self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
+    
 #Condiction to show the line edit equation and unit
     def on_unit_change(self):
         selected_unit = self.comboBox_setpoint.currentText()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgettrUrEI.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetIyjWkK.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -17,8 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QRadioButton, QSizePolicy, QVBoxLayout,
-    QWidget)
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 
 class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
@@ -626,10 +626,14 @@ class Ui_Arduino_PID_Control(object):
 
         self.horizontalLayout_12.addWidget(self.radioButton)
 
-        self.radioButton_2 = QRadioButton(self.widget)
-        self.radioButton_2.setObjectName(u"radioButton_2")
+        self.no_plot_radio = QRadioButton(self.widget)
+        self.no_plot_radio.setObjectName(u"no_plot_radio")
 
-        self.horizontalLayout_12.addWidget(self.radioButton_2)
+        self.horizontalLayout_12.addWidget(self.no_plot_radio)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer)
 
 
         self.gridLayout_2.addWidget(self.widget, 11, 2, 1, 1)
@@ -697,6 +701,6 @@ class Ui_Arduino_PID_Control(object):
         self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
         self.label.setText(QCoreApplication.translate("Arduino_PID_Control", u"Save Data?", None))
         self.radioButton.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
-        self.radioButton_2.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
+        self.no_plot_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
     # retranslateUi
 
