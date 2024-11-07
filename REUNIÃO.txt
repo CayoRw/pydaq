@@ -29,10 +29,10 @@ Reunião dia 24/10                                                              
 Trabalhos                                                                      | Progresso:
 -Pegar a nova versão do step response e do get data                            | >> feito
 -Data path                                                                     | >> feito
--Janelas do controle PID                                                       | 
--Enviar parametros do dialog para o main                                       |
--Desenvolver a ideia do (?)                                                    |
--Mudar a cores nas linhas <0.05                                                |
+-Janelas do controle PID                                                       | >> feito
+-Enviar parametros do dialog para o main                                       | >> feito
+-Desenvolver a ideia do (?)                                                    | >> feito, usando o toolTip
+-Mudar a cores nas linhas <0.05                                                | 
 -Mudar textos para ingles                                                      |
 -Conferir matematicamente ki e kd                                              |
 -Tirar label de duração                                                        |

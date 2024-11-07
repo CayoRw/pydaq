@@ -315,6 +315,12 @@ QDoubleSpinBox::down-button:hover{
 	background-color: rgb(0, 50, 0);
 }
 
+QLabel::toolTip {
+    font: 12pt &quot;Helvetica&quot;;
+    text-align: center;
+    color: white; /* Cor do texto */
+    background-color: rgb(64, 64, 64);; /* Cor de fundo */
+}
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -481,6 +487,18 @@ QDoubleSpinBox::down-button:hover{
           <width>0</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The equation should be written in the form A x² + B x + C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel::toolTip {
+    font: 12pt &quot;Helvetica&quot;;
+    text-align: center;
+    color: white;  /* Cor do texto */
+    background-color: rgb(64, 64, 64);  /* Cor de fundo */
+}
+</string>
         </property>
         <property name="text">
          <string>Equation (?):</string>

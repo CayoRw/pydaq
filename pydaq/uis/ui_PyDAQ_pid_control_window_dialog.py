@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogUZvlfY.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogxGPWEm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -395,6 +395,13 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.label_Disturbe = QLabel(self.widget_2)
         self.label_Disturbe.setObjectName(u"label_Disturbe")
+        self.label_Disturbe.setStyleSheet(u"QLabel::toolTip {\n"
+"    font: 12pt \"Helvetica\";\n"
+"    text-align: center;\n"
+"    color: white;\n"
+"    background-color: rgb(64, 64, 64);\n"
+"}\n"
+"")
 
         self.gridLayout.addWidget(self.label_Disturbe, 5, 1, 1, 1)
 
@@ -488,6 +495,9 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.label_Kp.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kp:", None))
         self.label_Ki.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Ki:", None))
         self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Controler type?", None))
+#if QT_CONFIG(tooltip)
+        self.label_Disturbe.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance of the control will be added as an integrator to the output signal of the PID control</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
         self.label_Disturbe.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe (?):", None))
         self.label_Setpoint.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
         self.label_Kd.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kd:", None))

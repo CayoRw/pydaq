@@ -405,6 +405,18 @@ QDoubleSpinBox::down-button:hover{
          </item>
          <item row="5" column="1">
           <widget class="QLabel" name="label_Disturbe">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The disturbance of the control will be added as an integrator to the output signal of the PID control&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel::toolTip {
+    font: 12pt &quot;Helvetica&quot;;
+    text-align: center;
+    color: white;
+    background-color: rgb(64, 64, 64);
+}
+</string>
+           </property>
            <property name="text">
             <string>Disturbe (?):</string>
            </property>

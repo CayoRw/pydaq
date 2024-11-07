@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetlcJVCN.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetJyhjah.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -333,6 +333,12 @@ class Ui_Arduino_PID_Control(object):
 "	background-color: rgb(0, 50, 0);\n"
 "}\n"
 "\n"
+"QLabel::toolTip {\n"
+"    font: 12pt \"Helvetica\";\n"
+"    text-align: center;\n"
+"    color: white; /* Cor do texto */\n"
+"    background-color: rgb(64, 64, 64);; /* Cor de fundo */\n"
+"}\n"
 "")
         self.gridLayout = QGridLayout(Arduino_PID_Control)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -448,6 +454,13 @@ class Ui_Arduino_PID_Control(object):
         self.label_equation = QLabel(self.widget_top)
         self.label_equation.setObjectName(u"label_equation")
         self.label_equation.setMinimumSize(QSize(0, 30))
+        self.label_equation.setStyleSheet(u"QLabel::toolTip {\n"
+"    font: 12pt \"Helvetica\";\n"
+"    text-align: center;\n"
+"    color: white;  /* Cor do texto */\n"
+"    background-color: rgb(64, 64, 64);  /* Cor de fundo */\n"
+"}\n"
+"")
 
         self.gridLayout_2.addWidget(self.label_equation, 4, 0, 1, 1)
 
@@ -668,6 +681,9 @@ class Ui_Arduino_PID_Control(object):
         self.label_unit.setText(QCoreApplication.translate("Arduino_PID_Control", u"Unit:", None))
         self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
         self.reload_devices.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form A x\u00b2 + B x + C</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
         self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"Equation (?):", None))
         self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type?", None))
         self.yes_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))

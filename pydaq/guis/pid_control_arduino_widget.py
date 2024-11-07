@@ -32,7 +32,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.path_line_edit.setText(
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
-
+        
 #Fuctions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
