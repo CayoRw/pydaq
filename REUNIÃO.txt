@@ -32,14 +32,16 @@ Trabalhos                                                                      |
 -Janelas do controle PID                                                       | >> feito
 -Enviar parametros do dialog para o main                                       | >> feito
 -Desenvolver a ideia do (?)                                                    | >> feito, usando o toolTip
--Mudar a cores nas linhas <0.05                                                | 
--Mudar textos para ingles                                                      |
--Conferir matematicamente ki e kd                                              |
--Tirar label de duração                                                        |
--Grafico com eixo do tempo a direita e o erro no mesmo grafico que o setpoint  |
--Sugestão de mesclagem do controle PID com o step response                     |
--Tipos de disturbios                                                           |
--ZOH e linhas continuas pontuadas 									                   |
--Mudar nome do botão para save and close / close                               |
+-Mudar o redimensionamento do eixo e as cores padrôes                          | >> feito
+-Mudar a cores nas linhas <0.05                                                | >> feito
+-Mudar textos para ingles                                                      | >> feito
+-Conferir matematicamente ki e kd                                              | >> não feito
+-Tirar label de duração                                                        | >> feito
+-Adicionar o erro no mesmo grafico que o setpoint                              | >> feito, mas não coloquei o eixo
+-Sugestão de mesclagem do controle PID com o step response                     | >> pensando
+-Tipos de disturbios                                                           | >> pensando
+-ZOH e linhas continuas pontuadas 									                   | >> não feito
+-Mudar nome do botão para save and close / close                               | >> não feito
 _______________________________________________________________________________|
 Prox data: dia 14/11 15h30                                                     |
+Sugestão: controlar variáveis no arduíno / placas nidaq                        |

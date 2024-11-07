@@ -24,12 +24,15 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
         self.setGeometry(200, 200, 1000, 600)
+
+#Setting the tool tip
+        self.label_Disturbe.setToolTip("The dis")
+
 #Calling the functions
         self.pushButton_startstop.clicked.connect(self.stopstart)
         self.pushButton_close.clicked.connect(self.go_back)
         self.pushButton_apply.clicked.connect(self.apply_parameters)
         self.comboBox_TypeDialog.currentIndexChanged.connect(self.on_type_combo_changed)
-
 
 #variable for control
         self.system_value = 0.0
@@ -73,6 +76,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print('Equation ', self.calibration_equation)
         print('Period ', self.period)
         print ('Path ', self.path)
+        print ('Save ', self.save)
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
 #both function below are to set the comboBox enabled/desabled status
@@ -133,7 +137,6 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print ('The new setpoint is ', self.setpoint)
             if self.pid:
                 self.pid.setpoint = self.setpoint
-                print ('The setpoint has been sended to pid control')
         except ValueError:
             pass  # Ignore invalid input  
 #changing Kp Ki and Kd parameters
@@ -156,6 +159,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.kd = None
             self.pid.Kd = 0
 #changing the disturbe
+        print ('The new kp is ', self.kp)
+        print ('The new ki is ', self.ki)
+        print ('The new kd is ', self.kd)
         self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
         print ('The new disturbe is ', self.disturbe)
 
@@ -190,14 +196,21 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.doubleSpinBox_KdDialog.setValue(self.kd)
         self.doubleSpinBox_SetpointDialog.setValue(self.setpoint)
         self.comboBox_TypeDialog.setCurrentIndex(self.index)
-
+        if self.save == True:
+            self.pushButton_close.setText("Save and Close")
+            self.pushButton_close.setMinimumWidth(150)
+        else:
+            self.pushButton_close.setText("Close")
+            self.pushButton_close.setMinimumWidth(60)
+            
 #init the plot with variables axes 
     def init_plot(self):
-        self.line1, = self.ax.plot([], [], 'x', label='System Output')  # Usar 'o' para pontos
-        self.line2, = self.ax.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
-        self.ax.set_xlim(0, 100)
-        self.ax.set_ylim(-10, 10)
-        return self.line1, self.line2
+        self.line1, = self.ax.plot([], [], 'x', label='System Output', color = 'cyan')  
+        self.line2, = self.ax.plot([], [], '-', label='Setpoint', color = 'lime')  
+        self.line3, = self.ax.plot([], [], '--', label='Error', color = 'red')  
+        self.ax.set_xlim(0, self.period*10)
+        self.ax.set_ylim(-1.1*self.setpoint ,1.1*self.setpoint)
+        return self.line1, self.line2, self.line3
 
 #updating the plot
     def update_plot(self, frame):
@@ -206,24 +219,32 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             return self.line1, self.line2
 #clock
         self.time_elapsed += self.period
-        control = self.pid.update(self.system_value, self.time_elapsed)
+        control, error = self.pid.update(self.system_value, self.time_elapsed)
 #print(f" self.system_value type: {type(self.system_value)}")
 #self.system_value += control * 0.1
         self.system_value = self.system_output(self.system_value,control)
         self.system_value = self.system_value - self.disturbe
+        self.errors.append(error)
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
 
         self.data.append(self.system_value)
         self.time_var.append(self.time_elapsed)
+        
+#change the color when the system value reaches 95% of setpoint
+        if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:
+            self.line1.set_color('yellow')  # Muda a cor para amarelo
+        else:
+            self.line1.set_color('cyan')  # Cor padrão (ciano)
 #updating
         self.ax.set_xlim(0, self.time_elapsed)
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
+        self.line3.set_data(np.arange(len(self.setpoints)) * self.period, self.errors)  # Atualiza a linha de erro
 #reloading the axes
-        self.ax.set_ylim(min(self.setpoints + self.system_values) - 1, max(self.setpoints + self.system_values) + 1)
+        self.ax.set_ylim(min(self.setpoints + self.system_values + self.errors) *0.9, max(self.setpoints + self.system_values + self.errors) *1.1)
         self.canvas.draw()
-        return self.line1, self.line2
+        return self.line1, self.line2, self.line3
 
 #system type 1/s+a
     def system_output(self, y_prev, control):

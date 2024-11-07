@@ -36,7 +36,7 @@ class PIDControl(Base):
         #output = self.zero_order_hold(current_time, self.hold_time, output)
         self.previous_error = error
         self.previous_output = output
-        return output
+        return output, error
     
 '''
         # Arduino ADC resolution (in bits)
