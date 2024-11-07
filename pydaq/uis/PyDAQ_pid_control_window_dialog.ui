@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>455</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -324,17 +324,64 @@ QDoubleSpinBox::down-button:hover{
       <item>
        <widget class="QWidget" name="widget_2" native="true">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="3">
+         <item row="4" column="2" rowspan="2">
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_SetpointDialog">
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
           <widget class="QDoubleSpinBox" name="doubleSpinBox_DisturbeDialog"/>
          </item>
+         <item row="2" column="3">
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_KiDialog"/>
+         </item>
+         <item row="0" column="3">
+          <widget class="QComboBox" name="comboBox_TypeDialog"/>
+         </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_Disturbe">
+          <widget class="QLabel" name="label_Kp">
            <property name="text">
-            <string>Disturbe:</string>
+            <string>Kp:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_Ki">
+           <property name="text">
+            <string>Ki:</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Controler type?</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLabel" name="label_Disturbe">
+           <property name="text">
+            <string>Disturbe (?):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_KpDialog"/>
+         </item>
+         <item row="4" column="1">
           <widget class="QLabel" name="label_Setpoint">
            <property name="minimumSize">
             <size>
@@ -353,22 +400,15 @@ QDoubleSpinBox::down-button:hover{
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_SetpointDialog">
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>0</height>
-            </size>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_Kd">
+           <property name="text">
+            <string>Kd:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2" rowspan="2">
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-          </widget>
+         <item row="3" column="3">
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_KdDialog"/>
          </item>
         </layout>
        </widget>

@@ -25,8 +25,8 @@ Trabalhos:                                                                     |
 - todas as correções ortograficas                                              | >> feito  
 - instalar Nidaq MX                                                            | >> feito
 _______________________________________________________________________________| 
-Reunião dia 24/10                                                              |
-Trabalhos                                                                      |
+Reunião dia 24/10                                                              | 
+Trabalhos                                                                      | Progresso:
 -Pegar a nova versão do step response e do get data                            | >> feito
 -Data path                                                                     | >> feito
 -Janelas do controle PID                                                       | 
@@ -39,6 +39,7 @@ Trabalhos                                                                      |
 -Grafico com eixo do tempo a direita e o erro no mesmo grafico que o setpoint  |
 -Sugestão de mesclagem do controle PID com o step response                     |
 -Tipos de disturbios                                                           |
--SOH									                                                 |
+-ZOH e linhas continuas pontuadas 									                   |
+-Mudar nome do botão para save and close / close                               |
 _______________________________________________________________________________|
 Prox data: dia 14/11 15h30                                                     |

@@ -46,15 +46,15 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, setpoint, unit, equation, period, duration, path, save):
+    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equation, period, path, save):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
+        self.index = index if index else 0
         self.setpoint = setpoint if setpoint else 0.0
         self.unit = unit if unit else 'Voltage (V)'
         self.calibration_equation = equation
         self.period = period if period else 1 
-        self.duration = duration if duration else 10
         self.path = path if path else os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         self.save = save
         self._check_path()
@@ -65,21 +65,23 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print('Unit ', self.unit)
         print('Equation ', self.calibration_equation)
         print('Period ', self.period)
-        print('Duration ', self.duration)
         print ('Path ', self.path)
-
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
+#def to save and go back
     def go_back(self):
+#save if wanted
         if self.save:
             print("\nSaving data ...")
             # Saving time_var and data
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.data, "data.dat")
             print("\nData saved ...")
+#stop the event and close the dialog
         self.ani.event_source.stop()
         self.close()
 
+#stop/start the event and change the button text
     def stopstart (self):
         self.paused = not self.paused
         if self.paused:
@@ -89,16 +91,17 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.ani.event_source.start()
             self.pushButton_startstop.setText("Stop")
 
+#apply all pid parameters while the event goes on
     def apply_parameters(self):
         try:
-            new_setpoint = self.doubleSpinBox_SetpointDialog.value()
-            self.setpoint = new_setpoint
-            print ('The new setpoint is ', new_setpoint)
+            self.setpoint = self.doubleSpinBox_SetpointDialog.value()
+            print ('The new setpoint is ', self.setpoint)
             if self.pid:
-                self.pid.setpoint = new_setpoint
+                self.pid.setpoint = self.setpoint
                 print ('The setpoint has been sended to pid control')
         except ValueError:
             pass  # Ignore invalid input  
+
         self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
         print ('The new disturbe is ', self.disturbe)
 
@@ -124,7 +127,12 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print("Error")
 
     def set_text(self):
+        self.comboBox_TypeDialog.set
+        self.doubleSpinBox_KpDialog.setValue(self.kp)
+        self.doubleSpinBox_KiDialog.setValue(self.ki)
+        self.doubleSpinBox_KdDialog.setValue(self.kd)
         self.doubleSpinBox_SetpointDialog.setValue(self.setpoint)
+        self.comboBox_TypeDialog.setCurrentIndex(self.index)
 
     def init_plot(self):
         self.line1, = self.ax.plot([], [], 'x', label='System Output')  # Usar 'o' para pontos

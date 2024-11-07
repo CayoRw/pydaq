@@ -102,7 +102,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         else:
             self.kd = None
         equation_parts = []
-#Create a pid equation to show
+#Create a pid equation to show when the line edits are able
         if self.kp is not None:
             kp_display = f"{self.kp:.2f}"
             equation_parts.append(rf"{kp_display} \cdot e(t)")
@@ -127,7 +127,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             widget_to_remove = self.image_layout.itemAt(i).widget()
             self.image_layout.removeWidget(widget_to_remove)
             widget_to_remove.setParent(None)
-            
+
         self.image_layout.addWidget(canvas)
 
 #Create the pid control window
@@ -136,11 +136,11 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.unit = self.lineEdit_unit.text()
         self.equation = self.lineEdit_equation.text()
         self.period = self.doubleSpinBox_period.value()
-        self.duration = self.doubleSpinBox_duration.value()
         self.path = self.path_line_edit.text()
+        self.index = self.comboBox_type.currentIndex()
         self.save = True if self.save_radio_group.checkedId() == -2 else False
         plot_window = PID_Control_Window_Dialog()
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.setpoint, self.unit, self.equation, self.period, self.duration, self.path, self.save)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
         plot_window.exec()
 
     def locate_path(self):  # Calling the Folder Browser Widget
