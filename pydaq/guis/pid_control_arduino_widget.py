@@ -141,8 +141,10 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.save = True if self.save_radio_group.checkedId() == -2 else False
         plot_window = PID_Control_Window_Dialog()
         plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
+        plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 
+#to locate the data path to armazenate
     def locate_path(self):  # Calling the Folder Browser Widget
         output_folder_path = QFileDialog.getExistingDirectory(
             self, caption="Choose a folder to save the data file"
@@ -152,37 +154,10 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         else:
             self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
 
-'''
-    def start_func_get_data(self):  # Start getting data
-        try:
-            # Instantiating the GetData class
-            g = GetData()
-
-            # Getting the values from the GUI
-            g.com_port = serial.tools.list_ports.comports()[
-                self.com_ports.index(self.device_combo.currentText())
-            ].name
-            g.ts = self.Ts_in.value()
-            g.session_duration = self.sesh_dur_in.value()
-            g.plot = True if self.plot_radio_group.checkedId() == -2 else False
-            g.save = True if self.save_radio_group.checkedId() == -2 else False
-            g.path = self.path_line_edit.text()
-
-            # Checking if a path was set
-            if self.path_line_edit.text() == "":
-                raise BaseException
-
-            # Restarting variables
-            g.data = []
-            g.time_var = []
-            g.error_path = False
-
-        except BaseException:
-            error_w = Error_window()
-            error_w.exec()
-            g.error_path = True
-
-app = QtWidgets.QApplication(sys.argv)
-window = PID_Control_Arduino_Widget()
-window.show()
-sys.exit(app.exec())'''
+    def update_values(self, value1, value2, value3, value4, value5):
+        # Define os valores nos QDoubleSpinBox correspondentes
+        self.doubleSpinBox_kp.setValue(value1)
+        self.doubleSpinBox_ki.setValue(value2)
+        self.doubleSpinBox_kd.setValue(value3)
+        self.comboBox_type.setCurrentIndex(value4)
+        self.doubleSpinBox_setpoint.setValue(value5)

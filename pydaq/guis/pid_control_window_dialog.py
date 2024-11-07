@@ -16,6 +16,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
+    
+#signal to send back to QWidget the values
+    send_values = Signal(float, float, float, int, float)
+
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
@@ -24,6 +28,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.pushButton_startstop.clicked.connect(self.stopstart)
         self.pushButton_close.clicked.connect(self.go_back)
         self.pushButton_apply.clicked.connect(self.apply_parameters)
+        self.comboBox_TypeDialog.currentIndexChanged.connect(self.on_type_combo_changed)
+
 
 #variable for control
         self.system_value = 0.0
@@ -61,12 +67,33 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
+        print('Index ', self.index)
         print('Setpoint ', self.setpoint)
         print('Unit ', self.unit)
         print('Equation ', self.calibration_equation)
         print('Period ', self.period)
         print ('Path ', self.path)
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
+
+#both function below are to set the comboBox enabled/desabled status
+    def on_type_combo_changed(self, index):
+        if index == 0:  
+            self.enable_pid_parameters(True, False, False)
+        elif index == 1:  
+            self.enable_pid_parameters(True, True, False)
+        elif index == 2: 
+            self.enable_pid_parameters(True, False, True)
+        elif index == 3:  
+            self.enable_pid_parameters(True, True, True)  
+        self.index = index  
+    def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
+        self.doubleSpinBox_KpDialog.setEnabled(kp_enabled)
+        self.doubleSpinBox_KiDialog.setEnabled(ki_enabled)
+        self.doubleSpinBox_KdDialog.setEnabled(kd_enabled)
+        if ki_enabled == False:
+            self.doubleSpinBox_KiDialog.setValue(0)
+        if kd_enabled == False:
+            self.doubleSpinBox_KdDialog.setValue(0)
 
 #def to save and go back
     def go_back(self):
@@ -77,6 +104,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.data, "data.dat")
             print("\nData saved ...")
+#sending the values to QWidget
+        self.send_values.emit(
+            self.kp,
+            self.ki,
+            self.kd,
+            self.index,
+            self.setpoint,
+        )
 #stop the event and close the dialog
         self.ani.event_source.stop()
         self.close()
@@ -101,10 +136,30 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
                 print ('The setpoint has been sended to pid control')
         except ValueError:
             pass  # Ignore invalid input  
-
+#changing Kp Ki and Kd parameters
+        if self.doubleSpinBox_KpDialog.isEnabled():
+            self.kp = self.doubleSpinBox_KpDialog.value()
+            self.pid.Kp = self.kp
+        else:
+            self.kp = None
+            self.pid.Kp = 0
+        if self.doubleSpinBox_KiDialog.isEnabled():
+            self.ki = self.doubleSpinBox_KiDialog.value()
+            self.pid.Ki = self.ki
+        else:
+            self.ki = None
+            self.pid.Ki = 0
+        if self.doubleSpinBox_KdDialog.isEnabled():
+            self.kd = self.doubleSpinBox_KdDialog.value()
+            self.pid.Kd = self.kd
+        else:
+            self.kd = None
+            self.pid.Kd = 0
+#changing the disturbe
         self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
         print ('The new disturbe is ', self.disturbe)
 
+#stating the control and inicializating variables
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
             self.time_elapsed = 0.0
@@ -115,7 +170,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.errors = []
             self.data = []
             self.time_var = [] 
-            #self.set_text()
+            self.set_text()
+            self.on_type_combo_changed(self.index)
             self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)          
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
@@ -126,14 +182,16 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         except ValueError:
             print("Error")
 
+#changing the text of the pid parameters inputs
     def set_text(self):
-        self.comboBox_TypeDialog.set
+        self.comboBox_TypeDialog.setCurrentIndex(self.index)
         self.doubleSpinBox_KpDialog.setValue(self.kp)
         self.doubleSpinBox_KiDialog.setValue(self.ki)
         self.doubleSpinBox_KdDialog.setValue(self.kd)
         self.doubleSpinBox_SetpointDialog.setValue(self.setpoint)
         self.comboBox_TypeDialog.setCurrentIndex(self.index)
 
+#init the plot with variables axes 
     def init_plot(self):
         self.line1, = self.ax.plot([], [], 'x', label='System Output')  # Usar 'o' para pontos
         self.line2, = self.ax.plot([], [], '-', label='Setpoint')  # Usar 'o' para pontos
@@ -141,6 +199,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.ax.set_ylim(-10, 10)
         return self.line1, self.line2
 
+#updating the plot
     def update_plot(self, frame):
         if self.pid is None:
             print ('self.pid is none')
@@ -154,7 +213,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.system_value = self.system_value - self.disturbe
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
-        
+
         self.data.append(self.system_value)
         self.time_var.append(self.time_elapsed)
 #updating
@@ -166,6 +225,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.canvas.draw()
         return self.line1, self.line2
 
+#system type 1/s+a
     def system_output(self, y_prev, control):
 #discretization by euler
         return (self.period * control + y_prev) / (1 + self.period * self.a)

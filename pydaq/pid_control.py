@@ -24,7 +24,7 @@ class PIDControl(Base):
         self.previous_error = 0.0
         self.previous_output = 0.0
         self.T = period
-        self.hold_time = period
+#       self.hold_time = period
         
         
 #need to review

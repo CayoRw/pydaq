@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogdenNiD.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogUZvlfY.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,7 +23,7 @@ class Ui_Dialog_Plot_PID_Window(object):
     def setupUi(self, Dialog_Plot_PID_Window):
         if not Dialog_Plot_PID_Window.objectName():
             Dialog_Plot_PID_Window.setObjectName(u"Dialog_Plot_PID_Window")
-        Dialog_Plot_PID_Window.resize(455, 502)
+        Dialog_Plot_PID_Window.resize(455, 467)
         Dialog_Plot_PID_Window.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -353,20 +353,27 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.doubleSpinBox_SetpointDialog = QDoubleSpinBox(self.widget_2)
         self.doubleSpinBox_SetpointDialog.setObjectName(u"doubleSpinBox_SetpointDialog")
         self.doubleSpinBox_SetpointDialog.setMinimumSize(QSize(200, 0))
+        self.doubleSpinBox_SetpointDialog.setSingleStep(0.100000000000000)
 
         self.gridLayout.addWidget(self.doubleSpinBox_SetpointDialog, 4, 3, 1, 1)
 
         self.doubleSpinBox_DisturbeDialog = QDoubleSpinBox(self.widget_2)
         self.doubleSpinBox_DisturbeDialog.setObjectName(u"doubleSpinBox_DisturbeDialog")
+        self.doubleSpinBox_DisturbeDialog.setSingleStep(0.100000000000000)
 
         self.gridLayout.addWidget(self.doubleSpinBox_DisturbeDialog, 5, 3, 1, 1)
 
         self.doubleSpinBox_KiDialog = QDoubleSpinBox(self.widget_2)
         self.doubleSpinBox_KiDialog.setObjectName(u"doubleSpinBox_KiDialog")
+        self.doubleSpinBox_KiDialog.setSingleStep(0.100000000000000)
 
         self.gridLayout.addWidget(self.doubleSpinBox_KiDialog, 2, 3, 1, 1)
 
         self.comboBox_TypeDialog = QComboBox(self.widget_2)
+        self.comboBox_TypeDialog.addItem("")
+        self.comboBox_TypeDialog.addItem("")
+        self.comboBox_TypeDialog.addItem("")
+        self.comboBox_TypeDialog.addItem("")
         self.comboBox_TypeDialog.setObjectName(u"comboBox_TypeDialog")
 
         self.gridLayout.addWidget(self.comboBox_TypeDialog, 0, 3, 1, 1)
@@ -393,6 +400,7 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.doubleSpinBox_KpDialog = QDoubleSpinBox(self.widget_2)
         self.doubleSpinBox_KpDialog.setObjectName(u"doubleSpinBox_KpDialog")
+        self.doubleSpinBox_KpDialog.setSingleStep(0.100000000000000)
 
         self.gridLayout.addWidget(self.doubleSpinBox_KpDialog, 1, 3, 1, 1)
 
@@ -410,6 +418,7 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.doubleSpinBox_KdDialog = QDoubleSpinBox(self.widget_2)
         self.doubleSpinBox_KdDialog.setObjectName(u"doubleSpinBox_KdDialog")
+        self.doubleSpinBox_KdDialog.setSingleStep(0.100000000000000)
 
         self.gridLayout.addWidget(self.doubleSpinBox_KdDialog, 3, 3, 1, 1)
 
@@ -471,6 +480,11 @@ class Ui_Dialog_Plot_PID_Window(object):
 
     def retranslateUi(self, Dialog_Plot_PID_Window):
         Dialog_Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Dialog", None))
+        self.comboBox_TypeDialog.setItemText(0, QCoreApplication.translate("Dialog_Plot_PID_Window", u"P", None))
+        self.comboBox_TypeDialog.setItemText(1, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PI", None))
+        self.comboBox_TypeDialog.setItemText(2, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PD", None))
+        self.comboBox_TypeDialog.setItemText(3, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PID", None))
+
         self.label_Kp.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kp:", None))
         self.label_Ki.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Ki:", None))
         self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Controler type?", None))
