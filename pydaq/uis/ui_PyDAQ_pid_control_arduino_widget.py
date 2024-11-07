@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetIyjWkK.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetEIRAid.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
-    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDoubleSpinBox,
+    QFrame, QGridLayout, QHBoxLayout, QLabel,
+    QLineEdit, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
         if not Arduino_PID_Control.objectName():
             Arduino_PID_Control.setObjectName(u"Arduino_PID_Control")
-        Arduino_PID_Control.resize(519, 839)
+        Arduino_PID_Control.resize(519, 840)
         Arduino_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -621,15 +621,20 @@ class Ui_Arduino_PID_Control(object):
         self.widget.setObjectName(u"widget")
         self.horizontalLayout_12 = QHBoxLayout(self.widget)
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.radioButton = QRadioButton(self.widget)
-        self.radioButton.setObjectName(u"radioButton")
+        self.yes_save_radio = QRadioButton(self.widget)
+        self.save_radio_group = QButtonGroup(Arduino_PID_Control)
+        self.save_radio_group.setObjectName(u"save_radio_group")
+        self.save_radio_group.addButton(self.yes_save_radio)
+        self.yes_save_radio.setObjectName(u"yes_save_radio")
+        self.yes_save_radio.setChecked(True)
 
-        self.horizontalLayout_12.addWidget(self.radioButton)
+        self.horizontalLayout_12.addWidget(self.yes_save_radio)
 
-        self.no_plot_radio = QRadioButton(self.widget)
-        self.no_plot_radio.setObjectName(u"no_plot_radio")
+        self.no_save_radio = QRadioButton(self.widget)
+        self.save_radio_group.addButton(self.no_save_radio)
+        self.no_save_radio.setObjectName(u"no_save_radio")
 
-        self.horizontalLayout_12.addWidget(self.no_plot_radio)
+        self.horizontalLayout_12.addWidget(self.no_save_radio)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -700,7 +705,7 @@ class Ui_Arduino_PID_Control(object):
         self.pushButton_confirm.setText(QCoreApplication.translate("Arduino_PID_Control", u"Confirm", None))
         self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
         self.label.setText(QCoreApplication.translate("Arduino_PID_Control", u"Save Data?", None))
-        self.radioButton.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
-        self.no_plot_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
+        self.yes_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
+        self.no_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
     # retranslateUi
 

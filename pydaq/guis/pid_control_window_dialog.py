@@ -46,7 +46,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, setpoint, unit, equation, period, duration):
+    def set_parameters(self, kp, ki, kd, setpoint, unit, equation, period, duration, path, save):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
@@ -55,14 +55,19 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.calibration_equation = equation
         self.period = period if period else 1 
         self.duration = duration if duration else 10
+        self.path = path if path else os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
+        self.save = save
+        self._check_path()
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
         print('Setpoint ', self.setpoint)
-        print('unit ', self.unit)
-        print('equation ', self.calibration_equation)
-        print('period ', self.period)
+        print('Unit ', self.unit)
+        print('Equation ', self.calibration_equation)
+        print('Period ', self.period)
         print('Duration ', self.duration)
+        print ('Path ', self.path)
+
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
     def go_back(self):
@@ -100,19 +105,15 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
             self.time_elapsed = 0.0
-            self.setpoint = setpoint
-            self.unit = unit
-            self.period = period
             self.time = []
             self.setpoints = []
             self.disturbe = 0.0
             self.system_values = []
             self.errors = []
-            self.save = True
             self.data = []
             self.time_var = [] 
-            self.set_text()
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, self.unit, self.period, self.save)          
+            #self.set_text()
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)          
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
             self.ax.set_xlabel('Time (s)')
             self.ax.set_ylabel(self.unit)

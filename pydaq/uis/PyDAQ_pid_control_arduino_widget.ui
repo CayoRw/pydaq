@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>519</width>
-    <height>839</height>
+    <height>840</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -801,17 +801,26 @@ QDoubleSpinBox::down-button:hover{
        <widget class="QWidget" name="widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="yes_save_radio">
            <property name="text">
             <string>Yes</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">save_radio_group</string>
+           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="no_plot_radio">
+          <widget class="QRadioButton" name="no_save_radio">
            <property name="text">
             <string>No</string>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">save_radio_group</string>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -879,4 +888,7 @@ QDoubleSpinBox::down-button:hover{
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="save_radio_group"/>
+ </buttongroups>
 </ui>

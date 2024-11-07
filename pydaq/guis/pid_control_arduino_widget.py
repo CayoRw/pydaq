@@ -27,12 +27,12 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
         self.pushButton_start.clicked.connect(self.show_graph_window)
-
+        self.path_folder_browse.released.connect(self.locate_path)
         # Setting the starting values for some widgets
         self.path_line_edit.setText(
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
-        
+
 #Fuctions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
@@ -47,15 +47,6 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             if index != -1:
                 self.comboBox_arduino.setCurrentIndex(index)
 
-    def locate_path(self):  # Calling the Folder Browser Widget
-        output_folder_path = QFileDialog.getExistingDirectory(
-            self, caption="Choose a folder to save the data file"
-        )
-        if output_folder_path == "":
-            pass
-        else:
-            self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
-    
 #Condiction to show the line edit equation and unit
     def on_unit_change(self):
         selected_unit = self.comboBox_setpoint.currentText()
@@ -146,15 +137,52 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.equation = self.lineEdit_equation.text()
         self.period = self.doubleSpinBox_period.value()
         self.duration = self.doubleSpinBox_duration.value()
+        self.path = self.path_line_edit.text()
+        self.save = True if self.save_radio_group.checkedId() == -2 else False
         plot_window = PID_Control_Window_Dialog()
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.setpoint, self.unit, self.equation, self.period, self.duration)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.setpoint, self.unit, self.equation, self.period, self.duration, self.path, self.save)
         plot_window.exec()
 
-#starting the control
-    
+    def locate_path(self):  # Calling the Folder Browser Widget
+        output_folder_path = QFileDialog.getExistingDirectory(
+            self, caption="Choose a folder to save the data file"
+        )
+        if output_folder_path == "":
+            pass
+        else:
+            self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
 
+'''
+    def start_func_get_data(self):  # Start getting data
+        try:
+            # Instantiating the GetData class
+            g = GetData()
 
-'''app = QtWidgets.QApplication(sys.argv)
+            # Getting the values from the GUI
+            g.com_port = serial.tools.list_ports.comports()[
+                self.com_ports.index(self.device_combo.currentText())
+            ].name
+            g.ts = self.Ts_in.value()
+            g.session_duration = self.sesh_dur_in.value()
+            g.plot = True if self.plot_radio_group.checkedId() == -2 else False
+            g.save = True if self.save_radio_group.checkedId() == -2 else False
+            g.path = self.path_line_edit.text()
+
+            # Checking if a path was set
+            if self.path_line_edit.text() == "":
+                raise BaseException
+
+            # Restarting variables
+            g.data = []
+            g.time_var = []
+            g.error_path = False
+
+        except BaseException:
+            error_w = Error_window()
+            error_w.exec()
+            g.error_path = True
+
+app = QtWidgets.QApplication(sys.argv)
 window = PID_Control_Arduino_Widget()
 window.show()
 sys.exit(app.exec())'''
