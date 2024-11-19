@@ -10,17 +10,14 @@ from PySide6.QtCore import *
 from ..uis.ui_PyDAQ_pid_control_NIDAQ_widget import Ui_NIDAQ_PID_Control
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from ..guis.pid_control_window_dialog import PID_Control_Window_Dialog
 
 class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
     def __init__(self, *args):
         super(PID_Control_NIDAQ_Widget, self).__init__()
         self.setupUi(self)
 
-        #Calling the functions
-        self.locate_arduino()
-        self.reload_devices.clicked.connect(self.locate_arduino)
-
-        #Calling the functions
+#Calling the functions
         self.locate_arduino()
         self.reload_devices.clicked.connect(self.locate_arduino)
         self.on_unit_change()
@@ -28,8 +25,22 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.on_type_combo_changed(0)
         self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
-    
-#Fuctions
+        self.pushButton_start.clicked.connect(self.show_graph_window)
+        self.path_folder_browse.released.connect(self.locate_path)
+        # Setting the starting values for some widgets
+        self.path_line_edit.setText(
+            os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
+        )
+
+# Add a image in a tooltip
+        tooltip_html = """
+            <div>
+                <img src=":/uis/imgs/ControlePID_Bloco.png"/>
+            </div>
+            """
+        self.label_type.setToolTip(tooltip_html)
+
+# Functions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
         self.comboBox_arduino.clear()
@@ -61,9 +72,8 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             self.label_unit.hide()
             self.label_equation.show()
             self.widget_equation.show()
-    
-    #Enable the pid parameters inputs 
 
+#Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):
         if index == 0:  
             self.enable_pid_parameters(True, False, False)
@@ -83,37 +93,37 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         if kd_enabled == False:
             self.doubleSpinBox_kd.setValue(0)
 
-    #Method to create a image and show the pid equation
+#Method to create a image and show the pid equation
     def show_pid_equation(self):
 #Condiction to read only the inputs enable and set 'None' on desable inputs
         if self.doubleSpinBox_kp.isEnabled():
-            kp = self.doubleSpinBox_kp.value()
+            self.kp = self.doubleSpinBox_kp.value()
         else:
-            kp = None
+            self.kp = None
         if self.doubleSpinBox_ki.isEnabled():
-            ki = self.doubleSpinBox_ki.value()
+            self.ki = self.doubleSpinBox_ki.value()
         else:
-            ki = None
+            self.ki = None
         if self.doubleSpinBox_kd.isEnabled():
-            kd = self.doubleSpinBox_kd.value()
+            self.kd = self.doubleSpinBox_kd.value()
         else:
-            kd = None
+            self.kd = None
         equation_parts = []
-#Create a pid equation
-        if kp is not None:
-            kp_display = f"{kp:.2f}"
+#Create a pid equation to show when the line edits are able
+        if self.kp is not None:
+            kp_display = f"{self.kp:.2f}"
             equation_parts.append(rf"{kp_display} \cdot e(t)")
-        if ki is not None:
-            ki_display = f"{ki:.2f}"
+        if self.ki is not None:
+            ki_display = f"{self.ki:.2f}"
             equation_parts.append(rf"{ki_display} \int_{{0}}^{{t}} e(\tau) \, d\tau")
-        if kd is not None:
-            kd_display = f"{kd:.2f}"
+        if self.kd is not None:
+            kd_display = f"{self.kd:.2f}"
             equation_parts.append(rf"{kd_display} \frac{{d}}{{dt}} e(t)")
         if not equation_parts:
             return
-        #Equation on latex
+#Equation on latex
         latex = "u(t) = " + " + ".join(equation_parts)
-        #Figure created showing the equation, without axes
+#Figure created showing the equation, without axes
         fig = Figure(figsize=(9, 3), facecolor='#404040')
         ax = fig.add_subplot(111, facecolor='#404040')
         ax.text(0.5, 0.5, f"${latex}$", fontsize=15, ha='center', va='center', color='white')
@@ -124,4 +134,43 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             widget_to_remove = self.image_layout.itemAt(i).widget()
             self.image_layout.removeWidget(widget_to_remove)
             widget_to_remove.setParent(None)
+
         self.image_layout.addWidget(canvas)
+
+#Create the pid control window
+    def show_graph_window(self):
+        self.setpoint = self.doubleSpinBox_setpoint.value()
+        self.getunit()
+        self.equation = self.lineEdit_equation.text()
+        self.period = self.doubleSpinBox_period.value()
+        self.path = self.path_line_edit.text()
+        self.index = self.comboBox_type.currentIndex()
+        self.save = True if self.save_radio_group.checkedId() == -2 else False
+        plot_window = PID_Control_Window_Dialog()
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
+        plot_window.send_values.connect(self.update_values)
+        plot_window.exec()
+
+#to locate the data path to armazenate
+    def locate_path(self):  # Calling the Folder Browser Widget
+        output_folder_path = QFileDialog.getExistingDirectory(
+            self, caption="Choose a folder to save the data file"
+        )
+        if output_folder_path == "":
+            pass
+        else:
+            self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
+
+    def update_values(self, value1, value2, value3, value4, value5):
+        # Define os valores nos QDoubleSpinBox correspondentes
+        self.doubleSpinBox_kp.setValue(value1)
+        self.doubleSpinBox_ki.setValue(value2)
+        self.doubleSpinBox_kd.setValue(value3)
+        self.comboBox_type.setCurrentIndex(value4)
+        self.doubleSpinBox_setpoint.setValue(value5)
+
+    def getunit(self):
+        if self.comboBox_setpoint.currentIndex() != 2:
+            self.unit = self.comboBox_setpoint.currentText()
+        else:
+            self.unit = self.lineEdit_unit.text()

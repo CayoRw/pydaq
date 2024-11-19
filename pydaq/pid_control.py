@@ -19,25 +19,27 @@ class PIDControl(Base):
         self.Kp = float(Kp)
         self.Ki = float(Ki)
         self.Kd = float(Kd)
+        self.disturbe = 0
         self.setpoint = float(setpoint)
         self.integral = 0.0
         self.previous_error = 0.0
         self.previous_output = 0.0
         self.T = period
 #       self.hold_time = period
-        
-        
+
 #need to review
-    def update(self, feedback_value, current_time):
+    def update(self, feedback_value):
+        #self.setpoint_update = self.setpoint - self.disturbe
         error = self.setpoint - feedback_value
         self.integral = self.integral + error * self.T
         derivative = (error - self.previous_error) / self.T
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+        #print('Output = ', self.Kp,'*', error)
         #output = self.zero_order_hold(current_time, self.hold_time, output)
         self.previous_error = error
         self.previous_output = output
         return output, error
-    
+
 '''
         # Arduino ADC resolution (in bits)
         self.arduino_ai_bits = 10
@@ -55,7 +57,6 @@ class PIDControl(Base):
         else:
             return self.previous_output
 '''
-
 
 '''Implementação do PID em tempo discreto
     def pid_controller(setpoint, y, Kp, Ki, Kd, integral_prev, error_prev, T):

@@ -32,7 +32,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.path_line_edit.setText(
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
-        
+
 #Fuctions
     def locate_arduino(self):
         current_selection = self.comboBox_arduino.currentText()
@@ -133,7 +133,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 #Create the pid control window
     def show_graph_window(self):
         self.setpoint = self.doubleSpinBox_setpoint.value()
-        self.unit = self.lineEdit_unit.text()
+        self.getunit()
         self.equation = self.lineEdit_equation.text()
         self.period = self.doubleSpinBox_period.value()
         self.path = self.path_line_edit.text()
@@ -161,3 +161,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.doubleSpinBox_kd.setValue(value3)
         self.comboBox_type.setCurrentIndex(value4)
         self.doubleSpinBox_setpoint.setValue(value5)
+
+    def getunit(self):
+        if self.comboBox_setpoint.currentIndex() != 2:
+            self.unit = self.comboBox_setpoint.currentText()
+        else:
+            self.unit = self.lineEdit_unit.text()

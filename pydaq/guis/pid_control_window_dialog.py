@@ -23,10 +23,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
-        self.setGeometry(200, 200, 1000, 600)
-
-#Setting the tool tip
-        self.label_Disturbe.setToolTip("The dis")
+        self.setMinimumSize(1000, 600)
 
 #Calling the functions
         self.pushButton_startstop.clicked.connect(self.stopstart)
@@ -50,7 +47,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
-        self.ax = self.figure.add_subplot(111, facecolor='#404040')  # Output graph
+        self.ax = self.figure.add_subplot(111, facecolor='#505050')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         self.image_layout.addWidget(self.canvas)
 
@@ -106,7 +103,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print("\nSaving data ...")
             # Saving time_var and data
             self._save_data(self.time_var, "time.dat")
-            self._save_data(self.data, "data.dat")
+            self._save_data(self.datas, "data.dat")
+            self._save_data(self.errors, "error.dat")
+            self._save_data(self.setpoints, "setpoint.dat")
             print("\nData saved ...")
 #sending the values to QWidget
         self.send_values.emit(
@@ -148,6 +147,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.pid.Kp = 0
         if self.doubleSpinBox_KiDialog.isEnabled():
             self.ki = self.doubleSpinBox_KiDialog.value()
+            self.pid.integral = 0
             self.pid.Ki = self.ki
         else:
             self.ki = None
@@ -163,6 +163,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print ('The new ki is ', self.ki)
         print ('The new kd is ', self.kd)
         self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
+        self.pid.disturbe = self.disturbe
         print ('The new disturbe is ', self.disturbe)
 
 #stating the control and inicializating variables
@@ -172,23 +173,23 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.time = []
             self.setpoints = []
             self.disturbe = 0.0
+            self.feedback_value = 0
+            self.control = 0
+            self.disturbe
             self.system_values = []
             self.errors = []
-            self.data = []
+            self.datas = []
             self.time_var = [] 
             self.set_text()
             self.on_type_combo_changed(self.index)
             self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)          
             self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
-            self.ax.set_xlabel('Time (s)')
-            self.ax.set_ylabel(self.unit)
-            self.ax.legend(['System Output', 'Setpoint'])
-            plt.suptitle('PID Control')
+            plt.suptitle('PID Control', color='white')
             self.canvas.draw()
         except ValueError:
             print("Error")
 
-#changing the text of the pid parameters inputs
+# Changing the text of the pid parameters inputs
     def set_text(self):
         self.comboBox_TypeDialog.setCurrentIndex(self.index)
         self.doubleSpinBox_KpDialog.setValue(self.kp)
@@ -202,51 +203,102 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         else:
             self.pushButton_close.setText("Close")
             self.pushButton_close.setMinimumWidth(60)
-            
-#init the plot with variables axes 
+
+# Init the plot with variables axes 
     def init_plot(self):
+
         self.line1, = self.ax.plot([], [], 'x', label='System Output', color = 'cyan')  
         self.line2, = self.ax.plot([], [], '-', label='Setpoint', color = 'lime')  
         self.line3, = self.ax.plot([], [], '--', label='Error', color = 'red')  
+        if not hasattr(self, 'ax2'):
+            self.ax2 = self.ax.twinx()  # Create the error axe the first time
+
         self.ax.set_xlim(0, self.period*10)
         self.ax.set_ylim(-1.1*self.setpoint ,1.1*self.setpoint)
+        self.ax2.set_ylim(-1.1 * self.setpoint, 1.1 * self.setpoint)
+
+        self.ax.set_xlabel('Sample (s)', color = 'white')
+        self.ax.set_ylabel(self.unit, color = 'white')
+        self.ax2.set_ylabel('Error', color = 'white')
+        #.............
+        self.ax.legend(['System Output', 'Setpoint', 'Error'])
+        #.............
+
+# Set the axes colors to white
+        self.ax.spines['bottom'].set_color('white')
+        self.ax.spines['top'].set_color('white')
+        self.ax.spines['left'].set_color('white')
+        self.ax.spines['right'].set_color('white')
+
+        self.ax.tick_params(axis='x', colors='white')
+        self.ax.tick_params(axis='y', colors='white')
+        self.ax.xaxis.label.set_color('white')
+        self.ax.yaxis.label.set_color('white')
+
+        self.ax2.tick_params(axis='y', colors='white')
+        self.ax2.yaxis.label.set_color('white')
+
+        self.ax.title.set_color('white')
+        
+        #plt.tight_layout()
         return self.line1, self.line2, self.line3
 
-#updating the plot
+# Updating the plot
     def update_plot(self, frame):
         if self.pid is None:
             print ('self.pid is none')
             return self.line1, self.line2
-#clock
-        self.time_elapsed += self.period
-        control, error = self.pid.update(self.system_value, self.time_elapsed)
-#print(f" self.system_value type: {type(self.system_value)}")
-#self.system_value += control * 0.1
-        self.system_value = self.system_output(self.system_value,control)
-        self.system_value = self.system_value - self.disturbe
+# Get the system response value
+        self.system_value = self.system_output(self.feedback_value, self.control)
+        # Print ('System value = ', self.system_value )
+# Get the feedback sensor value
+        self.feedback_value = self.system_value
+        self.time_elapsed += self.period # Clock
+# Get the control value
+        self.control, error = self.pid.update(self.feedback_value)
+        self.control = self.control - self.disturbe
+# Plot the datas
         self.errors.append(error)
         self.system_values.append(self.system_value)
         self.setpoints.append(self.setpoint)
 
-        self.data.append(self.system_value)
+        self.datas.append(self.system_value)
         self.time_var.append(self.time_elapsed)
-        
-#change the color when the system value reaches 95% of setpoint
+# Change the color when the system value reaches 95% of setpoint
         if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:
-            self.line1.set_color('yellow')  # Muda a cor para amarelo
+            self.line1.set_color('yellow')  
         else:
-            self.line1.set_color('cyan')  # Cor padrão (ciano)
-#updating
+            self.line1.set_color('cyan')  
+# Updating
         self.ax.set_xlim(0, self.time_elapsed)
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
-        self.line3.set_data(np.arange(len(self.setpoints)) * self.period, self.errors)  # Atualiza a linha de erro
-#reloading the axes
-        self.ax.set_ylim(min(self.setpoints + self.system_values + self.errors) *0.9, max(self.setpoints + self.system_values + self.errors) *1.1)
+        self.line3.set_data(np.arange(len(self.setpoints)) * self.period, self.errors)  
+# Reloading the axes
+        if (min(self.setpoints + self.system_values + self.errors)<0):
+            xmin = min(self.setpoints + self.system_values + self.errors) * 1.1
+        elif(min(self.setpoints + self.system_values + self.errors)>0):
+            xmin = min(self.setpoints + self.system_values + self.errors) * 0.9
+        else:
+            xmin = max(self.setpoints + self.system_values + self.errors) * -0.1
+        self.ax.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
+#Reload the error axe
+        self.ax2.set_ylim(
+            min(self.errors) * 1.1 if min(self.errors) < 0 else min(self.errors) * 0.9,
+            max(self.errors) * 1.1
+        )
+#.......................................................................................................................
+# Reload the X axe after 100 datas
+        if len(self.system_values) > 100:
+            self.ax.set_xlim((len(self.system_values) - 100) * self.period, len(self.system_values) * self.period)
+        else:
+            self.ax.set_xlim(0, self.time_elapsed)
+#.......................................................................................................................
+
         self.canvas.draw()
         return self.line1, self.line2, self.line3
 
-#system type 1/s+a
+# System type 1/s+a
     def system_output(self, y_prev, control):
-#discretization by euler
+# Discretization by euler
         return (self.period * control + y_prev) / (1 + self.period * self.a)
