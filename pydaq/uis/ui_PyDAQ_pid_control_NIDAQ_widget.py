@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetsOdKam.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetRWtRGk.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
-    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QRadioButton, QSizePolicy, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDoubleSpinBox,
+    QFrame, QGridLayout, QHBoxLayout, QLabel,
+    QLineEdit, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_NIDAQ_PID_Control(object):
     def setupUi(self, NIDAQ_PID_Control):
         if not NIDAQ_PID_Control.objectName():
             NIDAQ_PID_Control.setObjectName(u"NIDAQ_PID_Control")
-        NIDAQ_PID_Control.resize(519, 888)
+        NIDAQ_PID_Control.resize(519, 889)
         NIDAQ_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -336,20 +336,23 @@ class Ui_NIDAQ_PID_Control(object):
 "")
         self.gridLayout = QGridLayout(NIDAQ_PID_Control)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.line_2 = QFrame(NIDAQ_PID_Control)
-        self.line_2.setObjectName(u"line_2")
-        self.line_2.setMinimumSize(QSize(0, 0))
-        self.line_2.setFrameShape(QFrame.Shape.HLine)
-        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
+        self.frame_equation = QFrame(NIDAQ_PID_Control)
+        self.frame_equation.setObjectName(u"frame_equation")
+        self.frame_equation.setMinimumSize(QSize(400, 120))
+        self.frame_equation.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_equation.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_5 = QGridLayout(self.frame_equation)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.widget_image = QWidget(self.frame_equation)
+        self.widget_image.setObjectName(u"widget_image")
+        self.widget_image.setMinimumSize(QSize(0, 100))
+        self.image_layout = QVBoxLayout(self.widget_image)
+        self.image_layout.setObjectName(u"image_layout")
 
-        self.gridLayout.addWidget(self.line_2, 1, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.widget_image, 0, 0, 1, 1)
 
-        self.pushButton_start = QPushButton(NIDAQ_PID_Control)
-        self.pushButton_start.setObjectName(u"pushButton_start")
-        self.pushButton_start.setMinimumSize(QSize(120, 30))
-        self.pushButton_start.setMaximumSize(QSize(150, 30))
 
-        self.gridLayout.addWidget(self.pushButton_start, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.gridLayout.addWidget(self.frame_equation, 3, 0, 1, 1)
 
         self.widget_top = QWidget(NIDAQ_PID_Control)
         self.widget_top.setObjectName(u"widget_top")
@@ -499,7 +502,7 @@ class Ui_NIDAQ_PID_Control(object):
         self.doubleSpinBox_period.setObjectName(u"doubleSpinBox_period")
         self.doubleSpinBox_period.setMaximum(9999999.000000000000000)
         self.doubleSpinBox_period.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_period.setValue(10.000000000000000)
+        self.doubleSpinBox_period.setValue(1.000000000000000)
 
         self.horizontalLayout_8.addWidget(self.doubleSpinBox_period)
 
@@ -650,21 +653,39 @@ class Ui_NIDAQ_PID_Control(object):
         self.widget_3.setObjectName(u"widget_3")
         self.horizontalLayout_12 = QHBoxLayout(self.widget_3)
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.radioButton = QRadioButton(self.widget_3)
-        self.radioButton.setObjectName(u"radioButton")
+        self.yes_save_radio = QRadioButton(self.widget_3)
+        self.save_radio_group = QButtonGroup(NIDAQ_PID_Control)
+        self.save_radio_group.setObjectName(u"save_radio_group")
+        self.save_radio_group.addButton(self.yes_save_radio)
+        self.yes_save_radio.setObjectName(u"yes_save_radio")
+        self.yes_save_radio.setAutoFillBackground(False)
+        self.yes_save_radio.setChecked(True)
 
-        self.horizontalLayout_12.addWidget(self.radioButton)
+        self.horizontalLayout_12.addWidget(self.yes_save_radio)
 
-        self.radioButton_2 = QRadioButton(self.widget_3)
-        self.radioButton_2.setObjectName(u"radioButton_2")
+        self.no_save_radio = QRadioButton(self.widget_3)
+        self.save_radio_group.addButton(self.no_save_radio)
+        self.no_save_radio.setObjectName(u"no_save_radio")
 
-        self.horizontalLayout_12.addWidget(self.radioButton_2)
+        self.horizontalLayout_12.addWidget(self.no_save_radio)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer)
 
 
         self.gridLayout_2.addWidget(self.widget_3, 12, 2, 1, 1)
 
 
         self.gridLayout.addWidget(self.widget_top, 2, 0, 1, 1)
+
+        self.line_2 = QFrame(NIDAQ_PID_Control)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setMinimumSize(QSize(0, 0))
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout.addWidget(self.line_2, 1, 0, 1, 1)
 
         self.line_3 = QFrame(NIDAQ_PID_Control)
         self.line_3.setObjectName(u"line_3")
@@ -674,23 +695,12 @@ class Ui_NIDAQ_PID_Control(object):
 
         self.gridLayout.addWidget(self.line_3, 4, 0, 1, 1)
 
-        self.frame_equation = QFrame(NIDAQ_PID_Control)
-        self.frame_equation.setObjectName(u"frame_equation")
-        self.frame_equation.setMinimumSize(QSize(400, 120))
-        self.frame_equation.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_equation.setFrameShadow(QFrame.Shadow.Raised)
-        self.gridLayout_5 = QGridLayout(self.frame_equation)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.widget_image = QWidget(self.frame_equation)
-        self.widget_image.setObjectName(u"widget_image")
-        self.widget_image.setMinimumSize(QSize(0, 100))
-        self.image_layout = QVBoxLayout(self.widget_image)
-        self.image_layout.setObjectName(u"image_layout")
+        self.pushButton_start = QPushButton(NIDAQ_PID_Control)
+        self.pushButton_start.setObjectName(u"pushButton_start")
+        self.pushButton_start.setMinimumSize(QSize(120, 30))
+        self.pushButton_start.setMaximumSize(QSize(150, 30))
 
-        self.gridLayout_5.addWidget(self.widget_image, 0, 0, 1, 1)
-
-
-        self.gridLayout.addWidget(self.frame_equation, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.pushButton_start, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
 
 
         self.retranslateUi(NIDAQ_PID_Control)
@@ -700,15 +710,19 @@ class Ui_NIDAQ_PID_Control(object):
 
     def retranslateUi(self, NIDAQ_PID_Control):
         NIDAQ_PID_Control.setWindowTitle(QCoreApplication.translate("NIDAQ_PID_Control", u"Form", None))
-        self.pushButton_start.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"PID CONTROL", None))
         self.label_ki.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Ki:", None))
         self.path_folder_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
         self.label_terminal.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Terminal config.:", None))
         self.reload_devices.setText("")
+        self.lineEdit_unit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Current (A)", None))
         self.label_setpoint.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Setpoint:", None))
+        self.lineEdit_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"1x+2", None))
         self.pushButton_confirm.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Confirm", None))
         self.label_kp.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kp:", None))
         self.label_arduino.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Device:", None))
+#if QT_CONFIG(tooltip)
+        self.label_equation.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form A x\u00b2 + B x + C</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
         self.label_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Equation (?):", None))
         self.label_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Channel:", None))
         self.label_path.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Data path:", None))
@@ -723,10 +737,14 @@ class Ui_NIDAQ_PID_Control(object):
         self.comboBox_type.setItemText(3, QCoreApplication.translate("NIDAQ_PID_Control", u"PID", None))
 
         self.label_kd.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kd:", None))
-        self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type?", None))
+#if QT_CONFIG(tooltip)
+        self.label_type.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/ControlePID_Bloco.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type? (?)", None))
         self.label_periody.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Sampling period (s):", None))
         self.label.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Save Data?", None))
-        self.radioButton.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Yes", None))
-        self.radioButton_2.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"No", None))
+        self.yes_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Yes", None))
+        self.no_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"No", None))
+        self.pushButton_start.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"PID CONTROL", None))
     # retranslateUi
 

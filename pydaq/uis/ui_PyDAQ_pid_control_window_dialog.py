@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogxGPWEm.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogTNdJgK.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -23,7 +23,7 @@ class Ui_Dialog_Plot_PID_Window(object):
     def setupUi(self, Dialog_Plot_PID_Window):
         if not Dialog_Plot_PID_Window.objectName():
             Dialog_Plot_PID_Window.setObjectName(u"Dialog_Plot_PID_Window")
-        Dialog_Plot_PID_Window.resize(455, 467)
+        Dialog_Plot_PID_Window.resize(751, 585)
         Dialog_Plot_PID_Window.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -447,6 +447,7 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.widget_image = QWidget(self.frame_image)
         self.widget_image.setObjectName(u"widget_image")
+        self.widget_image.setMinimumSize(QSize(0, 133))
         self.image_layout = QHBoxLayout(self.widget_image)
         self.image_layout.setObjectName(u"image_layout")
 
@@ -479,6 +480,14 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.verticalLayout.addWidget(self.widget)
 
+        QWidget.setTabOrder(self.comboBox_TypeDialog, self.doubleSpinBox_KpDialog)
+        QWidget.setTabOrder(self.doubleSpinBox_KpDialog, self.doubleSpinBox_KiDialog)
+        QWidget.setTabOrder(self.doubleSpinBox_KiDialog, self.doubleSpinBox_KdDialog)
+        QWidget.setTabOrder(self.doubleSpinBox_KdDialog, self.doubleSpinBox_SetpointDialog)
+        QWidget.setTabOrder(self.doubleSpinBox_SetpointDialog, self.doubleSpinBox_DisturbeDialog)
+        QWidget.setTabOrder(self.doubleSpinBox_DisturbeDialog, self.pushButton_apply)
+        QWidget.setTabOrder(self.pushButton_apply, self.pushButton_startstop)
+        QWidget.setTabOrder(self.pushButton_startstop, self.pushButton_close)
 
         self.retranslateUi(Dialog_Plot_PID_Window)
 
@@ -496,7 +505,7 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.label_Ki.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Ki:", None))
         self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Controler type?", None))
 #if QT_CONFIG(tooltip)
-        self.label_Disturbe.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance of the control will be added as an integrator to the output signal of the PID control</span></p></body></html>", None))
+        self.label_Disturbe.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance will be added as an integrator to the output signal of the PID control, as shown in the figure below:<br/><br/></span><img src=\":/imgs/imgs/ControlePID_Bloco.png\"/></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.label_Disturbe.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe (?):", None))
         self.label_Setpoint.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))

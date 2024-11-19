@@ -513,8 +513,11 @@ QLabel::toolTip {
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/ControlePID_Bloco.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string>Controler type?</string>
+         <string>Controler type? (?)</string>
         </property>
        </widget>
       </item>
@@ -888,7 +891,9 @@ QLabel::toolTip {
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources_1.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="save_radio_group"/>

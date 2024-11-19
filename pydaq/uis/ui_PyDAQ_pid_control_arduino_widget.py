@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetJyhjah.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetWKlJZO.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDoubleSpi
     QFrame, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QRadioButton, QSizePolicy,
     QSpacerItem, QVBoxLayout, QWidget)
+
 
 class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
@@ -685,7 +686,10 @@ class Ui_Arduino_PID_Control(object):
         self.label_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form A x\u00b2 + B x + C</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"Equation (?):", None))
-        self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type?", None))
+#if QT_CONFIG(tooltip)
+        self.label_type.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/ControlePID_Bloco.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type? (?)", None))
         self.yes_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
         self.no_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
         self.label_kp.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kp:", None))

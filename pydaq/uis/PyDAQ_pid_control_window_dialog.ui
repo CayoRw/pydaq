@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>467</height>
+    <width>751</width>
+    <height>585</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -406,7 +406,7 @@ QDoubleSpinBox::down-button:hover{
          <item row="5" column="1">
           <widget class="QLabel" name="label_Disturbe">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The disturbance of the control will be added as an integrator to the output signal of the PID control&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The disturbance will be added as an integrator to the output signal of the PID control, as shown in the figure below:&lt;br/&gt;&lt;br/&gt;&lt;/span&gt;&lt;img src=&quot;:/imgs/imgs/ControlePID_Bloco.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">QLabel::toolTip {
@@ -495,6 +495,12 @@ QDoubleSpinBox::down-button:hover{
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QWidget" name="widget_image" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>133</height>
+            </size>
+           </property>
            <layout class="QHBoxLayout" name="image_layout"/>
           </widget>
          </item>
@@ -550,6 +556,19 @@ QDoubleSpinBox::down-button:hover{
    </item>
   </layout>
  </widget>
- <resources/>
+ <tabstops>
+  <tabstop>comboBox_TypeDialog</tabstop>
+  <tabstop>doubleSpinBox_KpDialog</tabstop>
+  <tabstop>doubleSpinBox_KiDialog</tabstop>
+  <tabstop>doubleSpinBox_KdDialog</tabstop>
+  <tabstop>doubleSpinBox_SetpointDialog</tabstop>
+  <tabstop>doubleSpinBox_DisturbeDialog</tabstop>
+  <tabstop>pushButton_apply</tabstop>
+  <tabstop>pushButton_startstop</tabstop>
+  <tabstop>pushButton_close</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources_1.qrc"/>
+ </resources>
  <connections/>
 </ui>

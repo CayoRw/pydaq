@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>519</width>
-    <height>888</height>
+    <height>889</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -318,36 +318,33 @@ QDoubleSpinBox::down-button:hover{
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="Line" name="line_2">
+   <item row="3" column="0">
+    <widget class="QFrame" name="frame_equation">
      <property name="minimumSize">
       <size>
-       <width>0</width>
-       <height>0</height>
+       <width>400</width>
+       <height>120</height>
       </size>
      </property>
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
-    </widget>
-   </item>
-   <item row="5" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-    <widget class="QPushButton" name="pushButton_start">
-     <property name="minimumSize">
-      <size>
-       <width>120</width>
-       <height>30</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>150</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>PID CONTROL</string>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QWidget" name="widget_image" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="image_layout"/>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="2" column="0">
@@ -485,6 +482,9 @@ QDoubleSpinBox::down-button:hover{
              <height>16777215</height>
             </size>
            </property>
+           <property name="text">
+            <string>Current (A)</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -535,6 +535,9 @@ QDoubleSpinBox::down-button:hover{
              <height>16777215</height>
             </size>
            </property>
+           <property name="text">
+            <string>1x+2</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -571,7 +574,7 @@ QDoubleSpinBox::down-button:hover{
             <double>0.100000000000000</double>
            </property>
            <property name="value">
-            <double>10.000000000000000</double>
+            <double>1.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -617,6 +620,9 @@ QDoubleSpinBox::down-button:hover{
           <width>0</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The equation should be written in the form A x² + B x + C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Equation (?):</string>
@@ -823,8 +829,11 @@ QDoubleSpinBox::down-button:hover{
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/ControlePID_Bloco.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string>Controler type?</string>
+         <string>Controler type? (?)</string>
         </property>
        </widget>
       </item>
@@ -852,23 +861,61 @@ QDoubleSpinBox::down-button:hover{
        <widget class="QWidget" name="widget_3" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="yes_save_radio">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Yes</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">save_radio_group</string>
+           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="no_save_radio">
            <property name="text">
             <string>No</string>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">save_radio_group</string>
+           </attribute>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="Line" name="line_2">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item row="4" column="0">
@@ -884,37 +931,32 @@ QDoubleSpinBox::down-button:hover{
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QFrame" name="frame_equation">
+   <item row="5" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+    <widget class="QPushButton" name="pushButton_start">
      <property name="minimumSize">
       <size>
-       <width>400</width>
-       <height>120</height>
+       <width>120</width>
+       <height>30</height>
       </size>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::Shape::StyledPanel</enum>
+     <property name="maximumSize">
+      <size>
+       <width>150</width>
+       <height>30</height>
+      </size>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Shadow::Raised</enum>
+     <property name="text">
+      <string>PID CONTROL</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
-       <widget class="QWidget" name="widget_image" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>100</height>
-         </size>
-        </property>
-        <layout class="QVBoxLayout" name="image_layout"/>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources_1.qrc"/>
+ </resources>
  <connections/>
+ <buttongroups>
+  <buttongroup name="save_radio_group"/>
+ </buttongroups>
 </ui>
