@@ -41,7 +41,18 @@ Trabalhos                                                                      |
 -Sugestão de mesclagem do controle PID com o step response                     | >> pensando
 -Tipos de disturbios                                                           | >> pensando
 -ZOH e linhas continuas pontuadas 									                   | >> não feito
--Mudar nome do botão para save and close / close                               | >> não feito
-_______________________________________________________________________________|
-Prox data: dia 14/11 15h30                                                     |
-Sugestão: controlar variáveis no arduíno / placas nidaq                        |
+-Mudar nome do botão para save and close / close                               | >> feito
+-Equation e unit                                                               | >> feito o unit
+_______________________________________________________________________________| 
+Prox data: dia 29/11 13h30                                                     | 
+                                                                               | 
+-Segregar offline (por enquanto nidaq) e arduino                               | >> fazendo
+-Grafico do erro - (eixo, tamanho, limites, legenda)                           | >> feito
+-Escala do grafico - (tamanho e ajuste do eixo x automático)                   | >> feito
+-Fundos do gráfico mais claro e o eixo branco                                  | >> feito
+-Tooltips do disturbios - (colocar imagem, qdialog)                            | >> feito
+-Disturbio no controle                                                         | >> feito
+-Salvar o erro, setpoint, kp, ki, kd no datapath                               | >> feito
+-Conferir matematicamente ki e kd                                              | >> não feito 
+-texto do eixo x: sample                                                       | >> feito
+-Controlar variáveis no arduíno / placas nidaq                                 | >> não feito
