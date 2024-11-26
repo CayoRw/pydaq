@@ -63,31 +63,31 @@ for t in time_steps:
     # Armazenando resultados
     system_output.append(output)
     control_signal.append(control)
-    
+
     # Atualizando as variáveis
     prev_error = error
     prev_output = output
-    
+
     # Atualizando os dados no gráfico
     line_output.set_data(time_steps[:len(system_output)], system_output)
     line_control.set_data(time_steps[:len(control_signal)], control_signal)
-    
+
     # Ajustar os limites do gráfico conforme os dados vão chegando
     ax1.set_xlim(0, total_time)
     ax1.set_ylim(min(system_output) - 0.5, max(system_output) + 0.5)
     ax2.set_xlim(0, total_time)
     ax2.set_ylim(min(control_signal) - 0.5, max(control_signal) + 0.5)
-    
+
     # Redesenhar o gráfico
     plt.draw()
     plt.pause(0.01)  # Pausa breve para atualização do gráfico
-    
+
     # Esperar até o próximo instante (tempo real)
     elapsed_time = time.time() - start_time
     sleep_time = T - elapsed_time
     if sleep_time > 0:
         time.sleep(sleep_time)
-    
+
     start_time = time.time()
 
 # Após a simulação, desativar o modo interativo e mostrar o gráfico final

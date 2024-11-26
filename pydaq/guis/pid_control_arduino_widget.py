@@ -19,8 +19,8 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.setupUi(self)
 
 #Calling the functions
-        self.locate_arduino()
-        self.reload_devices.clicked.connect(self.locate_arduino)
+        self.update_com_ports()
+        self.reload_devices.clicked.connect(self.update_com_ports)
         self.on_unit_change()
         self.comboBox_setpoint.currentIndexChanged.connect(self.on_unit_change)
         self.on_type_combo_changed(0)
@@ -34,18 +34,33 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         )
 
 #Fuctions
-    def locate_arduino(self):
-        current_selection = self.comboBox_arduino.currentText()
-        self.comboBox_arduino.clear()
-        ports = serial.tools.list_ports.comports()
+ #   def locate_arduino(self):
+ #       current_selection = self.comboBox_arduino.currentText()
+ #       self.comboBox_arduino.clear()
+ #       ports = serial.tools.list_ports.comports()
+#
+#        for port in ports:
+#            self.comboBox_arduino.addItem(f"{port.device} - {port.description}")
+#        
+#        if current_selection:
+#            index = self.comboBox_arduino.findText(current_selection)
+#            if index != -1:
+#                self.comboBox_arduino.setCurrentIndex(index)
+                
+            
+    
+    def update_com_ports(self):  # Updating com ports
+        self.com_ports = [i.description for i in serial.tools.list_ports.comports()]
+        selected = self.comboBox_arduino.currentText()
 
-        for port in ports:
-            self.comboBox_arduino.addItem(f"{port.device} - {port.description}")
-        
-        if current_selection:
-            index = self.comboBox_arduino.findText(current_selection)
-            if index != -1:
-                self.comboBox_arduino.setCurrentIndex(index)
+        self.comboBox_arduino.clear()
+        self.comboBox_arduino.addItems(self.com_ports)
+        index_current = self.comboBox_arduino.findText(selected)
+
+        if index_current == -1:
+            pass
+        else:
+            self.comboBox_arduino.setCurrentIndex(index_current)
 
 #Condiction to show the line edit equation and unit
     def on_unit_change(self):
@@ -132,6 +147,10 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 
 #Create the pid control window
     def show_graph_window(self):
+        self.com_port = serial.tools.list_ports.comports()[
+                self.com_ports.index(self.comboBox_arduino.currentText())
+            ].name
+        print ('Com port1 ', self.com_port)
         self.setpoint = self.doubleSpinBox_setpoint.value()
         self.getunit()
         self.equation = self.lineEdit_equation.text()
@@ -139,8 +158,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.path = self.path_line_edit.text()
         self.index = self.comboBox_type.currentIndex()
         self.save = True if self.save_radio_group.checkedId() == -2 else False
+        self.board = 'arduino'
         plot_window = PID_Control_Window_Dialog()
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.com_port, self.setpoint, self.unit, self.equation, self.period, self.path, self.save, self.board)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 
@@ -153,7 +173,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             pass
         else:
             self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
-
+            
     def update_values(self, value1, value2, value3, value4, value5):
         # Define os valores nos QDoubleSpinBox correspondentes
         self.doubleSpinBox_kp.setValue(value1)

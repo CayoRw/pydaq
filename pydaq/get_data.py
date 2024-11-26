@@ -202,7 +202,7 @@ class GetData(Base):
 
             # Acquire data
             self.ser.reset_input_buffer()  # Reseting serial input buffer
-
+            
             # Get the last complete value
             temp = int(self.ser.read(14).split()[-2].decode("UTF-8")) * self.ard_vpb
 

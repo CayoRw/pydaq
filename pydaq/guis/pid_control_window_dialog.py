@@ -43,6 +43,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
 
 #to save the data path
         self.path = os.path.join(os.path.join(os.path.expanduser("~")), "Desktop") # Defining default path
+
         self._check_path()
 
 #Starting the canvas
@@ -52,22 +53,25 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equation, period, path, save):
+    def set_parameters(self, kp, ki, kd, index, com_port, setpoint, unit, equation, period, path, save, board):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
         self.index = index if index else 0
+        self.com_port = com_port
         self.setpoint = setpoint if setpoint else 0.0
         self.unit = unit if unit else 'Voltage (V)'
         self.calibration_equation = equation
         self.period = period if period else 1 
         self.path = path if path else os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         self.save = save
+        self.board = board if board else 'arduino'
         self._check_path()
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
         print('Index ', self.index)
+        print('Com Port ', self.com_port)
         print('Setpoint ', self.setpoint)
         print('Unit ', self.unit)
         print('Equation ', self.calibration_equation)
@@ -76,25 +80,15 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print ('Save ', self.save)
         self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
 
-#both function below are to set the comboBox enabled/desabled status
-    def on_type_combo_changed(self, index):
-        if index == 0:  
-            self.enable_pid_parameters(True, False, False)
-        elif index == 1:  
-            self.enable_pid_parameters(True, True, False)
-        elif index == 2: 
-            self.enable_pid_parameters(True, False, True)
-        elif index == 3:  
-            self.enable_pid_parameters(True, True, True)  
-        self.index = index  
-    def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
-        self.doubleSpinBox_KpDialog.setEnabled(kp_enabled)
-        self.doubleSpinBox_KiDialog.setEnabled(ki_enabled)
-        self.doubleSpinBox_KdDialog.setEnabled(kd_enabled)
-        if ki_enabled == False:
-            self.doubleSpinBox_KiDialog.setValue(0)
-        if kd_enabled == False:
-            self.doubleSpinBox_KdDialog.setValue(0)
+#stop/start the event and change the button text
+    def stopstart (self):
+        self.paused = not self.paused
+        if self.paused:
+            self.ani.event_source.stop()
+            self.pushButton_startstop.setText("Start")
+        else:
+            self.ani.event_source.start()
+            self.pushButton_startstop.setText("Stop")
 
 #def to save and go back
     def go_back(self):
@@ -103,7 +97,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print("\nSaving data ...")
             # Saving time_var and data
             self._save_data(self.time_var, "time.dat")
-            self._save_data(self.datas, "data.dat")
+            self._save_data(self.system_values, "data.dat")
             self._save_data(self.errors, "error.dat")
             self._save_data(self.setpoints, "setpoint.dat")
             print("\nData saved ...")
@@ -116,18 +110,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.setpoint,
         )
 #stop the event and close the dialog
+        if self.board == 'arduino':
+            # Turning off the output at the end
+            self.ser.write(b"0")
+            # Closing port
+            self.ser.close()
+        
         self.ani.event_source.stop()
         self.close()
-
-#stop/start the event and change the button text
-    def stopstart (self):
-        self.paused = not self.paused
-        if self.paused:
-            self.ani.event_source.stop()
-            self.pushButton_startstop.setText("Start")
-        else:
-            self.ani.event_source.start()
-            self.pushButton_startstop.setText("Stop")
 
 #apply all pid parameters while the event goes on
     def apply_parameters(self):
@@ -169,21 +159,18 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
 #stating the control and inicializating variables
     def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
         try:
-            self.time_elapsed = 0.0
-            self.time = []
-            self.setpoints = []
-            self.disturbe = 0.0
-            self.feedback_value = 0
-            self.control = 0
-            self.disturbe
-            self.system_values = []
-            self.errors = []
-            self.datas = []
-            self.time_var = [] 
             self.set_text()
             self.on_type_combo_changed(self.index)
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)          
-            self.ani = animation.FuncAnimation(self.figure, self.update_plot, frames=range(100), init_func=self.init_plot, blit=True, interval=self.period*1000)
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period, self.com_port)
+            self.check_board()
+            self.ani = animation.FuncAnimation(
+                self.figure, 
+                self.update_plot, 
+                frames=range(100), 
+                init_func=self.init_plot, 
+                blit=True, 
+                interval=self.period*1000
+                )
             plt.suptitle('PID Control', color='white')
             self.canvas.draw()
         except ValueError:
@@ -203,6 +190,34 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         else:
             self.pushButton_close.setText("Close")
             self.pushButton_close.setMinimumWidth(60)
+
+#both function below are to set the comboBox enabled/desabled status
+    def on_type_combo_changed(self, index):
+        if index == 0:  
+            self.enable_pid_parameters(True, False, False)
+        elif index == 1:  
+            self.enable_pid_parameters(True, True, False)
+        elif index == 2: 
+            self.enable_pid_parameters(True, False, True)
+        elif index == 3:  
+            self.enable_pid_parameters(True, True, True)  
+        self.index = index  
+
+    def check_board(self):
+        if self.board == 'arduino':
+            self.pid.pid_control_arduino()
+            self.pid.com_port = self.com_port
+        elif self.board == 'nidaq':
+            self.pid.pid_control_nidaq()
+
+    def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
+        self.doubleSpinBox_KpDialog.setEnabled(kp_enabled)
+        self.doubleSpinBox_KiDialog.setEnabled(ki_enabled)
+        self.doubleSpinBox_KdDialog.setEnabled(kd_enabled)
+        if ki_enabled == False:
+            self.doubleSpinBox_KiDialog.setValue(0)
+        if kd_enabled == False:
+            self.doubleSpinBox_KdDialog.setValue(0)
 
 # Init the plot with variables axes 
     def init_plot(self):
@@ -239,32 +254,22 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.ax2.yaxis.label.set_color('white')
 
         self.ax.title.set_color('white')
-        
+
         #plt.tight_layout()
         return self.line1, self.line2, self.line3
 
-# Updating the plot
     def update_plot(self, frame):
+
         if self.pid is None:
             print ('self.pid is none')
-            return self.line1, self.line2
-# Get the system response value
-        self.system_value = self.system_output(self.feedback_value, self.control)
-        # Print ('System value = ', self.system_value )
-# Get the feedback sensor value
-        self.feedback_value = self.system_value
-        self.time_elapsed += self.period # Clock
-# Get the control value
-        self.control, error = self.pid.update(self.feedback_value)
-        self.control = self.control - self.disturbe
-# Plot the datas
-        self.errors.append(error)
-        self.system_values.append(self.system_value)
-        self.setpoints.append(self.setpoint)
+            return self.line1, self.line2, self.line3
 
-        self.datas.append(self.system_value)
-        self.time_var.append(self.time_elapsed)
-# Change the color when the system value reaches 95% of setpoint
+        if self.board == 'arduino':
+            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_arduino()
+        elif self.board == 'nidaq':
+            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_nidaq()
+
+        # Change the color when the system value reaches 95% of setpoint
         if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:
             self.line1.set_color('yellow')  
         else:
@@ -288,17 +293,12 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             max(self.errors) * 1.1
         )
 #.......................................................................................................................
-# Reload the X axe after 100 datas
-        if len(self.system_values) > 100:
-            self.ax.set_xlim((len(self.system_values) - 100) * self.period, len(self.system_values) * self.period)
+# Reload the X axe after 30 datas
+        if len(self.system_values) > 30:
+            self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
         else:
             self.ax.set_xlim(0, self.time_elapsed)
 #.......................................................................................................................
 
         self.canvas.draw()
         return self.line1, self.line2, self.line3
-
-# System type 1/s+a
-    def system_output(self, y_prev, control):
-# Discretization by euler
-        return (self.period * control + y_prev) / (1 + self.period * self.a)

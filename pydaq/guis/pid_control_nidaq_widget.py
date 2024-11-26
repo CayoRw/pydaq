@@ -139,15 +139,17 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
 
 #Create the pid control window
     def show_graph_window(self):
+        self.index = self.comboBox_type.currentIndex()
+        self.com_port = False
         self.setpoint = self.doubleSpinBox_setpoint.value()
         self.getunit()
         self.equation = self.lineEdit_equation.text()
         self.period = self.doubleSpinBox_period.value()
         self.path = self.path_line_edit.text()
-        self.index = self.comboBox_type.currentIndex()
         self.save = True if self.save_radio_group.checkedId() == -2 else False
+        self.board = 'nidaq'
         plot_window = PID_Control_Window_Dialog()
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.com_port, self.setpoint, self.unit, self.equation, self.period, self.path, self.save, self.board)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 
