@@ -29,7 +29,6 @@ class GetData(Base):
         save: if True, saves data in path defined by path.
         path: where data will be saved.
         plot: if True, plot data iteractively as they are acquired
-
     """
 
     def __init__(

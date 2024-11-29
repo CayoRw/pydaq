@@ -30,21 +30,10 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.pushButton_close.clicked.connect(self.go_back)
         self.pushButton_apply.clicked.connect(self.apply_parameters)
         self.comboBox_TypeDialog.currentIndexChanged.connect(self.on_type_combo_changed)
-
-#variable for control
-        self.system_value = 0.0
         self.paused = False
-        self.setpoints = []
-        self.system_values = []
-        self.start_time = time.time()
         self.pid = None
-#defining the a in H(s) = 1/s+a
-        self.a = 0.1
-
 #to save the data path
         self.path = os.path.join(os.path.join(os.path.expanduser("~")), "Desktop") # Defining default path
-
-        self._check_path()
 
 #Starting the canvas
         self.figure = plt.figure(facecolor='#404040')
@@ -97,10 +86,11 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print("\nSaving data ...")
             # Saving time_var and data
             self._save_data(self.time_var, "time.dat")
-            self._save_data(self.system_values, "data.dat")
+            self._save_data(self.system_values, "output.dat")
             self._save_data(self.errors, "error.dat")
             self._save_data(self.setpoints, "setpoint.dat")
             print("\nData saved ...")
+            
 #sending the values to QWidget
         self.send_values.emit(
             self.kp,
@@ -112,10 +102,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
 #stop the event and close the dialog
         if self.board == 'arduino':
             # Turning off the output at the end
-            self.ser.write(b"0")
+            self.pid.ser.write(b"0")
             # Closing port
-            self.ser.close()
-        
+            self.pid.ser.close()
         self.ani.event_source.stop()
         self.close()
 
@@ -250,8 +239,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.ax.xaxis.label.set_color('white')
         self.ax.yaxis.label.set_color('white')
 
-        self.ax2.tick_params(axis='y', colors='white')
-        self.ax2.yaxis.label.set_color('white')
+#        self.ax2.tick_params(axis='y', colors='white')
+#        self.ax2.yaxis.label.set_color('white')
 
         self.ax.title.set_color('white')
 
@@ -268,6 +257,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_arduino()
         elif self.board == 'nidaq':
             self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_nidaq()
+        self.system_value = self.system_values[-1]
 
         # Change the color when the system value reaches 95% of setpoint
         if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:
@@ -287,18 +277,16 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         else:
             xmin = max(self.setpoints + self.system_values + self.errors) * -0.1
         self.ax.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
-#Reload the error axe
-        self.ax2.set_ylim(
-            min(self.errors) * 1.1 if min(self.errors) < 0 else min(self.errors) * 0.9,
-            max(self.errors) * 1.1
-        )
-#.......................................................................................................................
+# Reload the error axe
+#        self.ax2.set_ylim(
+#            min(self.errors) * 1.1 if min(self.errors) < 0 else min(self.errors) * 0.9,
+#            max(self.errors) * 1.1
+#        )
 # Reload the X axe after 30 datas
         if len(self.system_values) > 30:
             self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
         else:
             self.ax.set_xlim(0, self.time_elapsed)
-#.......................................................................................................................
-
         self.canvas.draw()
+        
         return self.line1, self.line2, self.line3
