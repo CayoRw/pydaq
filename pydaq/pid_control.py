@@ -64,37 +64,34 @@ class PIDControl(Base):
 # Updating the datas to plot
     def update_plot_arduino(self):
         
-        # Reseting serial input buffer        
-        self.ser.reset_input_buffer()
+        if self.ser.in_waiting > 64:  # Por exemplo, se há mais de 64 bytes acumulados
+            self.ser.reset_input_buffer()
 
         # Get the feedback sensor value
         self.time_elapsed += self.period # Clock
-
-        # Get the control value
-        self.control, error = self.update(self.feedback_value)
-        if(self.control <= 0):
-            self.control = 0
-        elif (self.control >=5):
-            self.control = 5
         
-        data = int(self.ser.read(14).split()[-2].decode("UTF-8")) * self.ard_vpb
-
-        self.duty_cycle_control = ((self.control/self.ard_ao_max)**2) *255
-        
-        print(f"Control: {self.control} V -> Duty Cycle: {self.duty_cycle_control} (0-255)")
-        
-        self.ser.write(f"{self.duty_cycle_control:.2f}\n".encode("utf-8"))
-
+        data = self.ser.read(14).decode("UTF-8")
         try:
-            self.feedback_value = data
+            self.feedback_value =  int(data.split()[-2]) * self.ard_vpb
         except (IndexError, ValueError):
             print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use o último valor válido
 
-        # Queue data in a list
-        self.output.append(self.feedback_value)
+        
+        # Get the control value
+        self.control, error = self.update(self.feedback_value)
+        # self.control = self.setpoint
+        if(self.control <= 0):
+            self.control = 0
+        elif (self.control >=5):
+            self.control = 5
+        # change to a duty cicle
+        self.duty_cycle_control = int((self.control/self.ard_ao_max) *255)
+        self.ser.write(f"{self.duty_cycle_control}\n".encode("utf-8"))         # Send data to arduino 
+        
+        print(f"Control (V): {self.control:.2f}, Duty Cycle (0-255): {self.duty_cycle_control:.2f}, Feedback: {self.feedback_value:.2f}")
 
-        # Att the datas
+        # Queue data in a list
         self.errors.append(error)
         self.system_values.append(self.feedback_value)
         self.setpoints.append(self.setpoint)
@@ -111,7 +108,7 @@ class PIDControl(Base):
         self.output = []
         self.time_elapsed = 0.0
         self.feedback_value = 0
-        self.control = 0
+        self.control = self.setpoint
 
         # Oppening ports
         self._open_serial()
@@ -125,7 +122,10 @@ class PIDControl(Base):
         # Value per bit - Arduino
         self.ard_vpb = (self.ard_ao_max - self.ard_ao_min) / ((2 ** self.arduino_ai_bits)-1)
 
+        self.ser.reset_input_buffer()
+        
         time.sleep(1)  # Wait for Arduino and Serial to start up
+        
         # Start updatable plot
         self.title = f"PYDAQ - Step Response (Arduino), Port: {self.com_port}"
 

@@ -23,7 +23,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
-        self.setMinimumSize(1000, 750)
+        self.setMinimumSize(900, 700)
 
 #Calling the functions
         self.pushButton_startstop.clicked.connect(self.stopstart)
