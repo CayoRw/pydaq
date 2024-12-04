@@ -5,7 +5,6 @@
              - https://www.github.com/samirmartins/
 
  */
-
 int analogInputPort = A0; // Port that will be used to acquire data
 const int digitallOutputPort = 13; // Port that will be used to send data
 
@@ -19,12 +18,10 @@ void setup()
 
   // Setting up digitalOutputPort
   pinMode(digitallOutputPort, OUTPUT);
-
 }
 
 void loop() 
 { 
-
   // Reading data from serial and sending it to digital output
   if (Serial.available() > 0) // Check if there is data from serial
   {
@@ -40,10 +37,9 @@ void loop()
     {
       digitalWrite(digitallOutputPort, LOW);
     }
+    
   }
-
     // Reading data from arduino and printing on serial
   analogValue = analogRead(analogInputPort); // Reading input
   Serial.println(analogValue); // Printing on serial
-
 }

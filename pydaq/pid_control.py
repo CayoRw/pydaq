@@ -49,7 +49,6 @@ class PIDControl(Base):
 
 #need to review
     def update(self, feedback_value):
-        #self.setpoint_update = self.setpoint - self.disturbe
         error = self.setpoint - feedback_value
         self.integral = self.integral + error * self.period
         derivative = (error - self.previous_error) / self.period
@@ -58,12 +57,14 @@ class PIDControl(Base):
         #output = self.zero_order_hold(current_time, self.hold_time, output)
         self.previous_error = error
         self.previous_output = output
-
+        #self.output = self.output - self.disturbe
+        
         return output, error
 
 # Updating the datas to plot
     def update_plot_arduino(self):
-
+        
+        # Reseting serial input buffer        
         self.ser.reset_input_buffer()
 
         # Get the feedback sensor value
@@ -71,21 +72,27 @@ class PIDControl(Base):
 
         # Get the control value
         self.control, error = self.update(self.feedback_value)
-        self.control = self.control - self.disturbe
+        if(self.control <= 0):
+            self.control = 0
+        elif (self.control >=5):
+            self.control = 5
+        
+        data = int(self.ser.read(14).split()[-2].decode("UTF-8")) * self.ard_vpb
 
-        # Sending and acquiring data
-        self.ser.write(f"{self.control:.2f}\n".encode("utf-8"))
+        self.duty_cycle_control = ((self.control/self.ard_ao_max)**2) *255
+        
+        print(f"Control: {self.control} V -> Duty Cycle: {self.duty_cycle_control} (0-255)")
+        
+        self.ser.write(f"{self.duty_cycle_control:.2f}\n".encode("utf-8"))
 
-        # Read the data
-        data = self.ser.read(14).split()[-2].decode("UTF-8").strip()
         try:
-            self.feedback_value = int(data.split()[-2]) * self.ard_vpb
+            self.feedback_value = data
         except (IndexError, ValueError):
+            print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use o último valor válido
 
         # Queue data in a list
         self.output.append(self.feedback_value)
-        self.input.append(5 * float(self.control))
 
         # Att the datas
         self.errors.append(error)
@@ -102,7 +109,6 @@ class PIDControl(Base):
         self.datas = []
         self.time_var = [] 
         self.output = []
-        self.input = []
         self.time_elapsed = 0.0
         self.feedback_value = 0
         self.control = 0
@@ -118,9 +124,8 @@ class PIDControl(Base):
         self.ard_ao_max, self.ard_ao_min = 5, 0
         # Value per bit - Arduino
         self.ard_vpb = (self.ard_ao_max - self.ard_ao_min) / ((2 ** self.arduino_ai_bits)-1)
-        # Turning off the output before starting
-        self.ser.write(b"0")
-        time.sleep(2)  # Wait for Arduino and Serial to start up
+
+        time.sleep(1)  # Wait for Arduino and Serial to start up
         # Start updatable plot
         self.title = f"PYDAQ - Step Response (Arduino), Port: {self.com_port}"
 
@@ -131,7 +136,6 @@ class PIDControl(Base):
         self.datas = []
         self.time_var = [] 
         self.output = []
-        self.input = []
         self.time_elapsed = 0.0
         self.feedback_value = 0
         self.control = 0
@@ -153,24 +157,14 @@ class PIDControl(Base):
         self.system_values.append(self.feedback_value)
         self.setpoints.append(self.setpoint)
         self.time_var.append(self.time_elapsed)
-
+        
+        # return values to build the graphics
         return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed
 
 # System type 1/s+a
     def system_output(self, y_prev, control):
 # Discretization by euler
         return (self.period * control + y_prev) / (1 + self.period * self.a)
-
-'''
-        # Arduino ADC resolution (in bits)
-        self.arduino_ai_bits = 10
-
-        # Arduino analog input max and min
-        self.ard_ai_max, self.ard_ai_min = 5, 0
-
-        # Value per bit - Arduino
-        self.ard_vpb = (self.ard_ai_max - self.ard_ai_min) / ((2 ** self.arduino_ai_bits)-1)
-'''
 
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):

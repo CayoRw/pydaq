@@ -23,7 +23,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
     def __init__(self, *args):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
-        self.setMinimumSize(1000, 600)
+        self.setMinimumSize(1000, 750)
 
 #Calling the functions
         self.pushButton_startstop.clicked.connect(self.stopstart)
@@ -36,7 +36,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.path = os.path.join(os.path.join(os.path.expanduser("~")), "Desktop") # Defining default path
 
 #Starting the canvas
-        self.figure = plt.figure(facecolor='#404040')
+        self.figure = plt.figure(figsize =(6.4,4.8), facecolor='#404040')
         self.ax = self.figure.add_subplot(111, facecolor='#505050')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         self.image_layout.addWidget(self.canvas)
@@ -90,7 +90,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self._save_data(self.errors, "error.dat")
             self._save_data(self.setpoints, "setpoint.dat")
             print("\nData saved ...")
-            
+
 #sending the values to QWidget
         self.send_values.emit(
             self.kp,
@@ -218,33 +218,27 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.ax2 = self.ax.twinx()  # Create the error axe the first time
 
         self.ax.set_xlim(0, self.period*10)
-        self.ax.set_ylim(-1.1*self.setpoint ,1.1*self.setpoint)
-        self.ax2.set_ylim(-1.1 * self.setpoint, 1.1 * self.setpoint)
+        self.ax.set_ylim(-1.1*self.setpoint,1.1*self.setpoint)
+        self.ax2.set_ylim(-1.1 *self.setpoint, 1.1 * self.setpoint)
 
         self.ax.set_xlabel('Sample (s)', color = 'white')
         self.ax.set_ylabel(self.unit, color = 'white')
         self.ax2.set_ylabel('Error', color = 'white')
-        #.............
-        self.ax.legend(['System Output', 'Setpoint', 'Error'])
-        #.............
 
 # Set the axes colors to white
-        self.ax.spines['bottom'].set_color('white')
-        self.ax.spines['top'].set_color('white')
-        self.ax.spines['left'].set_color('white')
-        self.ax.spines['right'].set_color('white')
+        for spine in ['bottom', 'top', 'left', 'right']:
+            self.ax.spines[spine].set_color('white')
 
         self.ax.tick_params(axis='x', colors='white')
         self.ax.tick_params(axis='y', colors='white')
-        self.ax.xaxis.label.set_color('white')
-        self.ax.yaxis.label.set_color('white')
-
-#        self.ax2.tick_params(axis='y', colors='white')
-#        self.ax2.yaxis.label.set_color('white')
-
+        self.ax2.tick_params(axis='y', colors='white')
+        
         self.ax.title.set_color('white')
-
-        #plt.tight_layout()
+        self.ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray', alpha=0.7)
+        self.ax.legend(['System Output', 'Setpoint', 'Error'])
+        
+        #self.figure.tight_layout()
+        
         return self.line1, self.line2, self.line3
 
     def update_plot(self, frame):
@@ -278,10 +272,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             xmin = max(self.setpoints + self.system_values + self.errors) * -0.1
         self.ax.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
 # Reload the error axe
-#        self.ax2.set_ylim(
-#            min(self.errors) * 1.1 if min(self.errors) < 0 else min(self.errors) * 0.9,
-#            max(self.errors) * 1.1
-#        )
+        self.ax2.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
 # Reload the X axe after 30 datas
         if len(self.system_values) > 30:
             self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)

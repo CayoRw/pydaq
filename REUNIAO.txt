@@ -59,13 +59,13 @@ Trabalhos:                                                                     |
 -Simular amplificador buffer, circuito RC.                                     | >> feito
 _______________________________________________________________________________|
 Reunião 29/11 13h30                                                            |
--Reler o código e ver qual erro está dando                                     |
--Utilizar a biblioteca bokeh ou plotly                                         |
--Asyncio ou threading - trabalhar a coleta e o plot de forma assincronas       |
--draw.io para desenhar o diagrama de blocos                                    |
--destacar o (?)                                                                |
+-Reler o código e ver qual erro está dando                                     | >> feito
+-Utilizar a biblioteca bokeh ou plotly                                         | >> feito
+-Async.io ou threading - trabalhar a coleta e o plot de forma assincronas      | >> 
+-draw.io para desenhar o diagrama de blocos                                    | >> 
+-destacar o (?)                                                                | >> 
 -mudar o nome de data.txt para output                                          | >> feito
--rever o eixo de erro                                                          | >> comentar com o samir para excluir
+-rever o eixo de erro                                                          | >> feito
 -profiler pycharm python para ver onde está gastando o maior tempo             | >> 
 -Limite de saída e coleta - 0 a 5V                                             | >> 
 -Construir saída em PWM.                                                       | >> 

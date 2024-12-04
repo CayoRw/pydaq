@@ -10,7 +10,6 @@ from .error_window_gui import Error_window
 
 from ..get_data import GetData
 
-
 class GetData_Arduino_Widget(QWidget, Ui_Arduino_GetData_W):
     def __init__(self, *args):
         super(GetData_Arduino_Widget, self).__init__()
