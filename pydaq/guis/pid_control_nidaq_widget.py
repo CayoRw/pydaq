@@ -62,19 +62,19 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             self.label_unit.show()
             self.label_equation.show()
             self.widget_equation.show()
-            self.label_i_equaton.show()
+            self.label_i_equation.show()
         elif selected_unit == 'Voltage (V)':
             self.widget_unit.hide()
             self.label_unit.hide()
             self.label_equation.hide()
             self.widget_equation.hide()
-            self.label_i_equaton.hide()
+            self.label_i_equation.hide()
         else:
             self.widget_unit.hide()
             self.label_unit.hide()
             self.label_equation.show()
             self.widget_equation.show()
-            self.label_i_equaton.show()
+            self.label_i_equation.show()
 
 #Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):

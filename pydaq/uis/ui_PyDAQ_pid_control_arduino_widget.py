@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDoubleSpi
     QFrame, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QRadioButton, QSizePolicy,
     QSpacerItem, QVBoxLayout, QWidget)
-import resources_1_rc
 
 class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):

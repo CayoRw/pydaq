@@ -89,6 +89,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self._save_data(self.system_values, "output.dat")
             self._save_data(self.errors, "error.dat")
             self._save_data(self.setpoints, "setpoint.dat")
+            self._save_data(self.controls, "controls.dat")
             print("\nData saved ...")
 
 #sending the values to QWidget
@@ -250,7 +251,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         if self.board == 'arduino':
             self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_arduino()
         elif self.board == 'nidaq':
-            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_nidaq()
+            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls = self.pid.update_plot_nidaq()
         self.system_value = self.system_values[-1]
 
         # Change the color when the system value reaches 95% of setpoint

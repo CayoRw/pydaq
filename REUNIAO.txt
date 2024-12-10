@@ -68,4 +68,4 @@ Reunião 29/11 13h30                                                            
 -Profiler pycharm python para ver onde está gastando o maior tempo             | >> 
 -Limite de saída e coleta - 0 a 5V                                             | >> feito
 -Construir saída em PWM.                                                       | >> feito
--Conferir matematicamente ki e kd                                              | >> PROX
+-Conferir matematicamente ki e kd                                              | >> feito controle pi e pd

@@ -44,7 +44,7 @@ class PIDControl(Base):
 
 #       self.hold_time = period
 #defining the a in "H(s) = 1/s+a"
-        self.a = 0.1
+        self.a = 0.2
 #Inicializating the updating plot
 
 #need to review
@@ -53,7 +53,7 @@ class PIDControl(Base):
         self.integral = self.integral + error * self.period
         derivative = (error - self.previous_error) / self.period
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
-        #print('Output = ', self.Kp,'*', error)
+        #print('Output = ', self.Kp,' * ', error, ' + ', self.Kd , ' * ', derivative, ' = ', output)
         #output = self.zero_order_hold(current_time, self.hold_time, output)
         self.previous_error = error
         self.previous_output = output
@@ -133,7 +133,7 @@ class PIDControl(Base):
         self.setpoints = []
         self.system_values = []
         self.errors = []
-        self.datas = []
+        self.controls = []
         self.time_var = [] 
         self.output = []
         self.time_elapsed = 0.0
@@ -153,13 +153,14 @@ class PIDControl(Base):
         self.control = self.control - self.disturbe
 
         # Att the datas
+        self.controls.append(self.control)
         self.errors.append(error)
         self.system_values.append(self.feedback_value)
         self.setpoints.append(self.setpoint)
         self.time_var.append(self.time_elapsed)
         
         # return values to build the graphics
-        return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed
+        return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls
 
 # System type 1/s+a
     def system_output(self, y_prev, control):
@@ -173,6 +174,7 @@ class PIDControl(Base):
         else:
             return self.previous_output
 '''
+
 
 '''Implementação do PID em tempo discreto
     def pid_controller(setpoint, y, Kp, Ki, Kd, integral_prev, error_prev, T):
