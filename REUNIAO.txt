@@ -52,20 +52,20 @@ Trabalhos:                                                                     |
 -Fundos do gráfico mais claro e o eixo branco                                  | >> feito
 -Tooltips do disturbios - (colocar imagem, qdialog)                            | >> feito
 -Disturbio no controle                                                         | >> feito
--Salvar o erro, setpoint, kp, ki, kd no datapath                               | >> feito parcial
--Conferir matematicamente ki e kd                                              | >> não feito 
+-Salvar o erro, setpoint, kp, ki, kd no datapath                               | >> feito 
 -Texto do eixo x: sample                                                       | >> feito
 -Controlar variáveis no arduíno / placas nidaq                                 | >> não feito
 -Simular amplificador buffer, circuito RC.                                     | >> feito
 _______________________________________________________________________________|
 Reunião 29/11 13h30                                                            |
 -Reler o código e ver qual erro está dando                                     | >> feito
--Utilizar a biblioteca bokeh ou plotly                                         | >> feito
+-Utilizar a biblioteca bokeh ou plotly                                         | >> 
 -Async.io ou threading - trabalhar a coleta e o plot de forma assincronas      | >> 
--draw.io para desenhar o diagrama de blocos                                    | >> 
--destacar o (?)                                                                | >> 
--mudar o nome de data.txt para output                                          | >> feito
--rever o eixo de erro                                                          | >> feito
--profiler pycharm python para ver onde está gastando o maior tempo             | >> 
--Limite de saída e coleta - 0 a 5V                                             | >> 
--Construir saída em PWM.                                                       | >> 
+-Draw.io para desenhar o diagrama de blocos                                    | >> feito
+-Destacar o (?)                                                                | >> feito
+-Mudar o nome de data.txt para output                                          | >> feito
+-Rever o eixo de erro                                                          | >> feito
+-Profiler pycharm python para ver onde está gastando o maior tempo             | >> 
+-Limite de saída e coleta - 0 a 5V                                             | >> feito
+-Construir saída em PWM.                                                       | >> feito
+-Conferir matematicamente ki e kd                                              | >> PROX

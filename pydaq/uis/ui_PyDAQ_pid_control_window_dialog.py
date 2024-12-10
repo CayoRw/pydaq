@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogTNdJgK.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_window_dialogVpJvYM.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -18,12 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QDoubleSpinBox,
     QFrame, QGridLayout, QHBoxLayout, QLabel,
     QPushButton, QSizePolicy, QVBoxLayout, QWidget)
+import resources_1_rc
 
 class Ui_Dialog_Plot_PID_Window(object):
     def setupUi(self, Dialog_Plot_PID_Window):
         if not Dialog_Plot_PID_Window.objectName():
             Dialog_Plot_PID_Window.setObjectName(u"Dialog_Plot_PID_Window")
-        Dialog_Plot_PID_Window.resize(751, 585)
+        Dialog_Plot_PID_Window.resize(510, 602)
         Dialog_Plot_PID_Window.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -348,50 +349,106 @@ class Ui_Dialog_Plot_PID_Window(object):
         self.line.setFrameShape(QFrame.Shape.VLine)
         self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.gridLayout.addWidget(self.line, 4, 2, 2, 1)
+        self.gridLayout.addWidget(self.line, 0, 5, 6, 1)
 
-        self.doubleSpinBox_SetpointDialog = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_SetpointDialog.setObjectName(u"doubleSpinBox_SetpointDialog")
-        self.doubleSpinBox_SetpointDialog.setMinimumSize(QSize(200, 0))
-        self.doubleSpinBox_SetpointDialog.setSingleStep(0.100000000000000)
+        self.label_Type = QLabel(self.widget_2)
+        self.label_Type.setObjectName(u"label_Type")
+        self.label_Type.setMinimumSize(QSize(109, 0))
+        self.label_Type.setMaximumSize(QSize(109, 25))
 
-        self.gridLayout.addWidget(self.doubleSpinBox_SetpointDialog, 4, 3, 1, 1)
+        self.gridLayout.addWidget(self.label_Type, 0, 1, 1, 1)
 
-        self.doubleSpinBox_DisturbeDialog = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_DisturbeDialog.setObjectName(u"doubleSpinBox_DisturbeDialog")
-        self.doubleSpinBox_DisturbeDialog.setSingleStep(0.100000000000000)
+        self.widget_6 = QWidget(self.widget_2)
+        self.widget_6.setObjectName(u"widget_6")
+        self.horizontalLayout_6 = QHBoxLayout(self.widget_6)
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.doubleSpinBox_KdDialog = QDoubleSpinBox(self.widget_6)
+        self.doubleSpinBox_KdDialog.setObjectName(u"doubleSpinBox_KdDialog")
+        self.doubleSpinBox_KdDialog.setSingleStep(0.100000000000000)
 
-        self.gridLayout.addWidget(self.doubleSpinBox_DisturbeDialog, 5, 3, 1, 1)
+        self.horizontalLayout_6.addWidget(self.doubleSpinBox_KdDialog)
 
-        self.doubleSpinBox_KiDialog = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_KiDialog.setObjectName(u"doubleSpinBox_KiDialog")
-        self.doubleSpinBox_KiDialog.setSingleStep(0.100000000000000)
 
-        self.gridLayout.addWidget(self.doubleSpinBox_KiDialog, 2, 3, 1, 1)
+        self.gridLayout.addWidget(self.widget_6, 3, 6, 1, 1)
 
-        self.comboBox_TypeDialog = QComboBox(self.widget_2)
+        self.label_Kd = QLabel(self.widget_2)
+        self.label_Kd.setObjectName(u"label_Kd")
+
+        self.gridLayout.addWidget(self.label_Kd, 3, 1, 1, 1)
+
+        self.widget_9 = QWidget(self.widget_2)
+        self.widget_9.setObjectName(u"widget_9")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_9)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.comboBox_TypeDialog = QComboBox(self.widget_9)
         self.comboBox_TypeDialog.addItem("")
         self.comboBox_TypeDialog.addItem("")
         self.comboBox_TypeDialog.addItem("")
         self.comboBox_TypeDialog.addItem("")
         self.comboBox_TypeDialog.setObjectName(u"comboBox_TypeDialog")
+        self.comboBox_TypeDialog.setMinimumSize(QSize(175, 0))
 
-        self.gridLayout.addWidget(self.comboBox_TypeDialog, 0, 3, 1, 1)
+        self.horizontalLayout_3.addWidget(self.comboBox_TypeDialog)
 
-        self.label_Kp = QLabel(self.widget_2)
-        self.label_Kp.setObjectName(u"label_Kp")
 
-        self.gridLayout.addWidget(self.label_Kp, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.widget_9, 0, 6, 1, 1)
 
         self.label_Ki = QLabel(self.widget_2)
         self.label_Ki.setObjectName(u"label_Ki")
 
         self.gridLayout.addWidget(self.label_Ki, 2, 1, 1, 1)
 
-        self.label = QLabel(self.widget_2)
-        self.label.setObjectName(u"label")
+        self.widget_7 = QWidget(self.widget_2)
+        self.widget_7.setObjectName(u"widget_7")
+        self.horizontalLayout_5 = QHBoxLayout(self.widget_7)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.doubleSpinBox_KiDialog = QDoubleSpinBox(self.widget_7)
+        self.doubleSpinBox_KiDialog.setObjectName(u"doubleSpinBox_KiDialog")
+        self.doubleSpinBox_KiDialog.setSingleStep(0.100000000000000)
 
-        self.gridLayout.addWidget(self.label, 0, 1, 1, 1)
+        self.horizontalLayout_5.addWidget(self.doubleSpinBox_KiDialog)
+
+
+        self.gridLayout.addWidget(self.widget_7, 2, 6, 1, 1)
+
+        self.label_Setpoint = QLabel(self.widget_2)
+        self.label_Setpoint.setObjectName(u"label_Setpoint")
+        self.label_Setpoint.setMinimumSize(QSize(100, 30))
+        self.label_Setpoint.setMaximumSize(QSize(70, 16777215))
+
+        self.gridLayout.addWidget(self.label_Setpoint, 4, 1, 1, 1)
+
+        self.label_Kp = QLabel(self.widget_2)
+        self.label_Kp.setObjectName(u"label_Kp")
+
+        self.gridLayout.addWidget(self.label_Kp, 1, 1, 1, 1)
+
+        self.widget_5 = QWidget(self.widget_2)
+        self.widget_5.setObjectName(u"widget_5")
+        self.horizontalLayout_7 = QHBoxLayout(self.widget_5)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.doubleSpinBox_SetpointDialog = QDoubleSpinBox(self.widget_5)
+        self.doubleSpinBox_SetpointDialog.setObjectName(u"doubleSpinBox_SetpointDialog")
+        self.doubleSpinBox_SetpointDialog.setEnabled(True)
+        self.doubleSpinBox_SetpointDialog.setSingleStep(0.100000000000000)
+
+        self.horizontalLayout_7.addWidget(self.doubleSpinBox_SetpointDialog)
+
+
+        self.gridLayout.addWidget(self.widget_5, 4, 6, 1, 1)
+
+        self.widget_8 = QWidget(self.widget_2)
+        self.widget_8.setObjectName(u"widget_8")
+        self.horizontalLayout_4 = QHBoxLayout(self.widget_8)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.doubleSpinBox_KpDialog = QDoubleSpinBox(self.widget_8)
+        self.doubleSpinBox_KpDialog.setObjectName(u"doubleSpinBox_KpDialog")
+        self.doubleSpinBox_KpDialog.setSingleStep(0.100000000000000)
+
+        self.horizontalLayout_4.addWidget(self.doubleSpinBox_KpDialog)
+
+
+        self.gridLayout.addWidget(self.widget_8, 1, 6, 1, 1)
 
         self.label_Disturbe = QLabel(self.widget_2)
         self.label_Disturbe.setObjectName(u"label_Disturbe")
@@ -405,29 +462,30 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.gridLayout.addWidget(self.label_Disturbe, 5, 1, 1, 1)
 
-        self.doubleSpinBox_KpDialog = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_KpDialog.setObjectName(u"doubleSpinBox_KpDialog")
-        self.doubleSpinBox_KpDialog.setSingleStep(0.100000000000000)
+        self.label_I_Distrube = QLabel(self.widget_2)
+        self.label_I_Distrube.setObjectName(u"label_I_Distrube")
+        self.label_I_Distrube.setMaximumSize(QSize(24, 25))
 
-        self.gridLayout.addWidget(self.doubleSpinBox_KpDialog, 1, 3, 1, 1)
+        self.gridLayout.addWidget(self.label_I_Distrube, 5, 2, 1, 1)
 
-        self.label_Setpoint = QLabel(self.widget_2)
-        self.label_Setpoint.setObjectName(u"label_Setpoint")
-        self.label_Setpoint.setMinimumSize(QSize(100, 30))
-        self.label_Setpoint.setMaximumSize(QSize(70, 16777215))
+        self.label_i_Type = QLabel(self.widget_2)
+        self.label_i_Type.setObjectName(u"label_i_Type")
+        self.label_i_Type.setMaximumSize(QSize(24, 25))
 
-        self.gridLayout.addWidget(self.label_Setpoint, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_i_Type, 0, 2, 1, 1)
 
-        self.label_Kd = QLabel(self.widget_2)
-        self.label_Kd.setObjectName(u"label_Kd")
+        self.widget_4 = QWidget(self.widget_2)
+        self.widget_4.setObjectName(u"widget_4")
+        self.horizontalLayout_2 = QHBoxLayout(self.widget_4)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.doubleSpinBox_DisturbeDialog = QDoubleSpinBox(self.widget_4)
+        self.doubleSpinBox_DisturbeDialog.setObjectName(u"doubleSpinBox_DisturbeDialog")
+        self.doubleSpinBox_DisturbeDialog.setSingleStep(0.100000000000000)
 
-        self.gridLayout.addWidget(self.label_Kd, 3, 1, 1, 1)
+        self.horizontalLayout_2.addWidget(self.doubleSpinBox_DisturbeDialog)
 
-        self.doubleSpinBox_KdDialog = QDoubleSpinBox(self.widget_2)
-        self.doubleSpinBox_KdDialog.setObjectName(u"doubleSpinBox_KdDialog")
-        self.doubleSpinBox_KdDialog.setSingleStep(0.100000000000000)
 
-        self.gridLayout.addWidget(self.doubleSpinBox_KdDialog, 3, 3, 1, 1)
+        self.gridLayout.addWidget(self.widget_4, 5, 6, 1, 1)
 
 
         self.verticalLayout_3.addWidget(self.widget_2)
@@ -480,12 +538,6 @@ class Ui_Dialog_Plot_PID_Window(object):
 
         self.verticalLayout.addWidget(self.widget)
 
-        QWidget.setTabOrder(self.comboBox_TypeDialog, self.doubleSpinBox_KpDialog)
-        QWidget.setTabOrder(self.doubleSpinBox_KpDialog, self.doubleSpinBox_KiDialog)
-        QWidget.setTabOrder(self.doubleSpinBox_KiDialog, self.doubleSpinBox_KdDialog)
-        QWidget.setTabOrder(self.doubleSpinBox_KdDialog, self.doubleSpinBox_SetpointDialog)
-        QWidget.setTabOrder(self.doubleSpinBox_SetpointDialog, self.doubleSpinBox_DisturbeDialog)
-        QWidget.setTabOrder(self.doubleSpinBox_DisturbeDialog, self.pushButton_apply)
         QWidget.setTabOrder(self.pushButton_apply, self.pushButton_startstop)
         QWidget.setTabOrder(self.pushButton_startstop, self.pushButton_close)
 
@@ -496,20 +548,31 @@ class Ui_Dialog_Plot_PID_Window(object):
 
     def retranslateUi(self, Dialog_Plot_PID_Window):
         Dialog_Plot_PID_Window.setWindowTitle(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Dialog", None))
+#if QT_CONFIG(tooltip)
+        self.label_Type.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_Type.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Controler type?", None))
+        self.label_Kd.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kd:", None))
         self.comboBox_TypeDialog.setItemText(0, QCoreApplication.translate("Dialog_Plot_PID_Window", u"P", None))
         self.comboBox_TypeDialog.setItemText(1, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PI", None))
         self.comboBox_TypeDialog.setItemText(2, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PD", None))
         self.comboBox_TypeDialog.setItemText(3, QCoreApplication.translate("Dialog_Plot_PID_Window", u"PID", None))
 
-        self.label_Kp.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kp:", None))
         self.label_Ki.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Ki:", None))
-        self.label.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Controler type?", None))
-#if QT_CONFIG(tooltip)
-        self.label_Disturbe.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance will be added as an integrator to the output signal of the PID control, as shown in the figure below:<br/><br/></span><img src=\":/imgs/imgs/ControlePID_Bloco.png\"/></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_Disturbe.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe (?):", None))
         self.label_Setpoint.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Setpoint:", None))
-        self.label_Kd.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kd:", None))
+        self.label_Kp.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Kp:", None))
+#if QT_CONFIG(tooltip)
+        self.label_Disturbe.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance will be added as an integrator to the output signal of the PID control, as shown in the figure below:</span></p><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_Disturbe.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Disturbe:", None))
+#if QT_CONFIG(tooltip)
+        self.label_I_Distrube.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><span style=\" font-size:14pt;\">The disturbance will be added as an integrator to the output signal of the PID control, as shown in the figure below:<br/></span><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_I_Distrube.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.label_i_Type.setToolTip(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_i_Type.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
         self.pushButton_apply.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Apply", None))
         self.pushButton_startstop.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Stop", None))
         self.pushButton_close.setText(QCoreApplication.translate("Dialog_Plot_PID_Window", u"Close", None))

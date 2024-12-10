@@ -64,7 +64,7 @@ class PIDControl(Base):
 # Updating the datas to plot
     def update_plot_arduino(self):
         
-        if self.ser.in_waiting > 64:  # Por exemplo, se há mais de 64 bytes acumulados
+        if self.ser.in_waiting > 64:  # If there's more than 64 bits accumulated
             self.ser.reset_input_buffer()
 
         # Get the feedback sensor value
@@ -76,20 +76,20 @@ class PIDControl(Base):
         except (IndexError, ValueError):
             print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use o último valor válido
-
         
         # Get the control value
         self.control, error = self.update(self.feedback_value)
-        # self.control = self.setpoint
+        
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):
             self.control = 5
+            
         # change to a duty cicle
         self.duty_cycle_control = int((self.control/self.ard_ao_max) *255)
         self.ser.write(f"{self.duty_cycle_control}\n".encode("utf-8"))         # Send data to arduino 
         
-        print(f"Control (V): {self.control:.2f}, Duty Cycle (0-255): {self.duty_cycle_control:.2f}, Feedback: {self.feedback_value:.2f}")
+        print(f"Control (V): {self.control:.2f}, Duty Cycle (0-255): {self.duty_cycle_control}, Feedback: {self.feedback_value:.2f}")
 
         # Queue data in a list
         self.errors.append(error)

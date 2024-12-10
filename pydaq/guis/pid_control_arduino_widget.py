@@ -46,9 +46,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 #            index = self.comboBox_arduino.findText(current_selection)
 #            if index != -1:
 #                self.comboBox_arduino.setCurrentIndex(index)
-                
-            
-    
+
+
+
     def update_com_ports(self):  # Updating com ports
         self.com_ports = [i.description for i in serial.tools.list_ports.comports()]
         selected = self.comboBox_arduino.currentText()
@@ -70,16 +70,19 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             self.label_unit.show()
             self.label_equation.show()
             self.widget_equation.show()
+            self.label_i_equation.show()
         elif selected_unit == 'Voltage (V)':
             self.widget_unit.hide()
             self.label_unit.hide()
             self.label_equation.hide()
             self.widget_equation.hide()
+            self.label_i_equation.hide()
         else:
             self.widget_unit.hide()
             self.label_unit.hide()
             self.label_equation.show()
             self.widget_equation.show()
+            self.label_i_equation.show()
 
 #Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):
