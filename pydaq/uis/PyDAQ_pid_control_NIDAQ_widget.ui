@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>889</height>
+    <width>562</width>
+    <height>914</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -350,7 +350,169 @@ QDoubleSpinBox::down-button:hover{
    <item row="2" column="0">
     <widget class="QWidget" name="widget_top" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="11" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
+      <item row="9" column="3">
+       <widget class="QWidget" name="widget_type" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QComboBox" name="comboBox_type">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>9000000</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>P</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PI</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PD</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PID</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QWidget" name="widget_period" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_period">
+           <property name="maximum">
+            <double>9999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_arduino">
+        <property name="minimumSize">
+         <size>
+          <width>154</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>160</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Device:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="3">
+       <widget class="QWidget" name="widget_kp" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_kp">
+           <property name="maximum">
+            <double>999999.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QWidget" name="widget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_13">
+         <item>
+          <widget class="QComboBox" name="ai_channel_combo"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QWidget" name="widget_2" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QComboBox" name="terminal_config_combo"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_equation">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The equation should be written in the form: Ax²+Bx+C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Equation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QLabel" name="label_i_type">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/PID_Flow.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/inform.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" rowspan="17">
+       <widget class="Line" name="line">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
        <widget class="QWidget" name="widget_kd" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
@@ -366,23 +528,7 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="13" column="0">
-       <widget class="QLabel" name="label_path">
-        <property name="text">
-         <string>Data path:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QWidget" name="widget_2" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <widget class="QComboBox" name="comboBox_2"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="4" column="3">
+      <item row="5" column="3">
        <widget class="QWidget" name="widget_setpoint" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
@@ -438,7 +584,7 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="5" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
+      <item row="6" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
        <widget class="QWidget" name="widget_unit" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -464,7 +610,7 @@ QDoubleSpinBox::down-button:hover{
        </widget>
       </item>
       <item row="10" column="0">
-       <widget class="QLabel" name="label_ki">
+       <widget class="QLabel" name="label_kp">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -472,19 +618,12 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Ki:</string>
+         <string>Kp:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_terminal">
-        <property name="text">
-         <string>Terminal config.:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_equation">
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_type">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -492,14 +631,14 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The equation should be written in the form: Ax²+Bx+C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/PID_Flow.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>Equation:</string>
+         <string>Controler type?</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="label_periody">
         <property name="minimumSize">
          <size>
@@ -512,68 +651,28 @@ QDoubleSpinBox::down-button:hover{
         </property>
        </widget>
       </item>
-      <item row="8" column="3">
-       <widget class="QWidget" name="widget_type" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QComboBox" name="comboBox_type">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>9000000</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <item>
-            <property name="text">
-             <string>P</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PD</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PID</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="label_kd">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
+      <item row="14" column="0">
+       <widget class="QLabel" name="label_path">
         <property name="text">
-         <string>Kd:</string>
+         <string>Data path:</string>
         </property>
        </widget>
       </item>
-      <item row="13" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
+      <item row="13" column="0">
+       <widget class="QLabel" name="label_save">
+        <property name="text">
+         <string>Save Data?</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_channel">
+        <property name="text">
+         <string>AI channel:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="3" alignment="Qt::AlignmentFlag::AlignVCenter">
        <widget class="QWidget" name="widget_path" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
@@ -602,7 +701,7 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="label_setpoint">
         <property name="minimumSize">
          <size>
@@ -615,16 +714,20 @@ QDoubleSpinBox::down-button:hover{
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QWidget" name="widget" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QComboBox" name="comboBox"/>
-         </item>
-        </layout>
+      <item row="11" column="0">
+       <widget class="QLabel" name="label_ki">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Ki:</string>
+        </property>
        </widget>
       </item>
-      <item row="14" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
+      <item row="15" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
        <widget class="QPushButton" name="pushButton_confirm">
         <property name="minimumSize">
          <size>
@@ -643,28 +746,8 @@ QDoubleSpinBox::down-button:hover{
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_channel">
-        <property name="text">
-         <string>Channel:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" rowspan="16">
-       <widget class="Line" name="line">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Orientation::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_unit">
+      <item row="12" column="0">
+       <widget class="QLabel" name="label_kd">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -672,11 +755,42 @@ QDoubleSpinBox::down-button:hover{
          </size>
         </property>
         <property name="text">
-         <string>Unit:</string>
+         <string>Kd:</string>
         </property>
        </widget>
       </item>
-      <item row="12" column="3">
+      <item row="7" column="3">
+       <widget class="QWidget" name="widget_equation" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLineEdit" name="lineEdit_equation">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>10</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>9000000</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>1x+2</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="13" column="3">
        <widget class="QWidget" name="widget_3" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
@@ -721,42 +835,11 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="6" column="3">
-       <widget class="QWidget" name="widget_equation" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_equation">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>10</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>150</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>9000000</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>1x+2</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="1" column="3">
        <widget class="QWidget" name="widget_arduino" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QComboBox" name="comboBox_arduino">
+          <widget class="QComboBox" name="device_combo">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -793,42 +876,7 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_type">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/PID_Flow.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="text">
-         <string>Controler type?</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="QWidget" name="widget_period" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_period">
-           <property name="maximum">
-            <double>9999999.000000000000000</double>
-           </property>
-           <property name="singleStep">
-            <double>0.100000000000000</double>
-           </property>
-           <property name="value">
-            <double>1.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="10" column="3">
+      <item row="11" column="3">
        <widget class="QWidget" name="widget_ki" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
@@ -844,65 +892,14 @@ QDoubleSpinBox::down-button:hover{
         </layout>
        </widget>
       </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_kp">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_terminal">
         <property name="text">
-         <string>Kp:</string>
+         <string>Terminal config.:</string>
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
-       <widget class="QLabel" name="label_save">
-        <property name="text">
-         <string>Save Data?</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="3">
-       <widget class="QWidget" name="widget_kp" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_kp">
-           <property name="maximum">
-            <double>999999.000000000000000</double>
-           </property>
-           <property name="singleStep">
-            <double>0.100000000000000</double>
-           </property>
-           <property name="value">
-            <double>1.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_arduino">
-        <property name="minimumSize">
-         <size>
-          <width>154</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>160</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Device:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1" alignment="Qt::AlignmentFlag::AlignRight">
+      <item row="7" column="1" alignment="Qt::AlignmentFlag::AlignRight">
        <widget class="QLabel" name="label_i_equation">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;The equation should be written in the form: Ax²+Bx+C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -912,14 +909,33 @@ QDoubleSpinBox::down-button:hover{
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QLabel" name="label_i_type">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/PID_Flow.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_unit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/imgs/imgs/inform.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>Unit:</string>
         </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>AO channel:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QWidget" name="widget_4" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
+         <item>
+          <widget class="QComboBox" name="ao_channel_combo"/>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

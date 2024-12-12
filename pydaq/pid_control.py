@@ -31,6 +31,7 @@ class PIDControl(Base):
         self.Kp = float(Kp)
         self.Ki = float(Ki)
         self.Kd = float(Kd)
+        
         self.disturbe = 0
         self.setpoint = float(setpoint)
         self.integral = 0.0
@@ -38,12 +39,6 @@ class PIDControl(Base):
         self.previous_output = 0.0
         self.period = period
 
-        # COM ports
-        self.com_ports = [i.description for i in serial.tools.list_ports.comports()]
-        self.com_port = com  # Default COM port
-
-#       self.hold_time = period
-#defining the a in "H(s) = 1/s+a"
         self.a = 0.2
 #Inicializating the updating plot
 
@@ -61,6 +56,36 @@ class PIDControl(Base):
         
         return output, error
 
+    def pid_control_arduino(self):
+        self.setpoints = []
+        self.system_values = []
+        self.errors = []
+        self.datas = []
+        self.time_var = [] 
+        self.output = []
+        self.time_elapsed = 0.0
+        self.feedback_value = 0
+        self.control = self.setpoint
+
+        # Oppening ports
+        self._open_serial()
+        # COM ports
+        self.com_ports = [i.description for i in serial.tools.list_ports.comports()]
+        self.com_port = self.com_port  # Default COM port
+        # Arduino ADC resolution (in bits)
+        self.arduino_ai_bits = 10
+        # Arduino analog input max and min
+        self.ard_ao_max, self.ard_ao_min = 5, 0
+        # Value per bit - Arduino
+        self.ard_vpb = (self.ard_ao_max - self.ard_ao_min) / ((2 ** self.arduino_ai_bits)-1)
+        
+        self.ser.reset_input_buffer()
+
+        time.sleep(1)  # Wait for Arduino and Serial to start up
+
+        # Start updatable plot
+        self.title = f"PYDAQ - Step Response (Arduino), Port: {self.com_port}"
+        
 # Updating the datas to plot
     def update_plot_arduino(self):
         
@@ -99,37 +124,29 @@ class PIDControl(Base):
 
         return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed
 
-    def pid_control_arduino(self):
-        self.setpoints = []
-        self.system_values = []
-        self.errors = []
-        self.datas = []
-        self.time_var = [] 
-        self.output = []
-        self.time_elapsed = 0.0
-        self.feedback_value = 0
-        self.control = self.setpoint
-
-        # Oppening ports
-        self._open_serial()
-        # COM ports
-        self.com_ports = [i.description for i in serial.tools.list_ports.comports()]
-        self.com_port = self.com_port  # Default COM port
-        # Arduino ADC resolution (in bits)
-        self.arduino_ai_bits = 10
-        # Arduino analog input max and min
-        self.ard_ao_max, self.ard_ao_min = 5, 0
-        # Value per bit - Arduino
-        self.ard_vpb = (self.ard_ao_max - self.ard_ao_min) / ((2 ** self.arduino_ai_bits)-1)
-
-        self.ser.reset_input_buffer()
-        
-        time.sleep(1)  # Wait for Arduino and Serial to start up
-        
-        # Start updatable plot
-        self.title = f"PYDAQ - Step Response (Arduino), Port: {self.com_port}"
 
     def pid_control_nidaq(self):
+#Aqui ou no init do pid control? provavelmente lá
+        # Gathering nidaq info
+        self._nidaq_info()
+        self.device = "Dev1"
+        self.ao_channel="ao0"
+        self.ai_channel="ai0"
+        self.terminal="Diff",
+        # Terminal configuration
+        self.terminal = self.term_map[self.terminal]
+        
+        self.task_ai = nidaqmx.Task()
+        self.task_ao = nidaqmx.Task()
+                
+        self.task_ai.ai_channels.add_ai_voltage_chan(
+            self.device + "/" + self.ai_channel, terminal_config=self.terminal
+        )
+        
+        self.task_ao.ao_channels.add_ao_voltage_chan(
+            self.device + "/" + self.ao_channel
+        )
+        
         self.setpoints = []
         self.system_values = []
         self.errors = []
@@ -141,7 +158,44 @@ class PIDControl(Base):
         self.control = 0
 
     def update_plot_nidaq(self):
+        
+        # Print ('System value = ', self.system_value )
+        self.time_elapsed += self.period # Clock
+        
+        # Get the control value
+        self.control, error = self.update(self.feedback_value)
+        #self.control = self.control - self.disturbe
+        
+        if(self.control <= 0):
+            self.control = 0
+        elif (self.control >=5):
+            self.control = 5
+            
+        self.task_ao.write(self.control)
+        self.feedback_value = self.task_ai.read()
+        
+        # Att the datas
+        self.controls.append(self.control)
+        self.errors.append(error)
+        self.system_values.append(self.feedback_value)
+        self.setpoints.append(self.setpoint)
+        self.time_var.append(self.time_elapsed)
+        
+        # return values to build the graphics
+        return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls
 
+    def simulate_system(self):
+        self.setpoints = []
+        self.system_values = []
+        self.errors = []
+        self.controls = []
+        self.time_var = [] 
+        self.output = []
+        self.time_elapsed = 0.0
+        self.feedback_value = 0
+        self.control = 0
+        
+    def update_simulated_system(self):
         # Get the system response value
         self.system_value = self.system_output(self.feedback_value, self.control)
         # Print ('System value = ', self.system_value )
@@ -161,7 +215,6 @@ class PIDControl(Base):
         
         # return values to build the graphics
         return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls
-
 # System type 1/s+a
     def system_output(self, y_prev, control):
 # Discretization by euler

@@ -42,25 +42,25 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, index, com_port, setpoint, unit, equation, period, path, save, board):
+    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equation, period, path, save):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
         self.index = index if index else 0
-        self.com_port = com_port
+        #self.com_port = com_port
         self.setpoint = setpoint if setpoint else 0.0
         self.unit = unit if unit else 'Voltage (V)'
         self.calibration_equation = equation
         self.period = period if period else 1 
         self.path = path if path else os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         self.save = save
-        self.board = board if board else 'arduino'
+        #self.board = board if board else 'arduino'
         self._check_path()
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
         print('Index ', self.index)
-        print('Com Port ', self.com_port)
+        #print('Com Port ', self.com_port)
         print('Setpoint ', self.setpoint)
         print('Unit ', self.unit)
         print('Equation ', self.calibration_equation)
@@ -106,6 +106,12 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.pid.ser.write(b"0")
             # Closing port
             self.pid.ser.close()
+        elif self.board == 'nidaq':
+                # Turning off the output at the end
+                self.pid.task_ao.write(0)
+                # Closing task
+                self.pid.task_ao.close()
+                self.pid.task_ai.close()
         self.ani.event_source.stop()
         self.close()
 
@@ -151,8 +157,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         try:
             self.set_text()
             self.on_type_combo_changed(self.index)
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period, self.com_port)
-            self.check_board()
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)
+            self.check_start()
             self.ani = animation.FuncAnimation(
                 self.figure, 
                 self.update_plot, 
@@ -193,13 +199,27 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.enable_pid_parameters(True, True, True)  
         self.index = index  
 
-    def check_board(self):
+    def check_board(self, board, device, ao, ai, terminal):
+        self.board = board
+        if self.board == 'arduino':
+            self.com_port = device
+        elif self.board == 'nidaq':
+            self.device = device
+            self.ao_channel = ao
+            self.ai_channel = ai
+            self.terminal = terminal
+            
+    def check_start(self):
         if self.board == 'arduino':
             self.pid.pid_control_arduino()
             self.pid.com_port = self.com_port
         elif self.board == 'nidaq':
             self.pid.pid_control_nidaq()
-
+            self.pid.device = self.device
+            self.pid.ao_channel = self.ao_channel
+            self.pid.ai_channel = self.ai_channel
+            self.pid.terminal = self.pid.term_map[self.terminal]
+            
     def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
         self.doubleSpinBox_KpDialog.setEnabled(kp_enabled)
         self.doubleSpinBox_KiDialog.setEnabled(ki_enabled)
@@ -279,6 +299,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
         else:
             self.ax.set_xlim(0, self.time_elapsed)
+            
         self.canvas.draw()
         
         return self.line1, self.line2, self.line3

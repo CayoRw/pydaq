@@ -163,7 +163,8 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.save = True if self.save_radio_group.checkedId() == -2 else False
         self.board = 'arduino'
         plot_window = PID_Control_Window_Dialog()
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.com_port, self.setpoint, self.unit, self.equation, self.period, self.path, self.save, self.board)
+        plot_window.check_board(self.board, self.com_port, None, None, None)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 
