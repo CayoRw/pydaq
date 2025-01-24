@@ -1,4 +1,5 @@
-Reunião do dia 10/10:                                                          |
+Reunião do dia 10/10:                                                          | 
+Sugestões:                                                                     | 
 Correcões ortograficas:                                                        | 
 -PADROES                                                                       | 
 -CHOOSE YOUR DEVICE (?)                                                        | 
@@ -26,7 +27,7 @@ Trabalhos:                                                                     |
 - instalar Nidaq MX                                                            | >> feito
 _______________________________________________________________________________| 
 Reunião dia 24/10                                                              | 
-Trabalhos                                                                      | Progresso:
+Trabalhos:                                                                     | Progresso:
 -Pegar a nova versão do step response e do get data                            | >> feito
 -Data path                                                                     | >> feito
 -Janelas do controle PID                                                       | >> feito
@@ -56,16 +57,32 @@ Trabalhos:                                                                     |
 -Texto do eixo x: sample                                                       | >> feito
 -Controlar variáveis no arduíno / placas nidaq                                 | >> não feito
 -Simular amplificador buffer, circuito RC.                                     | >> feito
-_______________________________________________________________________________|
-Reunião 29/11 13h30                                                            |
+_______________________________________________________________________________| 
+Reunião 29/11 13h30                                                            | 
 -Reler o código e ver qual erro está dando                                     | >> feito
--Utilizar a biblioteca bokeh ou plotly                                         | >> 
--Async.io ou threading - trabalhar a coleta e o plot de forma assincronas      | >> 
+-Utilizar a biblioteca bokeh ou plotly                                         | >> pesquisando
+-Async.io ou threading - trabalhar a coleta e o plot de forma assincronas      | >> ainda não pesquisado
 -Draw.io para desenhar o diagrama de blocos                                    | >> feito
 -Destacar o (?)                                                                | >> feito
 -Mudar o nome de data.txt para output                                          | >> feito
 -Rever o eixo de erro                                                          | >> feito
--Profiler pycharm python para ver onde está gastando o maior tempo             | >> 
+-Profiler pycharm python para ver onde está gastando o maior tempo             | >> não feito
 -Limite de saída e coleta - 0 a 5V                                             | >> feito
 -Construir saída em PWM.                                                       | >> feito
 -Conferir matematicamente ki e kd                                              | >> feito controle pi e pd
+_______________________________________________________________________________| 
+Reunião dia 16/12 13h30                                                        | 
+-Apresentei tudo e fui embora mais cedo. Fiquei de desenvolver o artigo        | 
+_______________________________________________________________________________| 
+Trabalho sugeridos: (Opção de simular o controle)                              | 
+-Label =                                                                       | 
+-Equation: V(unit) = Ax² + Bx + C                                              | 
+Introdução, Bibliografia, Metodologia e Conceitos preliminares                 | 
+-Métodos ->                                                                    | 
+_______________________________________________________________________________| 
+Proposta: Simulate in a radio group box                                        | 
+   - Get Data -> Filter data                                                   | 
+   - Send Data -> Nada ou 'Create data'                                        | 
+   - Step Response -> Simul step response / get pid parameters                 | 
+   - PID Control -> Simul a control system                                     | 
+_______________________________________________________________________________| 

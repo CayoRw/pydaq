@@ -23,6 +23,8 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.reload_devices.clicked.connect(self.update_com_ports)
         self.on_unit_change()
         self.comboBox_setpoint.currentIndexChanged.connect(self.on_unit_change)
+        self.simulate_radio_group.buttonClicked.connect(self.on_simulate_change)
+        self.on_simulate_change()
         self.on_type_combo_changed(0)
         self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
@@ -32,6 +34,7 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.path_line_edit.setText(
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
+       
 
 #Fuctions
  #   def locate_arduino(self):
@@ -83,6 +86,15 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             self.label_equation.show()
             self.widget_equation.show()
             self.label_i_equation.show()
+
+    def on_simulate_change(self):
+        self.simulate = True if self.simulate_radio_group.checkedId() == -2 else False
+        if self.simulate is False: #Simulate = False
+            self.widget_arduino.show()
+            self.label_arduino.show()
+        elif self.simulate is True: #Simulate = True
+            self.widget_arduino.hide()
+            self.label_arduino.hide()
 
 #Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):
@@ -150,34 +162,41 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 
 #Create the pid control window
     def show_graph_window(self):
-        self.com_port = serial.tools.list_ports.comports()[
-                self.com_ports.index(self.comboBox_arduino.currentText())
-            ].name
-        print ('Com port1 ', self.com_port)
+        self.simulate = True if self.simulate_radio_group.checkedId() == -2 else False
+        print('Simulated? ', self.simulate)
+        if self.simulate == False:
+            self.com_port = serial.tools.list_ports.comports()[
+                    self.com_ports.index(self.comboBox_arduino.currentText())
+                ].name
+            print ('Com port1 ', self.com_port)
+        else:    
+            self.com_port = ' '
         self.setpoint = self.doubleSpinBox_setpoint.value()
         self.getunit()
-        self.equation = self.lineEdit_equation.text()
+        self.equationvu = self.lineEdit_equationvu.text()
+        self.equationuv = self.lineEdit_equationuv.text()
         self.period = self.doubleSpinBox_period.value()
         self.path = self.path_line_edit.text()
         self.index = self.comboBox_type.currentIndex()
         self.save = True if self.save_radio_group.checkedId() == -2 else False
+        print('Save? ', self.save)
         self.board = 'arduino'
         plot_window = PID_Control_Window_Dialog()
-        plot_window.check_board(self.board, self.com_port, None, None, None)
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equation, self.period, self.path, self.save)
+        plot_window.check_board(self.board, self.com_port, None, None, None, self.simulate)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equationvu, self.equationuv, self.period, self.path, self.save)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 
-#to locate the data path to armazenate
+
     def locate_path(self):  # Calling the Folder Browser Widget
-        output_folder_path = QFileDialog.getExistingDirectory(
+        output_folder_path = QFileDialog.getExistingDirectory( #to locate the data path to armazenate
             self, caption="Choose a folder to save the data file"
         )
         if output_folder_path == "":
             pass
         else:
             self.path_line_edit.setText(output_folder_path.replace("/", "\\"))
-            
+
     def update_values(self, value1, value2, value3, value4, value5):
         # Define os valores nos QDoubleSpinBox correspondentes
         self.doubleSpinBox_kp.setValue(value1)

@@ -24,38 +24,34 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         super(PID_Control_Window_Dialog, self).__init__()
         self.setupUi(self)
         self.setMinimumSize(900, 700)
-
-#Calling the functions
         self.pushButton_startstop.clicked.connect(self.stopstart)
         self.pushButton_close.clicked.connect(self.go_back)
         self.pushButton_apply.clicked.connect(self.apply_parameters)
         self.comboBox_TypeDialog.currentIndexChanged.connect(self.on_type_combo_changed)
         self.paused = False
         self.pid = None
-#to save the data path
         self.path = os.path.join(os.path.join(os.path.expanduser("~")), "Desktop") # Defining default path
-
-#Starting the canvas
-        self.figure = plt.figure(figsize =(6.4,4.8), facecolor='#404040')
+        self.figure = plt.figure(figsize =(6.4,4.8), facecolor='#404040') #Starting the canvas
         self.ax = self.figure.add_subplot(111, facecolor='#505050')  # Output graph
         self.canvas = FigureCanvas(self.figure)
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equation, period, path, save):
+    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equationvu, equationuv, period, path, save):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
         self.index = index if index else 0
-        #self.com_port = com_port
         self.setpoint = setpoint if setpoint else 0.0
         self.unit = unit if unit else 'Voltage (V)'
-        self.calibration_equation = equation
+        self.calibration_equation_vu = equationvu
+        self.calibration_equation_uv = equationuv
         self.period = period if period else 1 
         self.path = path if path else os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         self.save = save
-        #self.board = board if board else 'arduino'
         self._check_path()
+        self.set_text()
+        self.on_type_combo_changed(self.index)
         print('kp ', self.kp)
         print('ki ', self.ki)
         print('kd ', self.kd)
@@ -63,14 +59,14 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         #print('Com Port ', self.com_port)
         print('Setpoint ', self.setpoint)
         print('Unit ', self.unit)
-        print('Equation ', self.calibration_equation)
+        print('Equation V(unit) = ', self.calibration_equation_vu)
+        print('Equation Unit(V) = ', self.calibration_equation_uv)
         print('Period ', self.period)
         print ('Path ', self.path)
         print ('Save ', self.save)
-        self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation, self.unit, self.period)
+        self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation_vu, self.calibration_equation_uv, self.unit, self.period)
 
-#stop/start the event and change the button text
-    def stopstart (self):
+    def stopstart (self): #stop/start the event and change the button text
         self.paused = not self.paused
         if self.paused:
             self.ani.event_source.stop()
@@ -79,44 +75,35 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.ani.event_source.start()
             self.pushButton_startstop.setText("Stop")
 
-#def to save and go back
-    def go_back(self):
-#save if wanted
-        if self.save:
+    def go_back(self): #def to save and go back
+        if self.save: #save if wanted
             print("\nSaving data ...")
-            # Saving time_var and data
-            self._save_data(self.time_var, "time.dat")
+            self._save_data(self.time_var, "time.dat") # Saving time_var and data
             self._save_data(self.system_values, "output.dat")
             self._save_data(self.errors, "error.dat")
             self._save_data(self.setpoints, "setpoint.dat")
             self._save_data(self.controls, "controls.dat")
             print("\nData saved ...")
-
-#sending the values to QWidget
-        self.send_values.emit(
+        self.send_values.emit( #sending the values to QWidget
             self.kp,
             self.ki,
             self.kd,
             self.index,
             self.setpoint,
-        )
-#stop the event and close the dialog
-        if self.board == 'arduino':
-            # Turning off the output at the end
-            self.pid.ser.write(b"0")
-            # Closing port
-            self.pid.ser.close()
+        ) 
+        if self.simulate == True:
+            print('Closing')
+        elif self.board == 'arduino': #stop the event and close the dialog
+            self.pid.ser.write(b"0") # Turning off the output at the end
+            self.pid.ser.close() # Closing port
         elif self.board == 'nidaq':
-                # Turning off the output at the end
-                self.pid.task_ao.write(0)
-                # Closing task
-                self.pid.task_ao.close()
+                self.pid.task_ao.write(0) # Turning off the output at the end
+                self.pid.task_ao.close() # Closing task
                 self.pid.task_ai.close()
         self.ani.event_source.stop()
         self.close()
 
-#apply all pid parameters while the event goes on
-    def apply_parameters(self):
+    def apply_parameters(self): #apply all pid parameters while the event goes on
         try:
             self.setpoint = self.doubleSpinBox_SetpointDialog.value()
             print ('The new setpoint is ', self.setpoint)
@@ -124,8 +111,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
                 self.pid.setpoint = self.setpoint
         except ValueError:
             pass  # Ignore invalid input  
-#changing Kp Ki and Kd parameters
-        if self.doubleSpinBox_KpDialog.isEnabled():
+        if self.doubleSpinBox_KpDialog.isEnabled(): #changing Kp Ki and Kd parameters
             self.kp = self.doubleSpinBox_KpDialog.value()
             self.pid.Kp = self.kp
         else:
@@ -144,20 +130,17 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         else:
             self.kd = None
             self.pid.Kd = 0
-#changing the disturbe
         print ('The new kp is ', self.kp)
         print ('The new ki is ', self.ki)
         print ('The new kd is ', self.kd)
-        self.disturbe = self.doubleSpinBox_DisturbeDialog.value()
+        self.disturbe = self.doubleSpinBox_DisturbeDialog.value() #changing the disturbe
         self.pid.disturbe = self.disturbe
         print ('The new disturbe is ', self.disturbe)
 
 #stating the control and inicializating variables
-    def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation, unit, period):
+    def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation_vu, calibration_equation_uv, unit, period):
         try:
-            self.set_text()
-            self.on_type_combo_changed(self.index)
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation, unit, period)
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation_vu, calibration_equation_uv, unit, period)
             self.check_start()
             self.ani = animation.FuncAnimation(
                 self.figure, 
@@ -199,27 +182,43 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.enable_pid_parameters(True, True, True)  
         self.index = index  
 
-    def check_board(self, board, device, ao, ai, terminal):
+    def check_board(self, board, device, ao, ai, terminal, simulate):
         self.board = board
-        if self.board == 'arduino':
+        self.simulate = simulate
+        if self.simulate == True:
+            print ('Simulated Sysetm')
+        elif self.board == 'arduino':
             self.com_port = device
+            print('Board ', self.board)
+            print('Com_port ', self.com_port)
+            print(' ')
         elif self.board == 'nidaq':
             self.device = device
             self.ao_channel = ao
             self.ai_channel = ai
             self.terminal = terminal
-            
+            print('Board ', self.board)
+            print('Device ', self.device)
+            print('Ao channel ', self.ao_channel)
+            print('Ai channel ', self.ai_channel)
+            print('Termnal ', self.terminal)
+            print(' ')
+    
     def check_start(self):
-        if self.board == 'arduino':
-            self.pid.pid_control_arduino()
+        print('simulate is ', self.simulate)
+        if self.simulate == True:
+            self.pid.simulate_system()
+        elif self.board == 'arduino':
             self.pid.com_port = self.com_port
+            self.pid.pid_control_arduino() 
         elif self.board == 'nidaq':
-            self.pid.pid_control_nidaq()
             self.pid.device = self.device
             self.pid.ao_channel = self.ao_channel
             self.pid.ai_channel = self.ai_channel
             self.pid.terminal = self.pid.term_map[self.terminal]
-            
+            self.pid.pid_control_nidaq() 
+            print(self.pid.terminal, ' = ', self.pid.term_map[self.terminal])
+
     def enable_pid_parameters(self, kp_enabled, ki_enabled, kd_enabled):
         self.doubleSpinBox_KpDialog.setEnabled(kp_enabled)
         self.doubleSpinBox_KiDialog.setEnabled(ki_enabled)
@@ -229,77 +228,60 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         if kd_enabled == False:
             self.doubleSpinBox_KdDialog.setValue(0)
 
-# Init the plot with variables axes 
-    def init_plot(self):
-
+    def init_plot(self): # Init the plot with the right axes 
         self.line1, = self.ax.plot([], [], 'x', label='System Output', color = 'cyan')  
         self.line2, = self.ax.plot([], [], '-', label='Setpoint', color = 'lime')  
         self.line3, = self.ax.plot([], [], '--', label='Error', color = 'red')  
         if not hasattr(self, 'ax2'):
             self.ax2 = self.ax.twinx()  # Create the error axe the first time
-
         self.ax.set_xlim(0, self.period*10)
         self.ax.set_ylim(-1.1*self.setpoint,1.1*self.setpoint)
         self.ax2.set_ylim(-1.1 *self.setpoint, 1.1 * self.setpoint)
-
         self.ax.set_xlabel('Sample (s)', color = 'white')
         self.ax.set_ylabel(self.unit, color = 'white')
         self.ax2.set_ylabel('Error', color = 'white')
-
-# Set the axes colors to white
-        for spine in ['bottom', 'top', 'left', 'right']:
+        for spine in ['bottom', 'top', 'left', 'right']: # Set the axes colors to white
             self.ax.spines[spine].set_color('white')
-
         self.ax.tick_params(axis='x', colors='white')
         self.ax.tick_params(axis='y', colors='white')
         self.ax2.tick_params(axis='y', colors='white')
-        
         self.ax.title.set_color('white')
         self.ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray', alpha=0.7)
         self.ax.legend(['System Output', 'Setpoint', 'Error'])
-        
         #self.figure.tight_layout()
-        
         return self.line1, self.line2, self.line3
 
     def update_plot(self, frame):
-
         if self.pid is None:
             print ('self.pid is none')
             return self.line1, self.line2, self.line3
-
-        if self.board == 'arduino':
-            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed = self.pid.update_plot_arduino()
+        if self.simulate == True:
+            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls = self.pid.update_simulated_system()
+        elif self.board == 'arduino':
+            self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls = self.pid.update_plot_arduino()
         elif self.board == 'nidaq':
             self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls = self.pid.update_plot_nidaq()
+        
         self.system_value = self.system_values[-1]
-
-        # Change the color when the system value reaches 95% of setpoint
-        if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:
+        if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:         # Change the color when the system value reaches 95% of setpoint
             self.line1.set_color('yellow')  
         else:
             self.line1.set_color('cyan')  
-# Updating
-        self.ax.set_xlim(0, self.time_elapsed)
+        self.ax.set_xlim(0, self.time_elapsed) # Updating
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)
         self.line3.set_data(np.arange(len(self.setpoints)) * self.period, self.errors)  
-# Reloading the axes
-        if (min(self.setpoints + self.system_values + self.errors)<0):
+        if (min(self.setpoints + self.system_values + self.errors)<0): # Reloading the axes
             xmin = min(self.setpoints + self.system_values + self.errors) * 1.1
         elif(min(self.setpoints + self.system_values + self.errors)>0):
             xmin = min(self.setpoints + self.system_values + self.errors) * 0.9
         else:
             xmin = max(self.setpoints + self.system_values + self.errors) * -0.1
         self.ax.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
-# Reload the error axe
-        self.ax2.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
-# Reload the X axe after 30 datas
-        if len(self.system_values) > 30:
+        self.ax2.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1) # Reload the error axe
+        if len(self.system_values) > 30: # Reload the X axe after 30 datas
             self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
         else:
             self.ax.set_xlim(0, self.time_elapsed)
-            
         self.canvas.draw()
-        
         return self.line1, self.line2, self.line3

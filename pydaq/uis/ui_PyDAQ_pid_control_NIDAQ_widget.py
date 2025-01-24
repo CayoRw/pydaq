@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetcVTWbU.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_NIDAQ_widgetilgzBN.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -24,7 +24,7 @@ class Ui_NIDAQ_PID_Control(object):
     def setupUi(self, NIDAQ_PID_Control):
         if not NIDAQ_PID_Control.objectName():
             NIDAQ_PID_Control.setObjectName(u"NIDAQ_PID_Control")
-        NIDAQ_PID_Control.resize(562, 914)
+        NIDAQ_PID_Control.resize(597, 982)
         NIDAQ_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -358,255 +358,55 @@ class Ui_NIDAQ_PID_Control(object):
         self.widget_top.setObjectName(u"widget_top")
         self.gridLayout_2 = QGridLayout(self.widget_top)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.widget_type = QWidget(self.widget_top)
-        self.widget_type.setObjectName(u"widget_type")
-        self.widget_type.setMinimumSize(QSize(100, 0))
-        self.horizontalLayout_7 = QHBoxLayout(self.widget_type)
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.comboBox_type = QComboBox(self.widget_type)
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.setObjectName(u"comboBox_type")
-        self.comboBox_type.setMinimumSize(QSize(0, 25))
-        self.comboBox_type.setMaximumSize(QSize(9000000, 16777215))
+        self.widget_equation = QWidget(self.widget_top)
+        self.widget_equation.setObjectName(u"widget_equation")
+        self.horizontalLayout_15 = QHBoxLayout(self.widget_equation)
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.label_vunit = QLabel(self.widget_equation)
+        self.label_vunit.setObjectName(u"label_vunit")
 
-        self.horizontalLayout_7.addWidget(self.comboBox_type)
+        self.horizontalLayout_15.addWidget(self.label_vunit)
 
+        self.lineEdit_equationvu = QLineEdit(self.widget_equation)
+        self.lineEdit_equationvu.setObjectName(u"lineEdit_equationvu")
 
-        self.gridLayout_2.addWidget(self.widget_type, 9, 3, 1, 1)
+        self.horizontalLayout_15.addWidget(self.lineEdit_equationvu)
 
-        self.widget_period = QWidget(self.widget_top)
-        self.widget_period.setObjectName(u"widget_period")
-        self.horizontalLayout_8 = QHBoxLayout(self.widget_period)
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.doubleSpinBox_period = QDoubleSpinBox(self.widget_period)
-        self.doubleSpinBox_period.setObjectName(u"doubleSpinBox_period")
-        self.doubleSpinBox_period.setMaximum(9999999.000000000000000)
-        self.doubleSpinBox_period.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_period.setValue(1.000000000000000)
+        self.label_unitv = QLabel(self.widget_equation)
+        self.label_unitv.setObjectName(u"label_unitv")
 
-        self.horizontalLayout_8.addWidget(self.doubleSpinBox_period)
+        self.horizontalLayout_15.addWidget(self.label_unitv)
+
+        self.lineEdit_equationuv = QLineEdit(self.widget_equation)
+        self.lineEdit_equationuv.setObjectName(u"lineEdit_equationuv")
+
+        self.horizontalLayout_15.addWidget(self.lineEdit_equationuv)
 
 
-        self.gridLayout_2.addWidget(self.widget_period, 8, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_equation, 8, 3, 1, 1)
 
-        self.label_arduino = QLabel(self.widget_top)
-        self.label_arduino.setObjectName(u"label_arduino")
-        self.label_arduino.setMinimumSize(QSize(154, 30))
-        self.label_arduino.setMaximumSize(QSize(160, 16777215))
+        self.label_i_type = QLabel(self.widget_top)
+        self.label_i_type.setObjectName(u"label_i_type")
 
-        self.gridLayout_2.addWidget(self.label_arduino, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_i_type, 11, 1, 1, 1)
 
-        self.widget_kp = QWidget(self.widget_top)
-        self.widget_kp.setObjectName(u"widget_kp")
-        self.horizontalLayout_6 = QHBoxLayout(self.widget_kp)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.doubleSpinBox_kp = QDoubleSpinBox(self.widget_kp)
-        self.doubleSpinBox_kp.setObjectName(u"doubleSpinBox_kp")
-        self.doubleSpinBox_kp.setMaximum(999999.000000000000000)
-        self.doubleSpinBox_kp.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_kp.setValue(1.000000000000000)
-
-        self.horizontalLayout_6.addWidget(self.doubleSpinBox_kp)
-
-
-        self.gridLayout_2.addWidget(self.widget_kp, 10, 3, 1, 1)
-
-        self.widget = QWidget(self.widget_top)
-        self.widget.setObjectName(u"widget")
-        self.horizontalLayout_13 = QHBoxLayout(self.widget)
-        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.ai_channel_combo = QComboBox(self.widget)
-        self.ai_channel_combo.setObjectName(u"ai_channel_combo")
-
-        self.horizontalLayout_13.addWidget(self.ai_channel_combo)
-
-
-        self.gridLayout_2.addWidget(self.widget, 2, 3, 1, 1)
-
-        self.widget_2 = QWidget(self.widget_top)
-        self.widget_2.setObjectName(u"widget_2")
-        self.horizontalLayout_11 = QHBoxLayout(self.widget_2)
+        self.widget_terminal_config = QWidget(self.widget_top)
+        self.widget_terminal_config.setObjectName(u"widget_terminal_config")
+        self.horizontalLayout_11 = QHBoxLayout(self.widget_terminal_config)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.terminal_config_combo = QComboBox(self.widget_2)
+        self.terminal_config_combo = QComboBox(self.widget_terminal_config)
         self.terminal_config_combo.setObjectName(u"terminal_config_combo")
 
         self.horizontalLayout_11.addWidget(self.terminal_config_combo)
 
 
-        self.gridLayout_2.addWidget(self.widget_2, 4, 3, 1, 1)
-
-        self.label_equation = QLabel(self.widget_top)
-        self.label_equation.setObjectName(u"label_equation")
-        self.label_equation.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_equation, 7, 0, 1, 1)
-
-        self.label_i_type = QLabel(self.widget_top)
-        self.label_i_type.setObjectName(u"label_i_type")
-
-        self.gridLayout_2.addWidget(self.label_i_type, 9, 1, 1, 1)
-
-        self.line = QFrame(self.widget_top)
-        self.line.setObjectName(u"line")
-        self.line.setMinimumSize(QSize(0, 0))
-        self.line.setFrameShape(QFrame.Shape.VLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout_2.addWidget(self.line, 0, 2, 17, 1)
-
-        self.widget_kd = QWidget(self.widget_top)
-        self.widget_kd.setObjectName(u"widget_kd")
-        self.horizontalLayout_5 = QHBoxLayout(self.widget_kd)
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.doubleSpinBox_kd = QDoubleSpinBox(self.widget_kd)
-        self.doubleSpinBox_kd.setObjectName(u"doubleSpinBox_kd")
-        self.doubleSpinBox_kd.setMaximum(9999999.000000000000000)
-        self.doubleSpinBox_kd.setSingleStep(0.100000000000000)
-
-        self.horizontalLayout_5.addWidget(self.doubleSpinBox_kd)
-
-
-        self.gridLayout_2.addWidget(self.widget_kd, 12, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
-
-        self.widget_setpoint = QWidget(self.widget_top)
-        self.widget_setpoint.setObjectName(u"widget_setpoint")
-        self.horizontalLayout_3 = QHBoxLayout(self.widget_setpoint)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.doubleSpinBox_setpoint = QDoubleSpinBox(self.widget_setpoint)
-        self.doubleSpinBox_setpoint.setObjectName(u"doubleSpinBox_setpoint")
-        self.doubleSpinBox_setpoint.setMaximumSize(QSize(100, 16777215))
-        self.doubleSpinBox_setpoint.setMaximum(9999999.000000000000000)
-        self.doubleSpinBox_setpoint.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_setpoint.setValue(5.000000000000000)
-
-        self.horizontalLayout_3.addWidget(self.doubleSpinBox_setpoint)
-
-        self.comboBox_setpoint = QComboBox(self.widget_setpoint)
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.setObjectName(u"comboBox_setpoint")
-        self.comboBox_setpoint.setMinimumSize(QSize(190, 0))
-        self.comboBox_setpoint.setMaximumSize(QSize(9000000, 16777215))
-
-        self.horizontalLayout_3.addWidget(self.comboBox_setpoint)
-
-
-        self.gridLayout_2.addWidget(self.widget_setpoint, 5, 3, 1, 1)
-
-        self.widget_unit = QWidget(self.widget_top)
-        self.widget_unit.setObjectName(u"widget_unit")
-        self.horizontalLayout = QHBoxLayout(self.widget_unit)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lineEdit_unit = QLineEdit(self.widget_unit)
-        self.lineEdit_unit.setObjectName(u"lineEdit_unit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(10)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEdit_unit.sizePolicy().hasHeightForWidth())
-        self.lineEdit_unit.setSizePolicy(sizePolicy)
-        self.lineEdit_unit.setMaximumSize(QSize(9999999, 16777215))
-
-        self.horizontalLayout.addWidget(self.lineEdit_unit)
-
-
-        self.gridLayout_2.addWidget(self.widget_unit, 6, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
-
-        self.label_kp = QLabel(self.widget_top)
-        self.label_kp.setObjectName(u"label_kp")
-        self.label_kp.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_kp, 10, 0, 1, 1)
-
-        self.label_type = QLabel(self.widget_top)
-        self.label_type.setObjectName(u"label_type")
-        self.label_type.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_type, 9, 0, 1, 1)
-
-        self.label_periody = QLabel(self.widget_top)
-        self.label_periody.setObjectName(u"label_periody")
-        self.label_periody.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_periody, 8, 0, 1, 1)
-
-        self.label_path = QLabel(self.widget_top)
-        self.label_path.setObjectName(u"label_path")
-
-        self.gridLayout_2.addWidget(self.label_path, 14, 0, 1, 1)
-
-        self.label_save = QLabel(self.widget_top)
-        self.label_save.setObjectName(u"label_save")
-
-        self.gridLayout_2.addWidget(self.label_save, 13, 0, 1, 1)
-
-        self.label_channel = QLabel(self.widget_top)
-        self.label_channel.setObjectName(u"label_channel")
-
-        self.gridLayout_2.addWidget(self.label_channel, 2, 0, 1, 1)
-
-        self.widget_path = QWidget(self.widget_top)
-        self.widget_path.setObjectName(u"widget_path")
-        self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.path_line_edit = QLineEdit(self.widget_path)
-        self.path_line_edit.setObjectName(u"path_line_edit")
-        self.path_line_edit.setMinimumSize(QSize(0, 22))
-
-        self.horizontalLayout_10.addWidget(self.path_line_edit)
-
-        self.path_folder_browse = QPushButton(self.widget_path)
-        self.path_folder_browse.setObjectName(u"path_folder_browse")
-        self.path_folder_browse.setMinimumSize(QSize(70, 30))
-
-        self.horizontalLayout_10.addWidget(self.path_folder_browse)
-
-
-        self.gridLayout_2.addWidget(self.widget_path, 14, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+        self.gridLayout_2.addWidget(self.widget_terminal_config, 5, 3, 1, 1)
 
         self.label_setpoint = QLabel(self.widget_top)
         self.label_setpoint.setObjectName(u"label_setpoint")
         self.label_setpoint.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout_2.addWidget(self.label_setpoint, 5, 0, 1, 1)
-
-        self.label_ki = QLabel(self.widget_top)
-        self.label_ki.setObjectName(u"label_ki")
-        self.label_ki.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_ki, 11, 0, 1, 1)
-
-        self.pushButton_confirm = QPushButton(self.widget_top)
-        self.pushButton_confirm.setObjectName(u"pushButton_confirm")
-        self.pushButton_confirm.setMinimumSize(QSize(80, 30))
-        self.pushButton_confirm.setMaximumSize(QSize(100, 16777215))
-
-        self.gridLayout_2.addWidget(self.pushButton_confirm, 15, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
-
-        self.label_kd = QLabel(self.widget_top)
-        self.label_kd.setObjectName(u"label_kd")
-        self.label_kd.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_kd, 12, 0, 1, 1)
-
-        self.widget_equation = QWidget(self.widget_top)
-        self.widget_equation.setObjectName(u"widget_equation")
-        self.horizontalLayout_9 = QHBoxLayout(self.widget_equation)
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.lineEdit_equation = QLineEdit(self.widget_equation)
-        self.lineEdit_equation.setObjectName(u"lineEdit_equation")
-        sizePolicy.setHeightForWidth(self.lineEdit_equation.sizePolicy().hasHeightForWidth())
-        self.lineEdit_equation.setSizePolicy(sizePolicy)
-        self.lineEdit_equation.setMinimumSize(QSize(150, 0))
-        self.lineEdit_equation.setMaximumSize(QSize(9000000, 16777215))
-
-        self.horizontalLayout_9.addWidget(self.lineEdit_equation)
-
-
-        self.gridLayout_2.addWidget(self.widget_equation, 7, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.label_setpoint, 6, 0, 1, 1)
 
         self.widget_3 = QWidget(self.widget_top)
         self.widget_3.setObjectName(u"widget_3")
@@ -633,20 +433,45 @@ class Ui_NIDAQ_PID_Control(object):
         self.horizontalLayout_12.addItem(self.horizontalSpacer)
 
 
-        self.gridLayout_2.addWidget(self.widget_3, 13, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_3, 15, 3, 1, 1)
 
-        self.widget_arduino = QWidget(self.widget_top)
-        self.widget_arduino.setObjectName(u"widget_arduino")
-        self.horizontalLayout_2 = QHBoxLayout(self.widget_arduino)
+        self.label_equation = QLabel(self.widget_top)
+        self.label_equation.setObjectName(u"label_equation")
+        self.label_equation.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_equation, 8, 0, 1, 1)
+
+        self.widget_type = QWidget(self.widget_top)
+        self.widget_type.setObjectName(u"widget_type")
+        self.widget_type.setMinimumSize(QSize(100, 0))
+        self.horizontalLayout_7 = QHBoxLayout(self.widget_type)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.comboBox_type = QComboBox(self.widget_type)
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.setObjectName(u"comboBox_type")
+        self.comboBox_type.setMinimumSize(QSize(0, 25))
+        self.comboBox_type.setMaximumSize(QSize(9000000, 16777215))
+
+        self.horizontalLayout_7.addWidget(self.comboBox_type)
+
+
+        self.gridLayout_2.addWidget(self.widget_type, 11, 3, 1, 1)
+
+        self.widget_nidaq = QWidget(self.widget_top)
+        self.widget_nidaq.setObjectName(u"widget_nidaq")
+        self.horizontalLayout_2 = QHBoxLayout(self.widget_nidaq)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.device_combo = QComboBox(self.widget_arduino)
+        self.device_combo = QComboBox(self.widget_nidaq)
         self.device_combo.setObjectName(u"device_combo")
         self.device_combo.setMinimumSize(QSize(0, 0))
         self.device_combo.setMaximumSize(QSize(9000000, 16777215))
 
         self.horizontalLayout_2.addWidget(self.device_combo)
 
-        self.reload_devices = QPushButton(self.widget_arduino)
+        self.reload_devices = QPushButton(self.widget_nidaq)
         self.reload_devices.setObjectName(u"reload_devices")
         self.reload_devices.setMinimumSize(QSize(22, 22))
         self.reload_devices.setMaximumSize(QSize(22, 22))
@@ -654,7 +479,196 @@ class Ui_NIDAQ_PID_Control(object):
         self.horizontalLayout_2.addWidget(self.reload_devices)
 
 
-        self.gridLayout_2.addWidget(self.widget_arduino, 1, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_nidaq, 2, 3, 1, 1)
+
+        self.label_path = QLabel(self.widget_top)
+        self.label_path.setObjectName(u"label_path")
+
+        self.gridLayout_2.addWidget(self.label_path, 16, 0, 1, 1)
+
+        self.line = QFrame(self.widget_top)
+        self.line.setObjectName(u"line")
+        self.line.setMinimumSize(QSize(0, 0))
+        self.line.setFrameShape(QFrame.Shape.VLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_2.addWidget(self.line, 0, 2, 19, 1)
+
+        self.label_periody = QLabel(self.widget_top)
+        self.label_periody.setObjectName(u"label_periody")
+        self.label_periody.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_periody, 10, 0, 1, 1)
+
+        self.label_terminal = QLabel(self.widget_top)
+        self.label_terminal.setObjectName(u"label_terminal")
+
+        self.gridLayout_2.addWidget(self.label_terminal, 5, 0, 1, 1)
+
+        self.label_ao_channel = QLabel(self.widget_top)
+        self.label_ao_channel.setObjectName(u"label_ao_channel")
+
+        self.gridLayout_2.addWidget(self.label_ao_channel, 4, 0, 1, 1)
+
+        self.widget_period = QWidget(self.widget_top)
+        self.widget_period.setObjectName(u"widget_period")
+        self.horizontalLayout_8 = QHBoxLayout(self.widget_period)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.doubleSpinBox_period = QDoubleSpinBox(self.widget_period)
+        self.doubleSpinBox_period.setObjectName(u"doubleSpinBox_period")
+        self.doubleSpinBox_period.setMaximum(9999999.000000000000000)
+        self.doubleSpinBox_period.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_period.setValue(1.000000000000000)
+
+        self.horizontalLayout_8.addWidget(self.doubleSpinBox_period)
+
+
+        self.gridLayout_2.addWidget(self.widget_period, 10, 3, 1, 1)
+
+        self.widget_path = QWidget(self.widget_top)
+        self.widget_path.setObjectName(u"widget_path")
+        self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.path_line_edit = QLineEdit(self.widget_path)
+        self.path_line_edit.setObjectName(u"path_line_edit")
+        self.path_line_edit.setMinimumSize(QSize(0, 22))
+
+        self.horizontalLayout_10.addWidget(self.path_line_edit)
+
+        self.path_folder_browse = QPushButton(self.widget_path)
+        self.path_folder_browse.setObjectName(u"path_folder_browse")
+        self.path_folder_browse.setMinimumSize(QSize(70, 30))
+
+        self.horizontalLayout_10.addWidget(self.path_folder_browse)
+
+
+        self.gridLayout_2.addWidget(self.widget_path, 16, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.widget_unit = QWidget(self.widget_top)
+        self.widget_unit.setObjectName(u"widget_unit")
+        self.horizontalLayout = QHBoxLayout(self.widget_unit)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.lineEdit_unit = QLineEdit(self.widget_unit)
+        self.lineEdit_unit.setObjectName(u"lineEdit_unit")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(10)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_unit.sizePolicy().hasHeightForWidth())
+        self.lineEdit_unit.setSizePolicy(sizePolicy)
+        self.lineEdit_unit.setMaximumSize(QSize(9999999, 16777215))
+
+        self.horizontalLayout.addWidget(self.lineEdit_unit)
+
+
+        self.gridLayout_2.addWidget(self.widget_unit, 7, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.widget_kd = QWidget(self.widget_top)
+        self.widget_kd.setObjectName(u"widget_kd")
+        self.horizontalLayout_5 = QHBoxLayout(self.widget_kd)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.doubleSpinBox_kd = QDoubleSpinBox(self.widget_kd)
+        self.doubleSpinBox_kd.setObjectName(u"doubleSpinBox_kd")
+        self.doubleSpinBox_kd.setMaximum(9999999.000000000000000)
+        self.doubleSpinBox_kd.setSingleStep(0.100000000000000)
+
+        self.horizontalLayout_5.addWidget(self.doubleSpinBox_kd)
+
+
+        self.gridLayout_2.addWidget(self.widget_kd, 14, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.label_kd = QLabel(self.widget_top)
+        self.label_kd.setObjectName(u"label_kd")
+        self.label_kd.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_kd, 14, 0, 1, 1)
+
+        self.pushButton_confirm = QPushButton(self.widget_top)
+        self.pushButton_confirm.setObjectName(u"pushButton_confirm")
+        self.pushButton_confirm.setMinimumSize(QSize(80, 30))
+        self.pushButton_confirm.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout_2.addWidget(self.pushButton_confirm, 17, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+
+        self.label_ai_channel = QLabel(self.widget_top)
+        self.label_ai_channel.setObjectName(u"label_ai_channel")
+
+        self.gridLayout_2.addWidget(self.label_ai_channel, 3, 0, 1, 1)
+
+        self.label_i_equation = QLabel(self.widget_top)
+        self.label_i_equation.setObjectName(u"label_i_equation")
+
+        self.gridLayout_2.addWidget(self.label_i_equation, 8, 1, 1, 1, Qt.AlignmentFlag.AlignRight)
+
+        self.label_nidaq = QLabel(self.widget_top)
+        self.label_nidaq.setObjectName(u"label_nidaq")
+        self.label_nidaq.setMinimumSize(QSize(154, 30))
+        self.label_nidaq.setMaximumSize(QSize(160, 16777215))
+
+        self.gridLayout_2.addWidget(self.label_nidaq, 2, 0, 1, 1)
+
+        self.widget_kp = QWidget(self.widget_top)
+        self.widget_kp.setObjectName(u"widget_kp")
+        self.horizontalLayout_6 = QHBoxLayout(self.widget_kp)
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.doubleSpinBox_kp = QDoubleSpinBox(self.widget_kp)
+        self.doubleSpinBox_kp.setObjectName(u"doubleSpinBox_kp")
+        self.doubleSpinBox_kp.setMaximum(999999.000000000000000)
+        self.doubleSpinBox_kp.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_kp.setValue(1.000000000000000)
+
+        self.horizontalLayout_6.addWidget(self.doubleSpinBox_kp)
+
+
+        self.gridLayout_2.addWidget(self.widget_kp, 12, 3, 1, 1)
+
+        self.widget_ai_channel = QWidget(self.widget_top)
+        self.widget_ai_channel.setObjectName(u"widget_ai_channel")
+        self.horizontalLayout_13 = QHBoxLayout(self.widget_ai_channel)
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.ai_channel_combo = QComboBox(self.widget_ai_channel)
+        self.ai_channel_combo.setObjectName(u"ai_channel_combo")
+
+        self.horizontalLayout_13.addWidget(self.ai_channel_combo)
+
+
+        self.gridLayout_2.addWidget(self.widget_ai_channel, 3, 3, 1, 1)
+
+        self.widget_setpoint = QWidget(self.widget_top)
+        self.widget_setpoint.setObjectName(u"widget_setpoint")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_setpoint)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.doubleSpinBox_setpoint = QDoubleSpinBox(self.widget_setpoint)
+        self.doubleSpinBox_setpoint.setObjectName(u"doubleSpinBox_setpoint")
+        self.doubleSpinBox_setpoint.setMaximumSize(QSize(100, 16777215))
+        self.doubleSpinBox_setpoint.setMaximum(9999999.000000000000000)
+        self.doubleSpinBox_setpoint.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_setpoint.setValue(5.000000000000000)
+
+        self.horizontalLayout_3.addWidget(self.doubleSpinBox_setpoint)
+
+        self.comboBox_setpoint = QComboBox(self.widget_setpoint)
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.setObjectName(u"comboBox_setpoint")
+        self.comboBox_setpoint.setMinimumSize(QSize(190, 0))
+        self.comboBox_setpoint.setMaximumSize(QSize(9000000, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.comboBox_setpoint)
+
+
+        self.gridLayout_2.addWidget(self.widget_setpoint, 6, 3, 1, 1)
+
+        self.label_save = QLabel(self.widget_top)
+        self.label_save.setObjectName(u"label_save")
+
+        self.gridLayout_2.addWidget(self.label_save, 15, 0, 1, 1)
+
+        self.label_type = QLabel(self.widget_top)
+        self.label_type.setObjectName(u"label_type")
+        self.label_type.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_type, 11, 0, 1, 1)
 
         self.widget_ki = QWidget(self.widget_top)
         self.widget_ki.setObjectName(u"widget_ki")
@@ -668,40 +682,68 @@ class Ui_NIDAQ_PID_Control(object):
         self.horizontalLayout_4.addWidget(self.doubleSpinBox_ki)
 
 
-        self.gridLayout_2.addWidget(self.widget_ki, 11, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_ki, 13, 3, 1, 1)
 
-        self.label_terminal = QLabel(self.widget_top)
-        self.label_terminal.setObjectName(u"label_terminal")
+        self.label_kp = QLabel(self.widget_top)
+        self.label_kp.setObjectName(u"label_kp")
+        self.label_kp.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout_2.addWidget(self.label_terminal, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_kp, 12, 0, 1, 1)
 
-        self.label_i_equation = QLabel(self.widget_top)
-        self.label_i_equation.setObjectName(u"label_i_equation")
-
-        self.gridLayout_2.addWidget(self.label_i_equation, 7, 1, 1, 1, Qt.AlignmentFlag.AlignRight)
-
-        self.label_unit = QLabel(self.widget_top)
-        self.label_unit.setObjectName(u"label_unit")
-        self.label_unit.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_unit, 6, 0, 1, 1)
-
-        self.label = QLabel(self.widget_top)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 3, 0, 1, 1)
-
-        self.widget_4 = QWidget(self.widget_top)
-        self.widget_4.setObjectName(u"widget_4")
-        self.horizontalLayout_14 = QHBoxLayout(self.widget_4)
+        self.widget_ao_channel = QWidget(self.widget_top)
+        self.widget_ao_channel.setObjectName(u"widget_ao_channel")
+        self.horizontalLayout_14 = QHBoxLayout(self.widget_ao_channel)
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.ao_channel_combo = QComboBox(self.widget_4)
+        self.ao_channel_combo = QComboBox(self.widget_ao_channel)
         self.ao_channel_combo.setObjectName(u"ao_channel_combo")
 
         self.horizontalLayout_14.addWidget(self.ao_channel_combo)
 
 
-        self.gridLayout_2.addWidget(self.widget_4, 3, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_ao_channel, 4, 3, 1, 1)
+
+        self.label_unit = QLabel(self.widget_top)
+        self.label_unit.setObjectName(u"label_unit")
+        self.label_unit.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_unit, 7, 0, 1, 1)
+
+        self.label_ki = QLabel(self.widget_top)
+        self.label_ki.setObjectName(u"label_ki")
+        self.label_ki.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_ki, 13, 0, 1, 1)
+
+        self.label_simulate = QLabel(self.widget_top)
+        self.label_simulate.setObjectName(u"label_simulate")
+
+        self.gridLayout_2.addWidget(self.label_simulate, 1, 0, 1, 1)
+
+        self.widget_6 = QWidget(self.widget_top)
+        self.widget_6.setObjectName(u"widget_6")
+        self.horizontalLayout_9 = QHBoxLayout(self.widget_6)
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.yes_simulate_radio = QRadioButton(self.widget_6)
+        self.simulate_radio_group = QButtonGroup(NIDAQ_PID_Control)
+        self.simulate_radio_group.setObjectName(u"simulate_radio_group")
+        self.simulate_radio_group.addButton(self.yes_simulate_radio)
+        self.yes_simulate_radio.setObjectName(u"yes_simulate_radio")
+
+        self.horizontalLayout_9.addWidget(self.yes_simulate_radio)
+
+        self.no_simulate_radio = QRadioButton(self.widget_6)
+        self.simulate_radio_group.addButton(self.no_simulate_radio)
+        self.no_simulate_radio.setObjectName(u"no_simulate_radio")
+        self.no_simulate_radio.setChecked(True)
+
+        self.horizontalLayout_9.addWidget(self.no_simulate_radio)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_2)
+
+
+        self.gridLayout_2.addWidget(self.widget_6, 1, 3, 1, 1)
 
 
         self.gridLayout.addWidget(self.widget_top, 2, 0, 1, 1)
@@ -737,50 +779,56 @@ class Ui_NIDAQ_PID_Control(object):
 
     def retranslateUi(self, NIDAQ_PID_Control):
         NIDAQ_PID_Control.setWindowTitle(QCoreApplication.translate("NIDAQ_PID_Control", u"Form", None))
+        self.label_vunit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"V(Unit)", None))
+        self.lineEdit_equationvu.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"1*x", None))
+        self.label_unitv.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Unit(V)", None))
+        self.lineEdit_equationuv.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"1*x", None))
+#if QT_CONFIG(tooltip)
+        self.label_i_type.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_i_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
+        self.label_setpoint.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Setpoint:", None))
+        self.yes_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Yes", None))
+        self.no_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"No", None))
+#if QT_CONFIG(tooltip)
+        self.label_equation.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form: Ax\u00b2+Bx+C</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Equation:", None))
         self.comboBox_type.setItemText(0, QCoreApplication.translate("NIDAQ_PID_Control", u"P", None))
         self.comboBox_type.setItemText(1, QCoreApplication.translate("NIDAQ_PID_Control", u"PI", None))
         self.comboBox_type.setItemText(2, QCoreApplication.translate("NIDAQ_PID_Control", u"PD", None))
         self.comboBox_type.setItemText(3, QCoreApplication.translate("NIDAQ_PID_Control", u"PID", None))
 
-        self.label_arduino.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Device:", None))
-#if QT_CONFIG(tooltip)
-        self.label_equation.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form: Ax\u00b2+Bx+C</span></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Equation:", None))
-#if QT_CONFIG(tooltip)
-        self.label_i_type.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_i_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
-        self.comboBox_setpoint.setItemText(0, QCoreApplication.translate("NIDAQ_PID_Control", u"Voltage (V)", None))
-        self.comboBox_setpoint.setItemText(1, QCoreApplication.translate("NIDAQ_PID_Control", u"Temperature (C\u00b0)", None))
-        self.comboBox_setpoint.setItemText(2, QCoreApplication.translate("NIDAQ_PID_Control", u"Other", None))
-
-        self.lineEdit_unit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Current (A)", None))
-        self.label_kp.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kp:", None))
-#if QT_CONFIG(tooltip)
-        self.label_type.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type?", None))
-        self.label_periody.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Sampling period (s):", None))
-        self.label_path.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Data path:", None))
-        self.label_save.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Save Data?", None))
-        self.label_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"AI channel:", None))
-        self.path_folder_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
-        self.label_setpoint.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Setpoint:", None))
-        self.label_ki.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Ki:", None))
-        self.pushButton_confirm.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Confirm", None))
-        self.label_kd.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kd:", None))
-        self.lineEdit_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"1x+2", None))
-        self.yes_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Yes", None))
-        self.no_save_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"No", None))
         self.reload_devices.setText("")
+        self.label_path.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Data path:", None))
+        self.label_periody.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Sampling period (s):", None))
         self.label_terminal.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Terminal config.:", None))
+        self.label_ao_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"AO channel:", None))
+        self.path_folder_browse.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Browse", None))
+        self.lineEdit_unit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Current (A)", None))
+        self.label_kd.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kd:", None))
+        self.pushButton_confirm.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Confirm", None))
+        self.label_ai_channel.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"AI channel:", None))
 #if QT_CONFIG(tooltip)
         self.label_i_equation.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the form: Ax\u00b2+Bx+C</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.label_i_equation.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
+        self.label_nidaq.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Device:", None))
+        self.comboBox_setpoint.setItemText(0, QCoreApplication.translate("NIDAQ_PID_Control", u"Voltage (V)", None))
+        self.comboBox_setpoint.setItemText(1, QCoreApplication.translate("NIDAQ_PID_Control", u"Temperature (C\u00b0)", None))
+        self.comboBox_setpoint.setItemText(2, QCoreApplication.translate("NIDAQ_PID_Control", u"Other", None))
+
+        self.label_save.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Save Data?", None))
+#if QT_CONFIG(tooltip)
+        self.label_type.setToolTip(QCoreApplication.translate("NIDAQ_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_type.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Controler type?", None))
+        self.label_kp.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Kp:", None))
         self.label_unit.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Unit:", None))
-        self.label.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"AO channel:", None))
+        self.label_ki.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Ki:", None))
+        self.label_simulate.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Simulate?", None))
+        self.yes_simulate_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"Yes", None))
+        self.no_simulate_radio.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"No", None))
         self.pushButton_start.setText(QCoreApplication.translate("NIDAQ_PID_Control", u"PID CONTROL", None))
     # retranslateUi
 
