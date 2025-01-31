@@ -37,10 +37,12 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.image_layout.addWidget(self.canvas)
 
 #Defining the fuctions
-    def set_parameters(self, kp, ki, kd, index, setpoint, unit, equationvu, equationuv, period, path, save):
+    def set_parameters(self, kp, ki, kd, index, numerator, denominator, setpoint, unit, equationvu, equationuv, period, path, save):
         self.kp = kp if kp else 1
         self.ki = ki if ki else 0
         self.kd = kd if kd else 0
+        self.numerator = numerator if numerator else '1'
+        self.denominator = denominator if denominator else 's+0.2'
         self.index = index if index else 0
         self.setpoint = setpoint if setpoint else 0.0
         self.unit = unit if unit else 'Voltage (V)'
@@ -64,7 +66,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print('Period ', self.period)
         print ('Path ', self.path)
         print ('Save ', self.save)
-        self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.calibration_equation_vu, self.calibration_equation_uv, self.unit, self.period)
+        self.start_control(self.kp, self.ki, self.kd, self.setpoint, self.numerator, self.denominator, self.calibration_equation_vu, self.calibration_equation_uv, self.unit, self.period)
 
     def stopstart (self): #stop/start the event and change the button text
         self.paused = not self.paused
@@ -138,9 +140,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         print ('The new disturbe is ', self.disturbe)
 
 #stating the control and inicializating variables
-    def start_control(self, Kp, Ki, Kd, setpoint, calibration_equation_vu, calibration_equation_uv, unit, period):
+    def start_control(self, Kp, Ki, Kd, setpoint, numerator, denominator, calibration_equation_vu, calibration_equation_uv, unit, period):
         try:
-            self.pid = PIDControl(Kp, Ki, Kd, setpoint, calibration_equation_vu, calibration_equation_uv, unit, period)
+            self.pid = PIDControl(Kp, Ki, Kd, setpoint, numerator, denominator, calibration_equation_vu, calibration_equation_uv, unit, period)
             self.check_start()
             self.ani = animation.FuncAnimation(
                 self.figure, 

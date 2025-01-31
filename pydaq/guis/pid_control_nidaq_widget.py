@@ -22,13 +22,13 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.comboBox_setpoint.currentIndexChanged.connect(self.on_unit_change)
         self.on_type_combo_changed(0)
         self.simulate_radio_group.buttonClicked.connect(self.on_simulate_change)
+        self.on_simulate_change()
         self.pushButton_confirm.released.connect(self.show_pid_equation)
         self.pushButton_start.clicked.connect(self.show_graph_window)
         self.path_folder_browse.released.connect(self.locate_path)
         self.path_line_edit.setText(
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
-        self.on_simulate_change()
         self.signals = GuiSignals()
         self._nidaq_info() # Gathering nidaq infos 
         try:

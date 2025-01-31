@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgetAnditv.ui'
+## Form generated from reading UI file 'PyDAQ_pid_control_Arduino_widgettdFrGF.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -24,7 +24,7 @@ class Ui_Arduino_PID_Control(object):
     def setupUi(self, Arduino_PID_Control):
         if not Arduino_PID_Control.objectName():
             Arduino_PID_Control.setObjectName(u"Arduino_PID_Control")
-        Arduino_PID_Control.resize(549, 835)
+        Arduino_PID_Control.resize(599, 884)
         Arduino_PID_Control.setStyleSheet(u"QWidget{\n"
 "	background-color: rgb(64, 64, 64);\n"
 "}\n"
@@ -361,85 +361,15 @@ class Ui_Arduino_PID_Control(object):
         self.widget_top.setObjectName(u"widget_top")
         self.gridLayout_2 = QGridLayout(self.widget_top)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.widget_setpoint = QWidget(self.widget_top)
-        self.widget_setpoint.setObjectName(u"widget_setpoint")
-        self.horizontalLayout_3 = QHBoxLayout(self.widget_setpoint)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.doubleSpinBox_setpoint = QDoubleSpinBox(self.widget_setpoint)
-        self.doubleSpinBox_setpoint.setObjectName(u"doubleSpinBox_setpoint")
-        self.doubleSpinBox_setpoint.setMinimumSize(QSize(100, 0))
-        self.doubleSpinBox_setpoint.setMaximumSize(QSize(100, 16777215))
-        self.doubleSpinBox_setpoint.setMaximum(9999999.000000000000000)
-        self.doubleSpinBox_setpoint.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_setpoint.setValue(5.000000000000000)
+        self.label_simulate = QLabel(self.widget_top)
+        self.label_simulate.setObjectName(u"label_simulate")
 
-        self.horizontalLayout_3.addWidget(self.doubleSpinBox_setpoint)
+        self.gridLayout_2.addWidget(self.label_simulate, 1, 0, 1, 1)
 
-        self.comboBox_setpoint = QComboBox(self.widget_setpoint)
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.addItem("")
-        self.comboBox_setpoint.setObjectName(u"comboBox_setpoint")
-        self.comboBox_setpoint.setMinimumSize(QSize(190, 0))
-        self.comboBox_setpoint.setMaximumSize(QSize(9000000, 16777215))
+        self.label_path = QLabel(self.widget_top)
+        self.label_path.setObjectName(u"label_path")
 
-        self.horizontalLayout_3.addWidget(self.comboBox_setpoint)
-
-
-        self.gridLayout_2.addWidget(self.widget_setpoint, 4, 3, 1, 1)
-
-        self.widget_equation = QWidget(self.widget_top)
-        self.widget_equation.setObjectName(u"widget_equation")
-        self.horizontalLayout_9 = QHBoxLayout(self.widget_equation)
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.label_vunit = QLabel(self.widget_equation)
-        self.label_vunit.setObjectName(u"label_vunit")
-
-        self.horizontalLayout_9.addWidget(self.label_vunit)
-
-        self.lineEdit_equationvu = QLineEdit(self.widget_equation)
-        self.lineEdit_equationvu.setObjectName(u"lineEdit_equationvu")
-
-        self.horizontalLayout_9.addWidget(self.lineEdit_equationvu)
-
-        self.label_unitv = QLabel(self.widget_equation)
-        self.label_unitv.setObjectName(u"label_unitv")
-
-        self.horizontalLayout_9.addWidget(self.label_unitv)
-
-        self.lineEdit_equationuv = QLineEdit(self.widget_equation)
-        self.lineEdit_equationuv.setObjectName(u"lineEdit_equationuv")
-
-        self.horizontalLayout_9.addWidget(self.lineEdit_equationuv)
-
-
-        self.gridLayout_2.addWidget(self.widget_equation, 6, 3, 1, 1)
-
-        self.widget_save = QWidget(self.widget_top)
-        self.widget_save.setObjectName(u"widget_save")
-        self.horizontalLayout_12 = QHBoxLayout(self.widget_save)
-        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.yes_save_radio = QRadioButton(self.widget_save)
-        self.save_radio_group = QButtonGroup(Arduino_PID_Control)
-        self.save_radio_group.setObjectName(u"save_radio_group")
-        self.save_radio_group.addButton(self.yes_save_radio)
-        self.yes_save_radio.setObjectName(u"yes_save_radio")
-        self.yes_save_radio.setChecked(True)
-
-        self.horizontalLayout_12.addWidget(self.yes_save_radio)
-
-        self.no_save_radio = QRadioButton(self.widget_save)
-        self.save_radio_group.addButton(self.no_save_radio)
-        self.no_save_radio.setObjectName(u"no_save_radio")
-
-        self.horizontalLayout_12.addWidget(self.no_save_radio)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer)
-
-
-        self.gridLayout_2.addWidget(self.widget_save, 12, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.label_path, 14, 0, 1, 1)
 
         self.widget_period = QWidget(self.widget_top)
         self.widget_period.setObjectName(u"widget_period")
@@ -454,49 +384,14 @@ class Ui_Arduino_PID_Control(object):
         self.horizontalLayout_8.addWidget(self.doubleSpinBox_period)
 
 
-        self.gridLayout_2.addWidget(self.widget_period, 7, 3, 1, 1)
-
-        self.label_kd = QLabel(self.widget_top)
-        self.label_kd.setObjectName(u"label_kd")
-        self.label_kd.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_kd, 11, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_period, 8, 3, 1, 1)
 
         self.label_arduino = QLabel(self.widget_top)
         self.label_arduino.setObjectName(u"label_arduino")
         self.label_arduino.setMinimumSize(QSize(154, 30))
         self.label_arduino.setMaximumSize(QSize(160, 16777215))
 
-        self.gridLayout_2.addWidget(self.label_arduino, 2, 0, 1, 1)
-
-        self.label_kp = QLabel(self.widget_top)
-        self.label_kp.setObjectName(u"label_kp")
-        self.label_kp.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_kp, 9, 0, 1, 1)
-
-        self.label_i_equation = QLabel(self.widget_top)
-        self.label_i_equation.setObjectName(u"label_i_equation")
-        self.label_i_equation.setMaximumSize(QSize(24, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_i_equation, 6, 1, 1, 1)
-
-        self.label_path = QLabel(self.widget_top)
-        self.label_path.setObjectName(u"label_path")
-
-        self.gridLayout_2.addWidget(self.label_path, 13, 0, 1, 1)
-
-        self.label_setpoint = QLabel(self.widget_top)
-        self.label_setpoint.setObjectName(u"label_setpoint")
-        self.label_setpoint.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_setpoint, 4, 0, 1, 1)
-
-        self.label_ki = QLabel(self.widget_top)
-        self.label_ki.setObjectName(u"label_ki")
-        self.label_ki.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_ki, 10, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_arduino, 3, 0, 1, 1)
 
         self.widget_kp = QWidget(self.widget_top)
         self.widget_kp.setObjectName(u"widget_kp")
@@ -510,24 +405,32 @@ class Ui_Arduino_PID_Control(object):
         self.horizontalLayout_6.addWidget(self.doubleSpinBox_kp)
 
 
-        self.gridLayout_2.addWidget(self.widget_kp, 9, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_kp, 10, 3, 1, 1)
 
-        self.widget_unit = QWidget(self.widget_top)
-        self.widget_unit.setObjectName(u"widget_unit")
-        self.horizontalLayout = QHBoxLayout(self.widget_unit)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lineEdit_unit = QLineEdit(self.widget_unit)
-        self.lineEdit_unit.setObjectName(u"lineEdit_unit")
+        self.label_equation = QLabel(self.widget_top)
+        self.label_equation.setObjectName(u"label_equation")
+        self.label_equation.setMinimumSize(QSize(0, 30))
+        self.label_equation.setStyleSheet(u"QLabel::toolTip {\n"
+"    font: 12pt \"Helvetica\";\n"
+"    text-align: center;\n"
+"    color: white;  /* Cor do texto */\n"
+"    background-color: rgb(64, 64, 64);  /* Cor de fundo */\n"
+"}\n"
+"")
 
-        self.horizontalLayout.addWidget(self.lineEdit_unit)
+        self.gridLayout_2.addWidget(self.label_equation, 7, 0, 1, 1)
 
+        self.label_ki = QLabel(self.widget_top)
+        self.label_ki.setObjectName(u"label_ki")
+        self.label_ki.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout_2.addWidget(self.widget_unit, 5, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+        self.gridLayout_2.addWidget(self.label_ki, 11, 0, 1, 1)
 
-        self.label_i_type = QLabel(self.widget_top)
-        self.label_i_type.setObjectName(u"label_i_type")
+        self.label_kd = QLabel(self.widget_top)
+        self.label_kd.setObjectName(u"label_kd")
+        self.label_kd.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout_2.addWidget(self.label_i_type, 8, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_kd, 12, 0, 1, 1)
 
         self.widget_arduino = QWidget(self.widget_top)
         self.widget_arduino.setObjectName(u"widget_arduino")
@@ -548,70 +451,7 @@ class Ui_Arduino_PID_Control(object):
         self.horizontalLayout_2.addWidget(self.reload_devices)
 
 
-        self.gridLayout_2.addWidget(self.widget_arduino, 2, 3, 1, 1)
-
-        self.label_periody = QLabel(self.widget_top)
-        self.label_periody.setObjectName(u"label_periody")
-        self.label_periody.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_periody, 7, 0, 1, 1)
-
-        self.label_type = QLabel(self.widget_top)
-        self.label_type.setObjectName(u"label_type")
-        self.label_type.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_type, 8, 0, 1, 1)
-
-        self.widget_kd = QWidget(self.widget_top)
-        self.widget_kd.setObjectName(u"widget_kd")
-        self.horizontalLayout_5 = QHBoxLayout(self.widget_kd)
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.doubleSpinBox_kd = QDoubleSpinBox(self.widget_kd)
-        self.doubleSpinBox_kd.setObjectName(u"doubleSpinBox_kd")
-        self.doubleSpinBox_kd.setSingleStep(0.100000000000000)
-
-        self.horizontalLayout_5.addWidget(self.doubleSpinBox_kd)
-
-
-        self.gridLayout_2.addWidget(self.widget_kd, 11, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
-
-        self.widget_path = QWidget(self.widget_top)
-        self.widget_path.setObjectName(u"widget_path")
-        self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.path_line_edit = QLineEdit(self.widget_path)
-        self.path_line_edit.setObjectName(u"path_line_edit")
-        self.path_line_edit.setMinimumSize(QSize(0, 22))
-
-        self.horizontalLayout_10.addWidget(self.path_line_edit)
-
-        self.path_folder_browse = QPushButton(self.widget_path)
-        self.path_folder_browse.setObjectName(u"path_folder_browse")
-        self.path_folder_browse.setMinimumSize(QSize(70, 30))
-
-        self.horizontalLayout_10.addWidget(self.path_folder_browse)
-
-
-        self.gridLayout_2.addWidget(self.widget_path, 13, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
-
-        self.line = QFrame(self.widget_top)
-        self.line.setObjectName(u"line")
-        self.line.setMinimumSize(QSize(0, 0))
-        self.line.setFrameShape(QFrame.Shape.VLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout_2.addWidget(self.line, 0, 2, 16, 1)
-
-        self.label_save = QLabel(self.widget_top)
-        self.label_save.setObjectName(u"label_save")
-
-        self.gridLayout_2.addWidget(self.label_save, 12, 0, 1, 1)
-
-        self.label_unit = QLabel(self.widget_top)
-        self.label_unit.setObjectName(u"label_unit")
-        self.label_unit.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_2.addWidget(self.label_unit, 5, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_arduino, 3, 3, 1, 1)
 
         self.widget_ki = QWidget(self.widget_top)
         self.widget_ki.setObjectName(u"widget_ki")
@@ -624,51 +464,7 @@ class Ui_Arduino_PID_Control(object):
         self.horizontalLayout_4.addWidget(self.doubleSpinBox_ki)
 
 
-        self.gridLayout_2.addWidget(self.widget_ki, 10, 3, 1, 1)
-
-        self.label_equation = QLabel(self.widget_top)
-        self.label_equation.setObjectName(u"label_equation")
-        self.label_equation.setMinimumSize(QSize(0, 30))
-        self.label_equation.setStyleSheet(u"QLabel::toolTip {\n"
-"    font: 12pt \"Helvetica\";\n"
-"    text-align: center;\n"
-"    color: white;  /* Cor do texto */\n"
-"    background-color: rgb(64, 64, 64);  /* Cor de fundo */\n"
-"}\n"
-"")
-
-        self.gridLayout_2.addWidget(self.label_equation, 6, 0, 1, 1)
-
-        self.pushButton_confirm = QPushButton(self.widget_top)
-        self.pushButton_confirm.setObjectName(u"pushButton_confirm")
-        self.pushButton_confirm.setMinimumSize(QSize(80, 30))
-        self.pushButton_confirm.setMaximumSize(QSize(100, 16777215))
-
-        self.gridLayout_2.addWidget(self.pushButton_confirm, 14, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
-
-        self.widget_type = QWidget(self.widget_top)
-        self.widget_type.setObjectName(u"widget_type")
-        self.widget_type.setMinimumSize(QSize(100, 0))
-        self.horizontalLayout_7 = QHBoxLayout(self.widget_type)
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.comboBox_type = QComboBox(self.widget_type)
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.addItem("")
-        self.comboBox_type.setObjectName(u"comboBox_type")
-        self.comboBox_type.setMinimumSize(QSize(0, 25))
-        self.comboBox_type.setMaximumSize(QSize(9000000, 16777215))
-
-        self.horizontalLayout_7.addWidget(self.comboBox_type)
-
-
-        self.gridLayout_2.addWidget(self.widget_type, 8, 3, 1, 1)
-
-        self.label_simulate = QLabel(self.widget_top)
-        self.label_simulate.setObjectName(u"label_simulate")
-
-        self.gridLayout_2.addWidget(self.label_simulate, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.widget_ki, 11, 3, 1, 1)
 
         self.widget_simulate = QWidget(self.widget_top)
         self.widget_simulate.setObjectName(u"widget_simulate")
@@ -695,6 +491,247 @@ class Ui_Arduino_PID_Control(object):
 
 
         self.gridLayout_2.addWidget(self.widget_simulate, 1, 3, 1, 1)
+
+        self.widget_type = QWidget(self.widget_top)
+        self.widget_type.setObjectName(u"widget_type")
+        self.widget_type.setMinimumSize(QSize(100, 0))
+        self.horizontalLayout_7 = QHBoxLayout(self.widget_type)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.comboBox_type = QComboBox(self.widget_type)
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.setObjectName(u"comboBox_type")
+        self.comboBox_type.setMinimumSize(QSize(0, 25))
+        self.comboBox_type.setMaximumSize(QSize(9000000, 16777215))
+
+        self.horizontalLayout_7.addWidget(self.comboBox_type)
+
+
+        self.gridLayout_2.addWidget(self.widget_type, 9, 3, 1, 1)
+
+        self.label_type = QLabel(self.widget_top)
+        self.label_type.setObjectName(u"label_type")
+        self.label_type.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_type, 9, 0, 1, 1)
+
+        self.line = QFrame(self.widget_top)
+        self.line.setObjectName(u"line")
+        self.line.setMinimumSize(QSize(0, 0))
+        self.line.setFrameShape(QFrame.Shape.VLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_2.addWidget(self.line, 0, 2, 17, 1)
+
+        self.widget_equation = QWidget(self.widget_top)
+        self.widget_equation.setObjectName(u"widget_equation")
+        self.horizontalLayout_9 = QHBoxLayout(self.widget_equation)
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.label_vunit = QLabel(self.widget_equation)
+        self.label_vunit.setObjectName(u"label_vunit")
+
+        self.horizontalLayout_9.addWidget(self.label_vunit)
+
+        self.lineEdit_equationvu = QLineEdit(self.widget_equation)
+        self.lineEdit_equationvu.setObjectName(u"lineEdit_equationvu")
+
+        self.horizontalLayout_9.addWidget(self.lineEdit_equationvu)
+
+        self.label_unitv = QLabel(self.widget_equation)
+        self.label_unitv.setObjectName(u"label_unitv")
+
+        self.horizontalLayout_9.addWidget(self.label_unitv)
+
+        self.lineEdit_equationuv = QLineEdit(self.widget_equation)
+        self.lineEdit_equationuv.setObjectName(u"lineEdit_equationuv")
+
+        self.horizontalLayout_9.addWidget(self.lineEdit_equationuv)
+
+
+        self.gridLayout_2.addWidget(self.widget_equation, 7, 3, 1, 1)
+
+        self.pushButton_confirm = QPushButton(self.widget_top)
+        self.pushButton_confirm.setObjectName(u"pushButton_confirm")
+        self.pushButton_confirm.setMinimumSize(QSize(80, 30))
+        self.pushButton_confirm.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout_2.addWidget(self.pushButton_confirm, 15, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+
+        self.widget_path = QWidget(self.widget_top)
+        self.widget_path.setObjectName(u"widget_path")
+        self.horizontalLayout_10 = QHBoxLayout(self.widget_path)
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.path_line_edit = QLineEdit(self.widget_path)
+        self.path_line_edit.setObjectName(u"path_line_edit")
+        self.path_line_edit.setMinimumSize(QSize(0, 22))
+
+        self.horizontalLayout_10.addWidget(self.path_line_edit)
+
+        self.path_folder_browse = QPushButton(self.widget_path)
+        self.path_folder_browse.setObjectName(u"path_folder_browse")
+        self.path_folder_browse.setMinimumSize(QSize(70, 30))
+
+        self.horizontalLayout_10.addWidget(self.path_folder_browse)
+
+
+        self.gridLayout_2.addWidget(self.widget_path, 14, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.label_setpoint = QLabel(self.widget_top)
+        self.label_setpoint.setObjectName(u"label_setpoint")
+        self.label_setpoint.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_setpoint, 5, 0, 1, 1)
+
+        self.label_i_type = QLabel(self.widget_top)
+        self.label_i_type.setObjectName(u"label_i_type")
+
+        self.gridLayout_2.addWidget(self.label_i_type, 9, 1, 1, 1)
+
+        self.label_periody = QLabel(self.widget_top)
+        self.label_periody.setObjectName(u"label_periody")
+        self.label_periody.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_periody, 8, 0, 1, 1)
+
+        self.widget_setpoint = QWidget(self.widget_top)
+        self.widget_setpoint.setObjectName(u"widget_setpoint")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_setpoint)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.doubleSpinBox_setpoint = QDoubleSpinBox(self.widget_setpoint)
+        self.doubleSpinBox_setpoint.setObjectName(u"doubleSpinBox_setpoint")
+        self.doubleSpinBox_setpoint.setMinimumSize(QSize(100, 0))
+        self.doubleSpinBox_setpoint.setMaximumSize(QSize(100, 16777215))
+        self.doubleSpinBox_setpoint.setMaximum(9999999.000000000000000)
+        self.doubleSpinBox_setpoint.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_setpoint.setValue(5.000000000000000)
+
+        self.horizontalLayout_3.addWidget(self.doubleSpinBox_setpoint)
+
+        self.comboBox_setpoint = QComboBox(self.widget_setpoint)
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.addItem("")
+        self.comboBox_setpoint.setObjectName(u"comboBox_setpoint")
+        self.comboBox_setpoint.setMinimumSize(QSize(190, 0))
+        self.comboBox_setpoint.setMaximumSize(QSize(9000000, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.comboBox_setpoint)
+
+
+        self.gridLayout_2.addWidget(self.widget_setpoint, 5, 3, 1, 1)
+
+        self.label_save = QLabel(self.widget_top)
+        self.label_save.setObjectName(u"label_save")
+
+        self.gridLayout_2.addWidget(self.label_save, 13, 0, 1, 1)
+
+        self.label_kp = QLabel(self.widget_top)
+        self.label_kp.setObjectName(u"label_kp")
+        self.label_kp.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_kp, 10, 0, 1, 1)
+
+        self.widget_kd = QWidget(self.widget_top)
+        self.widget_kd.setObjectName(u"widget_kd")
+        self.horizontalLayout_5 = QHBoxLayout(self.widget_kd)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.doubleSpinBox_kd = QDoubleSpinBox(self.widget_kd)
+        self.doubleSpinBox_kd.setObjectName(u"doubleSpinBox_kd")
+        self.doubleSpinBox_kd.setSingleStep(0.100000000000000)
+
+        self.horizontalLayout_5.addWidget(self.doubleSpinBox_kd)
+
+
+        self.gridLayout_2.addWidget(self.widget_kd, 12, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.label_unit = QLabel(self.widget_top)
+        self.label_unit.setObjectName(u"label_unit")
+        self.label_unit.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.label_unit, 6, 0, 1, 1)
+
+        self.widget_save = QWidget(self.widget_top)
+        self.widget_save.setObjectName(u"widget_save")
+        self.horizontalLayout_12 = QHBoxLayout(self.widget_save)
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.yes_save_radio = QRadioButton(self.widget_save)
+        self.save_radio_group = QButtonGroup(Arduino_PID_Control)
+        self.save_radio_group.setObjectName(u"save_radio_group")
+        self.save_radio_group.addButton(self.yes_save_radio)
+        self.yes_save_radio.setObjectName(u"yes_save_radio")
+        self.yes_save_radio.setChecked(True)
+
+        self.horizontalLayout_12.addWidget(self.yes_save_radio)
+
+        self.no_save_radio = QRadioButton(self.widget_save)
+        self.save_radio_group.addButton(self.no_save_radio)
+        self.no_save_radio.setObjectName(u"no_save_radio")
+
+        self.horizontalLayout_12.addWidget(self.no_save_radio)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer)
+
+
+        self.gridLayout_2.addWidget(self.widget_save, 13, 3, 1, 1)
+
+        self.widget_unit = QWidget(self.widget_top)
+        self.widget_unit.setObjectName(u"widget_unit")
+        self.horizontalLayout = QHBoxLayout(self.widget_unit)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.lineEdit_unit = QLineEdit(self.widget_unit)
+        self.lineEdit_unit.setObjectName(u"lineEdit_unit")
+
+        self.horizontalLayout.addWidget(self.lineEdit_unit)
+
+
+        self.gridLayout_2.addWidget(self.widget_unit, 6, 3, 1, 1, Qt.AlignmentFlag.AlignVCenter)
+
+        self.label_i_equation = QLabel(self.widget_top)
+        self.label_i_equation.setObjectName(u"label_i_equation")
+        self.label_i_equation.setMaximumSize(QSize(24, 16777215))
+
+        self.gridLayout_2.addWidget(self.label_i_equation, 7, 1, 1, 1)
+
+        self.label_system_equation = QLabel(self.widget_top)
+        self.label_system_equation.setObjectName(u"label_system_equation")
+
+        self.gridLayout_2.addWidget(self.label_system_equation, 2, 0, 1, 1)
+
+        self.label_i_polinomial = QLabel(self.widget_top)
+        self.label_i_polinomial.setObjectName(u"label_i_polinomial")
+
+        self.gridLayout_2.addWidget(self.label_i_polinomial, 2, 1, 1, 1)
+
+        self.widget_polynomial = QWidget(self.widget_top)
+        self.widget_polynomial.setObjectName(u"widget_polynomial")
+        self.horizontalLayout_13 = QHBoxLayout(self.widget_polynomial)
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.label_numerator = QLabel(self.widget_polynomial)
+        self.label_numerator.setObjectName(u"label_numerator")
+
+        self.horizontalLayout_13.addWidget(self.label_numerator)
+
+        self.lineEdit_numerator = QLineEdit(self.widget_polynomial)
+        self.lineEdit_numerator.setObjectName(u"lineEdit_numerator")
+
+        self.horizontalLayout_13.addWidget(self.lineEdit_numerator)
+
+        self.label_denominator = QLabel(self.widget_polynomial)
+        self.label_denominator.setObjectName(u"label_denominator")
+
+        self.horizontalLayout_13.addWidget(self.label_denominator)
+
+        self.lineEdit_denominator = QLineEdit(self.widget_polynomial)
+        self.lineEdit_denominator.setObjectName(u"lineEdit_denominator")
+
+        self.horizontalLayout_13.addWidget(self.lineEdit_denominator)
+
+
+        self.gridLayout_2.addWidget(self.widget_polynomial, 2, 3, 1, 1)
 
 
         self.gridLayout.addWidget(self.widget_top, 2, 0, 1, 1)
@@ -734,21 +771,50 @@ class Ui_Arduino_PID_Control(object):
     def retranslateUi(self, Arduino_PID_Control):
         Arduino_PID_Control.setWindowTitle(QCoreApplication.translate("Arduino_PID_Control", u"Form", None))
         self.pushButton_start.setText(QCoreApplication.translate("Arduino_PID_Control", u"PID CONTROL", None))
-        self.comboBox_setpoint.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"Voltage (V)", None))
-        self.comboBox_setpoint.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"Temperature (C\u00b0)", None))
-        self.comboBox_setpoint.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"Other", None))
+        self.label_simulate.setText(QCoreApplication.translate("Arduino_PID_Control", u"Simulate?", None))
+        self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
+        self.label_arduino.setText(QCoreApplication.translate("Arduino_PID_Control", u"Arduino:", None))
+#if QT_CONFIG(tooltip)
+        self.label_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the for: Ax\u00b2+Bx+C</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p>Equation: </p></body></html>", None))
+        self.label_ki.setText(QCoreApplication.translate("Arduino_PID_Control", u"Ki:", None))
+        self.label_kd.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kd:", None))
+        self.reload_devices.setText("")
+        self.yes_simulate_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
+        self.no_simulate_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
+        self.comboBox_type.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"P", None))
+        self.comboBox_type.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"PI", None))
+        self.comboBox_type.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"PD", None))
+        self.comboBox_type.setItemText(3, QCoreApplication.translate("Arduino_PID_Control", u"PID", None))
 
+#if QT_CONFIG(tooltip)
+        self.label_type.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type? ", None))
         self.label_vunit.setText(QCoreApplication.translate("Arduino_PID_Control", u"V(Unit):", None))
         self.lineEdit_equationvu.setText(QCoreApplication.translate("Arduino_PID_Control", u"1*x", None))
         self.label_unitv.setText(QCoreApplication.translate("Arduino_PID_Control", u"Unit(V):", None))
         self.lineEdit_equationuv.setText(QCoreApplication.translate("Arduino_PID_Control", u"1*x", None))
+        self.pushButton_confirm.setText(QCoreApplication.translate("Arduino_PID_Control", u"Confirm", None))
+        self.path_folder_browse.setText(QCoreApplication.translate("Arduino_PID_Control", u"Browse", None))
+        self.label_setpoint.setText(QCoreApplication.translate("Arduino_PID_Control", u"Setpoint:", None))
+#if QT_CONFIG(tooltip)
+        self.label_i_type.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_i_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
+        self.label_periody.setText(QCoreApplication.translate("Arduino_PID_Control", u"Sampling period (s):", None))
+        self.comboBox_setpoint.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"Voltage (V)", None))
+        self.comboBox_setpoint.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"Temperature (C\u00b0)", None))
+        self.comboBox_setpoint.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"Other", None))
+
+        self.label_save.setText(QCoreApplication.translate("Arduino_PID_Control", u"Save Data?", None))
+        self.label_kp.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kp:", None))
+        self.label_unit.setText(QCoreApplication.translate("Arduino_PID_Control", u"Unit:", None))
         self.yes_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
         self.no_save_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
-        self.label_kd.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kd:", None))
-        self.label_arduino.setText(QCoreApplication.translate("Arduino_PID_Control", u"Arduino:", None))
-        self.label_kp.setText(QCoreApplication.translate("Arduino_PID_Control", u"Kp:", None))
 #if QT_CONFIG(tooltip)
-        self.label_i_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the for: Ax\u00b2+Bx+C</span></p></body></html>", None))
+        self.label_i_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p>The equation should be written as a polynomial, for example: A*x\u00b2+B*x+C</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.label_i_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -758,34 +824,14 @@ class Ui_Arduino_PID_Control(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Helvetica'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/imgs/imgs/inform.png\" /></p></body></html>", None))
-        self.label_path.setText(QCoreApplication.translate("Arduino_PID_Control", u"Data path:", None))
-        self.label_setpoint.setText(QCoreApplication.translate("Arduino_PID_Control", u"Setpoint:", None))
-        self.label_ki.setText(QCoreApplication.translate("Arduino_PID_Control", u"Ki:", None))
+        self.label_system_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"System Equation:", None))
 #if QT_CONFIG(tooltip)
-        self.label_i_type.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
+        self.label_i_polinomial.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">Transfer function of a polynomial system G(s) = N(s) / D(s), where N(s) and D(s) are polynomials in s.</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_i_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
-        self.reload_devices.setText("")
-        self.label_periody.setText(QCoreApplication.translate("Arduino_PID_Control", u"Sampling period (s):", None))
-#if QT_CONFIG(tooltip)
-        self.label_type.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/PID_Flow.png\"/></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_type.setText(QCoreApplication.translate("Arduino_PID_Control", u"Controler type? ", None))
-        self.path_folder_browse.setText(QCoreApplication.translate("Arduino_PID_Control", u"Browse", None))
-        self.label_save.setText(QCoreApplication.translate("Arduino_PID_Control", u"Save Data?", None))
-        self.label_unit.setText(QCoreApplication.translate("Arduino_PID_Control", u"Unit:", None))
-#if QT_CONFIG(tooltip)
-        self.label_equation.setToolTip(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><span style=\" font-size:14pt;\">The equation should be written in the for: Ax\u00b2+Bx+C</span></p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_equation.setText(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p>Equation: </p></body></html>", None))
-        self.pushButton_confirm.setText(QCoreApplication.translate("Arduino_PID_Control", u"Confirm", None))
-        self.comboBox_type.setItemText(0, QCoreApplication.translate("Arduino_PID_Control", u"P", None))
-        self.comboBox_type.setItemText(1, QCoreApplication.translate("Arduino_PID_Control", u"PI", None))
-        self.comboBox_type.setItemText(2, QCoreApplication.translate("Arduino_PID_Control", u"PD", None))
-        self.comboBox_type.setItemText(3, QCoreApplication.translate("Arduino_PID_Control", u"PID", None))
-
-        self.label_simulate.setText(QCoreApplication.translate("Arduino_PID_Control", u"Simulate?", None))
-        self.yes_simulate_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"Yes", None))
-        self.no_simulate_radio.setText(QCoreApplication.translate("Arduino_PID_Control", u"No", None))
+        self.label_i_polinomial.setText(QCoreApplication.translate("Arduino_PID_Control", u"<html><head/><body><p><img src=\":/imgs/imgs/inform.png\"/></p></body></html>", None))
+        self.label_numerator.setText(QCoreApplication.translate("Arduino_PID_Control", u"Numerator:", None))
+        self.lineEdit_numerator.setText(QCoreApplication.translate("Arduino_PID_Control", u"1", None))
+        self.label_denominator.setText(QCoreApplication.translate("Arduino_PID_Control", u"Denominator:", None))
+        self.lineEdit_denominator.setText(QCoreApplication.translate("Arduino_PID_Control", u"1*s+0.2", None))
     # retranslateUi
 

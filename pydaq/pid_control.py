@@ -1,6 +1,7 @@
 import os
 import time
 import numpy as np
+import sympy as sp
 
 import serial
 import serial.tools.list_ports
@@ -21,6 +22,8 @@ class PIDControl(Base):
         Ki, 
         Kd, 
         setpoint=0.0, 
+        numerator = '1',
+        denominator = 's+0.2',
         calibration_equation_vu = None, 
         calibration_equation_uv = None,
         unit='Voltage (V)', 
@@ -32,6 +35,8 @@ class PIDControl(Base):
         self.Kd = float(Kd)
         self.disturbe = 0
         self.setpoint = float(setpoint)
+        self.numerator = numerator
+        self.denominator = denominator
         self.calibration_equation_vu = calibration_equation_vu
         self.calibration_equation_uv = calibration_equation_uv
         self.integral = 0.0
@@ -152,9 +157,9 @@ class PIDControl(Base):
         self.time_elapsed = 0.0
         self.feedback_value = 0
         self.control = 0
-        
+
     def update_simulated_system(self):
-        self.system_value = self.system_output(self.feedback_value, self.control)         # Get the system response value
+        self.system_value = self.discrete_euler(self.numerator, self.denominator, self.period, self.feedback_value, self.control)  # Get the system response value by euler descritization of system
         # Print ('System value = ', self.system_value )
         self.feedback_value = self.system_value         # Get the feedback sensor value
         self.time_elapsed += self.period # Clock
@@ -170,8 +175,8 @@ class PIDControl(Base):
         self.time_var.append(self.time_elapsed)
         return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls
 
-    def system_output(self, y_prev, control): # System type 1/s+a
-        return (self.period * control + y_prev) / (1 + self.period * self.a) # Discretization by euler
+    #def system_output(self, y_prev, control): # System type 1/s+a
+    #    return (self.period * control + y_prev) / (1 + self.period * self.a) # Discretization by euler
 
     def calibrationvu(self, output):
         #print('A funcao foi chamada com ', output, 'e com a equacao ', self.calibration_equation_vu, 'do tipo ', type(output), ', ', type(self.calibration_equation))
@@ -185,20 +190,30 @@ class PIDControl(Base):
             #print('output_calibrated after equation.subs -> ', output_calibrated, ' do tipo ', type(output_calibrated))
             output_calibrated = float(output_calibrated)
             return output_calibrated
-        
+
     def calibrationuv(self, output):
-        print('A funcao foi chamada com ', output, 'e com a equacao ', self.calibration_equation_uv, 'do tipo ', type(output), ', ', type(self.calibration_equation_uv))
+        #print('A funcao foi chamada com ', output, 'e com a equacao ', self.calibration_equation_uv, 'do tipo ', type(output), ', ', type(self.calibration_equation_uv))
         if not self.calibration_equation_uv.strip():
-            print ('self.calibration_equation is ', self.calibration_equation_uv)
+            #print ('self.calibration_equation is ', self.calibration_equation_uv)
             return output
         else:
             equation = parse_expr(self.calibration_equation_uv)
-            print('equation after parse_expr -> ', equation)
+            #print('equation after parse_expr -> ', equation)
             output_calibrated = equation.subs('x', output) # X is the variable used
-            print('output_calibrated after equation.subs -> ', output_calibrated, ' do tipo ', type(output_calibrated))
+            #print('output_calibrated after equation.subs -> ', output_calibrated, ' do tipo ', type(output_calibrated))
             output_calibrated = float(output_calibrated)
             return output_calibrated
-        
+
+    def discrete_euler(self, numerador: str, denominador: str, period: float, y_prev: float, control: float) -> float:
+        s = sp.symbols('s')
+        num_expr = sp.sympify(numerador)
+        den_expr = sp.sympify(denominador)
+        H_s = num_expr / den_expr  
+        H_s_discrete = H_s.subs(s, (1 - sp.exp(-period)) / period)  
+        output_expr = H_s_discrete * control
+        output = float(output_expr.evalf()) + y_prev 
+        return output
+
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):
         if current_time_step % hold_time == 0:

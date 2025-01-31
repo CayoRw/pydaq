@@ -86,3 +86,11 @@ Proposta: Simulate in a radio group box                                        |
    - Step Response -> Simul step response / get pid parameters                 | 
    - PID Control -> Simul a control system                                     | 
 _______________________________________________________________________________| 
+Para o dia 03/02/25:                                                           |
+Implementação do ambiente virtual de controle:                                 |
+Sintonia dos parametros de controle:                                           |
+Escrita do artigo acadêmico                                                    |
+                                                                               |
+                                                                               |
+                                                                               | 
+                                                                               |

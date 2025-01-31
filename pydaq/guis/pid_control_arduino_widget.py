@@ -92,9 +92,15 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         if self.simulate is False: #Simulate = False
             self.widget_arduino.show()
             self.label_arduino.show()
+            self.widget_polynomial.hide()
+            self.label_system_equation.hide()
+            self.label_i_polinomial.hide()
         elif self.simulate is True: #Simulate = True
             self.widget_arduino.hide()
             self.label_arduino.hide()
+            self.widget_polynomial.show()
+            self.label_system_equation.show()
+            self.label_i_polinomial.show()
 
 #Enable the pid parameters inputs 
     def on_type_combo_changed(self, index):
@@ -157,12 +163,13 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             widget_to_remove = self.image_layout.itemAt(i).widget()
             self.image_layout.removeWidget(widget_to_remove)
             widget_to_remove.setParent(None)
-
         self.image_layout.addWidget(canvas)
 
 #Create the pid control window
     def show_graph_window(self):
         self.simulate = True if self.simulate_radio_group.checkedId() == -2 else False
+        self.numerator = self.lineEdit_numerator.text()
+        self.denominator = self.lineEdit_denominator.text()
         print('Simulated? ', self.simulate)
         if self.simulate == False:
             self.com_port = serial.tools.list_ports.comports()[
@@ -183,10 +190,9 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
         self.board = 'arduino'
         plot_window = PID_Control_Window_Dialog()
         plot_window.check_board(self.board, self.com_port, None, None, None, self.simulate)
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equationvu, self.equationuv, self.period, self.path, self.save)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.numerator, self.denominator, self.setpoint, self.unit, self.equationvu, self.equationuv, self.period, self.path, self.save)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
-
 
     def locate_path(self):  # Calling the Folder Browser Widget
         output_folder_path = QFileDialog.getExistingDirectory( #to locate the data path to armazenate
