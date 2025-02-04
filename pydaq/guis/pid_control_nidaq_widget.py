@@ -21,8 +21,9 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.on_unit_change()
         self.comboBox_setpoint.currentIndexChanged.connect(self.on_unit_change)
         self.on_type_combo_changed(0)
-        self.simulate_radio_group.buttonClicked.connect(self.on_simulate_change)
+        self.comboBox_type.currentIndexChanged.connect(self.on_type_combo_changed)
         self.on_simulate_change()
+        self.simulate_radio_group.buttonClicked.connect(self.on_simulate_change)
         self.pushButton_confirm.released.connect(self.show_pid_equation)
         self.pushButton_start.clicked.connect(self.show_graph_window)
         self.path_folder_browse.released.connect(self.locate_path)
@@ -97,6 +98,9 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             self.label_ao_channel.show()
             self.label_nidaq.show()
             self.label_terminal.show()
+            self.widget_polynomial.hide()
+            self.label_system_equation.hide()
+            self.label_i_polinomial.hide()
         elif self.simulate is True: #Simulate = True
             self.widget_ai_channel.hide()
             self.widget_ao_channel.hide()
@@ -106,6 +110,9 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
             self.label_ao_channel.hide()
             self.label_nidaq.hide()
             self.label_terminal.hide()
+            self.widget_polynomial.show()
+            self.label_system_equation.show()
+            self.label_i_polinomial.show()
 
     def on_type_combo_changed(self, index): # Enable the pid parameters inputs 
         if index == 0:  
@@ -123,6 +130,7 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.doubleSpinBox_kd.setEnabled(kd_enabled)
         if ki_enabled == False:
             self.doubleSpinBox_ki.setValue(0)
+            
         if kd_enabled == False:
             self.doubleSpinBox_kd.setValue(0)
 
@@ -166,6 +174,8 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
 # Create the pid control window
     def show_graph_window(self):
         self.simulate = True if self.simulate_radio_group.checkedId() == -2 else False
+        self.numerator = self.lineEdit_numerator.text()
+        self.denominator = self.lineEdit_denominator.text()
         print('Simulated? ', self.simulate)
         self.index = self.comboBox_type.currentIndex()
         self.setpoint = self.doubleSpinBox_setpoint.value()
@@ -182,7 +192,7 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.terminal = self.terminal_config_combo.currentText()
         plot_window = PID_Control_Window_Dialog()
         plot_window.check_board(self.board, self.device, self.ao_channel, self.ai_channel, self.terminal, self.simulate)
-        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.setpoint, self.unit, self.equationvu, self.equationuv, self.period, self.path, self.save)
+        plot_window.set_parameters(self.kp, self.ki, self.kd, self.index, self.numerator, self.denominator, self.setpoint, self.unit, self.equationvu, self.equationuv, self.period, self.path, self.save)
         plot_window.send_values.connect(self.update_values)
         plot_window.exec()
 

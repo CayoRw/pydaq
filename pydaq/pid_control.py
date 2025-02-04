@@ -151,6 +151,7 @@ class PIDControl(Base):
     def simulate_system(self):
         self.setpoints = []
         self.system_values = []
+        self.feedback_list = []
         self.errors = []
         self.controls = []
         self.time_var = [] 
@@ -159,17 +160,18 @@ class PIDControl(Base):
         self.control = 0
 
     def update_simulated_system(self):
-        self.system_value = self.discrete_euler(self.numerator, self.denominator, self.period, self.feedback_value, self.control)  # Get the system response value by euler descritization of system
+        self.system_value = self.discrete_tustin(self.numerator, self.denominator, self.period, self.feedback_list, self.controls, self.control)  # Get the system response value by euler descritization of system
         # Print ('System value = ', self.system_value )
         self.feedback_value = self.system_value         # Get the feedback sensor value
         self.time_elapsed += self.period # Clock
+        self.controls.append(self.control)         # Att the datas
         self.control, error = self.update(self.feedback_value)         # Get control value
         self.control = self.control - self.disturbe
         self.feedback_calibrated = self.calibrationuv(self.feedback_value)
         self.error_calibrated = self.calibrationuv(error)
-        self.controls.append(self.control)         # Att the datas
         self.errors.append(self.error_calibrated)
         #print('self.feedback_calibrated after self.calibration(self.feedback_value) -> ', self.feedback_calibrated, ' do tipo ', type(self.feedback_calibrated))
+        self.feedback_list.append(self.feedback_value)
         self.system_values.append(self.feedback_calibrated)
         self.setpoints.append(self.setpoint)
         self.time_var.append(self.time_elapsed)
@@ -211,8 +213,48 @@ class PIDControl(Base):
         H_s = num_expr / den_expr  
         H_s_discrete = H_s.subs(s, (1 - sp.exp(-period)) / period)  
         output_expr = H_s_discrete * control
-        output = float(output_expr.evalf()) + y_prev 
+        output = float(output_expr.evalf()) 
         return output
+    
+    import sympy as sp
+
+    def discrete_tustin(self, numerador: str, denominador: str, period: float, y_prev: list, u_prev: list, control: float) -> float:
+        s = sp.symbols('s')
+        num_expr = sp.sympify(numerador)
+        den_expr = sp.sympify(denominador)
+        H_s = num_expr / den_expr  # Função de transferência no contínuo
+        
+        # Transformada bilinear: s ≈ (2/T) * (z - 1) / (z + 1)
+        z = sp.symbols('z')
+        s_tustin = (2/period) * (z - 1) / (z + 1)
+        H_z = H_s.subs(s, s_tustin).simplify()  # Discretização
+        
+        # Obter coeficientes do numerador e denominador
+        H_z = sp.simplify(H_z)
+        num, den = sp.fraction(H_z)
+        num_coeffs = sp.Poly(num, z).all_coeffs()
+        den_coeffs = sp.Poly(den, z).all_coeffs()
+        
+        # Converter para valores numéricos
+        num_coeffs = [float(c) for c in num_coeffs]
+        den_coeffs = [float(c) for c in den_coeffs]
+        
+        # Normalizar os coeficientes pelo primeiro coeficiente do denominador
+        a0 = den_coeffs[0]
+        num_coeffs = [c / a0 for c in num_coeffs]
+        den_coeffs = [c / a0 for c in den_coeffs]
+        
+        # Garantir que y_prev e u_prev tenham o tamanho correto
+        ordem = len(den_coeffs) - 1  # Ordem do sistema
+        while len(y_prev) < ordem:
+            y_prev.insert(0, 0.0)  # Preenche com zeros se necessário
+        while len(u_prev) < ordem:
+            u_prev.insert(0, 0.0)
+        
+        # Aplicar a equação de diferenças
+        y_k = sum(b * u for b, u in zip(num_coeffs, [control] + u_prev)) - sum(a * y for a, y in zip(den_coeffs[1:], y_prev))
+        
+        return y_k
 
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):
