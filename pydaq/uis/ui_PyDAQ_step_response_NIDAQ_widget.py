@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_step_response_NIDAQ_widgetMRRzmp.ui'
+## Form generated from reading UI file 'PyDAQ_step_response_NIDAQ_widgetLQGpbw.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -18,13 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QButtonGroup, QComboBox,
     QDoubleSpinBox, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QRadioButton,
-    QSizePolicy, QWidget)
+    QSizePolicy, QSpacerItem, QWidget)
 
 class Ui_NIDAQ_StepResponse_W(object):
     def setupUi(self, NIDAQ_StepResponse_W):
         if not NIDAQ_StepResponse_W.objectName():
             NIDAQ_StepResponse_W.setObjectName(u"NIDAQ_StepResponse_W")
-        NIDAQ_StepResponse_W.resize(560, 646)
+        NIDAQ_StepResponse_W.resize(560, 652)
         NIDAQ_StepResponse_W.setStyleSheet(u"QComboBox QAbstractItemView {\n"
 "    background-color: rgb(77, 77, 77);\n"
 "}\n"
@@ -204,7 +204,32 @@ class Ui_NIDAQ_StepResponse_W(object):
 "\n"
 "QPushButton#reload_devices:pressed{\n"
 "	border: 2px solid rgb(255, 255, 255);\n"
-"}")
+"}\n"
+"\n"
+"QDoubleSpinBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px solid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px solid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"")
         self.gridLayout_12 = QGridLayout(NIDAQ_StepResponse_W)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.widget = QWidget(NIDAQ_StepResponse_W)
@@ -562,6 +587,19 @@ class Ui_NIDAQ_StepResponse_W(object):
 
         self.horizontalLayout_4.addWidget(self.no_pid_radio)
 
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer)
+
+        self.PID_comboBox = QComboBox(self.widget_15)
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.setObjectName(u"PID_comboBox")
+        self.PID_comboBox.setMinimumSize(QSize(60, 0))
+
+        self.horizontalLayout_4.addWidget(self.PID_comboBox, 0, Qt.AlignmentFlag.AlignRight)
+
 
         self.gridLayout.addWidget(self.widget_15, 10, 3, 1, 1, Qt.AlignmentFlag.AlignLeft)
 
@@ -584,6 +622,9 @@ class Ui_NIDAQ_StepResponse_W(object):
 
 
         self.retranslateUi(NIDAQ_StepResponse_W)
+
+        self.PID_comboBox.setCurrentIndex(0)
+
 
         QMetaObject.connectSlotsByName(NIDAQ_StepResponse_W)
     # setupUi
@@ -612,6 +653,10 @@ class Ui_NIDAQ_StepResponse_W(object):
         self.label_5.setText(QCoreApplication.translate("NIDAQ_StepResponse_W", u"Session duration (s):", None))
         self.yes_pid_radio.setText(QCoreApplication.translate("NIDAQ_StepResponse_W", u"Yes", None))
         self.no_pid_radio.setText(QCoreApplication.translate("NIDAQ_StepResponse_W", u"No", None))
+        self.PID_comboBox.setItemText(0, QCoreApplication.translate("NIDAQ_StepResponse_W", u"P", None))
+        self.PID_comboBox.setItemText(1, QCoreApplication.translate("NIDAQ_StepResponse_W", u"PI", None))
+        self.PID_comboBox.setItemText(2, QCoreApplication.translate("NIDAQ_StepResponse_W", u"PID", None))
+
         self.start_step_response.setText(QCoreApplication.translate("NIDAQ_StepResponse_W", u"STEP RESPONSE", None))
     # retranslateUi
 

@@ -2,7 +2,6 @@ import os
 import time
 import numpy as np
 import sympy as sp
-
 import serial
 import serial.tools.list_ports
 from pydaq.utils.base import Base
@@ -216,7 +215,7 @@ class PIDControl(Base):
         output = float(output_expr.evalf()) 
         return output
     
-    import sympy as sp
+
 
     def discrete_tustin(self, numerador: str, denominador: str, period: float, y_prev: list, u_prev: list, control: float) -> float:
         s = sp.symbols('s')

@@ -66,6 +66,9 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
         self.start_step_response.released.connect(self.start_func_step_response)
         self.device_combo.currentIndexChanged.connect(self.update_channels)
         self.reload_devices.released.connect(self.reload_devices_handler)
+        self.pidshow()
+        self.parameters_radio_group.buttonClicked.connect(self.pidshow)
+
         self.signals = GuiSignals()
 
     def start_func_step_response(self):
@@ -90,6 +93,8 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
             s.plot = True if self.plot_radio_group.checkedId() == -2 else False
             s.save = True if self.save_radio_group.checkedId() == -2 else False
             s.path = self.path_line_edit.text()
+            s.pid_parameters = self.enabled
+            s.sintony_type = self.sintony_type
             s.error_path = False
 
         except BaseException:
@@ -179,3 +184,17 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
 
         # Reconnecting the signal
         self.device_combo.currentIndexChanged.connect(self.update_channels)
+
+    def pidshow(self):
+        self.enabled = True if self.parameters_radio_group.checkedId() == -2 else False
+        if self.enabled is False: #Simulate = False
+            self.PID_comboBox.setEnabled(False)
+        else:
+            self.PID_comboBox.setEnabled(True)
+
+    def get_sintony_type(self):
+        if self.PID_comboBox.isEnabled():
+            self.sintony_type = self.PID_comboBox.currentIndex() # Can be 0, 1 or 2
+        else:
+            self.sintony_type = None # None if desabled
+    

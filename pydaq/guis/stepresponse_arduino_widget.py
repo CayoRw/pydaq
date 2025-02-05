@@ -20,6 +20,9 @@ class StepResponse_Arduino_Widget(QWidget, Ui_Arduino_StepResponse_W):
         self.reload_devices.released.connect(self.update_com_ports)
         self.path_folder_browse.released.connect(self.locate_path)
         self.start_step_response.released.connect(self.start_func_step_response)
+        self.pidshow()
+        self.parameters_radio_group.buttonClicked.connect(self.pidshow)
+
         self.signals = GuiSignals()
 
         # Setting the starting values for some widgets
@@ -80,3 +83,16 @@ class StepResponse_Arduino_Widget(QWidget, Ui_Arduino_StepResponse_W):
         except BaseException:
             error_w = Error_window()
             error_w.exec()
+
+    def pidshow(self):
+        self.enabled = True if self.parameters_radio_group.checkedId() == -2 else False
+        if self.enabled is False: #Simulate = False
+            self.PID_comboBox.setEnabled(False)
+        else:
+            self.PID_comboBox.setEnabled(True)
+
+    def get_sintony_type(self):
+        if self.PID_comboBox.isEnabled():
+            self.sintony_type = self.PID_comboBox.currentIndex() # Can be 0, 1 or 2
+        else:
+            self.sintony_type = None # None if desabled

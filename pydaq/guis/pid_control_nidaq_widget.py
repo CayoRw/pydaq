@@ -130,7 +130,6 @@ class PID_Control_NIDAQ_Widget(QWidget, Ui_NIDAQ_PID_Control):
         self.doubleSpinBox_kd.setEnabled(kd_enabled)
         if ki_enabled == False:
             self.doubleSpinBox_ki.setValue(0)
-            
         if kd_enabled == False:
             self.doubleSpinBox_kd.setValue(0)
 

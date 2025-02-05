@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>646</height>
+    <height>652</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -189,7 +189,32 @@ QPushButton#reload_devices:hover{
 
 QPushButton#reload_devices:pressed{
 	border: 2px solid rgb(255, 255, 255);
-}</string>
+}
+
+QDoubleSpinBox:disabled {
+    background-color: rgb(50, 50, 50);
+    
+    border-top: 1.5px solid rgb(30, 30, 30);
+    border-left: 1.5px solid rgb(30, 30, 30);
+    
+    border-bottom: 1.5px solid rgb(100, 100, 100);
+    border-right: 1.5px solid rgb(100, 100, 100);
+    
+    color: rgb(150, 150, 150);
+}
+
+QComboBox:disabled {
+    background-color: rgb(50, 50, 50);
+    
+    border-top: 1.5px solid rgb(30, 30, 30);
+    border-left: 1.5px solid rgb(30, 30, 30);
+    
+    border-bottom: 1.5px solid rgb(100, 100, 100);
+    border-right: 1.5px solid rgb(100, 100, 100);
+    
+    color: rgb(150, 150, 150);
+}
+</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_12">
    <item row="0" column="0">
@@ -854,6 +879,47 @@ QPushButton#reload_devices:pressed{
            <attribute name="buttonGroup">
             <string notr="true">parameters_radio_group</string>
            </attribute>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item alignment="Qt::AlignmentFlag::AlignRight">
+          <widget class="QComboBox" name="PID_comboBox">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>P</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PI</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PID</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

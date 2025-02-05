@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'PyDAQ_step_response_Arduino_widgetXhmdiR.ui'
+## Form generated from reading UI file 'PyDAQ_step_response_Arduino_widgetkreCrW.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -18,13 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QButtonGroup, QComboBox,
     QDoubleSpinBox, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QRadioButton,
-    QSizePolicy, QWidget)
+    QSizePolicy, QSpacerItem, QWidget)
 
 class Ui_Arduino_StepResponse_W(object):
     def setupUi(self, Arduino_StepResponse_W):
         if not Arduino_StepResponse_W.objectName():
             Arduino_StepResponse_W.setObjectName(u"Arduino_StepResponse_W")
-        Arduino_StepResponse_W.resize(603, 442)
+        Arduino_StepResponse_W.resize(603, 448)
         Arduino_StepResponse_W.setStyleSheet(u"QComboBox QAbstractItemView {\n"
 "    background-color: rgb(77, 77, 77);\n"
 "}\n"
@@ -204,7 +204,33 @@ class Ui_Arduino_StepResponse_W(object):
 "\n"
 "QPushButton#reload_devices:pressed{\n"
 "	border: 2px solid rgb(255, 255, 255);\n"
-"}")
+"}\n"
+"\n"
+"QDoubleSpinBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px solid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color: rgb(50, 50, 50);\n"
+"    \n"
+"    border-top: 1.5px solid rgb(30, 30, 30);\n"
+"    border-left: 1.5px solid rgb(30, 30, 30);\n"
+"    \n"
+"    border-bottom: 1.5px solid rgb(100, 100, 100);\n"
+"    border-right: 1.5px solid rgb(100, 100, 100);\n"
+"    \n"
+"    color: rgb(150, 150, 150);\n"
+"}\n"
+"\n"
+"")
         self.gridLayout_3 = QGridLayout(Arduino_StepResponse_W)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.widget = QWidget(Arduino_StepResponse_W)
@@ -432,6 +458,19 @@ class Ui_Arduino_StepResponse_W(object):
 
         self.horizontalLayout.addWidget(self.no_pid_radio)
 
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.PID_comboBox = QComboBox(self.widget_2)
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.addItem("")
+        self.PID_comboBox.setObjectName(u"PID_comboBox")
+        self.PID_comboBox.setMinimumSize(QSize(60, 0))
+
+        self.horizontalLayout.addWidget(self.PID_comboBox, 0, Qt.AlignmentFlag.AlignRight)
+
 
         self.gridLayout_2.addWidget(self.widget_2, 6, 3, 1, 1, Qt.AlignmentFlag.AlignLeft)
 
@@ -479,6 +518,10 @@ class Ui_Arduino_StepResponse_W(object):
         self.label.setText(QCoreApplication.translate("Arduino_StepResponse_W", u"Get PID Parameters?", None))
         self.yes_pid_radio.setText(QCoreApplication.translate("Arduino_StepResponse_W", u"Yes", None))
         self.no_pid_radio.setText(QCoreApplication.translate("Arduino_StepResponse_W", u"No", None))
+        self.PID_comboBox.setItemText(0, QCoreApplication.translate("Arduino_StepResponse_W", u"P", None))
+        self.PID_comboBox.setItemText(1, QCoreApplication.translate("Arduino_StepResponse_W", u"PI", None))
+        self.PID_comboBox.setItemText(2, QCoreApplication.translate("Arduino_StepResponse_W", u"PID", None))
+
         self.start_step_response.setText(QCoreApplication.translate("Arduino_StepResponse_W", u"STEP RESPONSE", None))
     # retranslateUi
 

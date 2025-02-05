@@ -1,55 +1,100 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
 
-def identificar_parametros(a, b):
-    """Identifica K, L e T de um sistema a partir da resposta ao degrau."""
+def get_parameters(time, voltage, system_value, step_time,type_sintony):
+    # Estimativa do ganho estático k
+    k = (system_value[-1] - system_value[0]) / (voltage[-1] - 0)
+
+    # Cálculo da derivada
+    derivative = np.gradient(system_value, time)
     
-    # Determinar K (ganho do sistema)
-    K = (b[-1] - b[0])  # Supondo entrada de 1 unidade de amplitude no degrau
+    # Encontrando o índice do máximo valor absoluto da derivada
+    max_derivative_idx = np.argmax(np.abs(derivative))
     
-    # Aproximação da derivada para encontrar o maior crescimento (ponto de inflexão)
-    derivada = np.gradient(b, a)
-    idx_max_derivada = np.argmax(derivada)
+    # Obtendo os valores correspondentes
+    time_inflection = time[max_derivative_idx]
+    sys_inflection = system_value[max_derivative_idx]
+    
+    # Ajustando reta tangente na inflexão
+    slope = derivative[max_derivative_idx]
+    intercept = sys_inflection - slope * time_inflection
+    
+    # Encontrando L e T
+    L = (step_time - (-intercept / slope)) if step_time > 0 else (-intercept / slope)
+    T = (k - intercept) / slope - step_time - L  # Ajuste para `step_time`
+    print(f"L: {L}, T: {T}")
 
-    # Ponto da maior inclinação
-    t_inf = a[idx_max_derivada]
-    b_inf = b[idx_max_derivada]
+    if type_sintony == 0:  # P Controler
+        Kp = (T / L)
+        Ki = 0
+        Kd = 0
+    elif type_sintony == 1: # PI Controler
+        Kp = 0.9 * (T / L)
+        Ti = L / 0.3 
+        Ki = Kp / Ti
+        Kd = 0
+    elif type_sintony == 2: # PID Controler
+        Kp = 1.2 * (T / L)
+        Ti = 2 * L
+        Ki = Kp / Ti
+        Td = 0.5 * L
+        Kd = Kp * Td
 
-    # Ajuste da reta tangente na maior inclinação
-    coef_ang = derivada[idx_max_derivada]
-    reta_tangente = lambda t: coef_ang * (t - t_inf) + b_inf
+    return Kp, Ki, Kd, slope, intercept, time_inflection, sys_inflection
 
-    # Encontrar L (tempo de atraso) - interseção da reta tangente com o eixo zero
-    L = t_inf - (b_inf / coef_ang)
 
-    # Encontrar T (constante de tempo) - quando a reta tangente atinge 63% de K
-    T = (b[0] + 0.632 * K - b_inf) / coef_ang + t_inf
+pid_parameters = True
 
-    # Cálculo dos parâmetros PID pelo método de Ziegler-Nichols
-    Kp = 1.2 * (T / L) * K
-    Ki = Kp / (2 * L)
-    Kd = 0.5 * Kp * L
+# Lista corrigida para o tempo (time)
+time = [
+    1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0,
+    11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0,
+    21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30, 31, 32, 33
+]
 
-    return K, L, T, Kp, Ki, Kd
+# Lista corrigida para a voltagem (voltage)
+voltage = [10.0] * len(time)  # Criando uma lista de 10.0 com o mesmo tamanho de `time`
 
-# Exemplo de uso
-a = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])  # Vetor de tempo
-b = np.array([0, 2, 4, 5, 6, 6.5, 7, 7.4, 7.8, 8])  # Resposta ao degrau
+# Lista corrigida para os valores do sistema (system_value)
+system_value = [
+    0.0, 0, 0, 0, 0, 2.4000000000000004, 3.8240000000000003, 5.0022400000000005, 5.954662400000001,
+    6.725633024, 7.3496675942400005, 7.8547726925824, 8.263613950132223, 8.594537509803786,
+    8.862393065456166, 9.079200230138838, 9.254687897523764, 9.396730811323613,
+    9.511702932506896, 9.604763461158186, 9.680088347780497, 9.741057682759505,
+    9.790407372808446, 9.830351910644799, 9.862683747002384, 9.888853724147603,
+    9.910036180232275, 9.927181645942433, 9.94105949812554, 9.952292484413107,
+    9.961384668078983, 9.968744047116552, 9.974700862531739
+]
 
-K, L, T, Kp, Ki, Kd = identificar_parametros(a, b)
+# Definição de valores adicionais
+step_time = 5
+type_sintony = 0
 
-print(f"K = {K:.4f}")
-print(f"L = {L:.4f}")
-print(f"T = {T:.4f}")
-print(f"Kp = {Kp:.4f}, Ki = {Ki:.4f}, Kd = {Kd:.4f}")
+# Verifica se deve calcular os parâmetros do PIDs
+if pid_parameters:
+    # A função `get_parameters` precisa ser implementada!
+    try:
+        Kp, Ki, Kd, slope, intercept, time_inflection, sys_inflection = get_parameters(time, voltage, system_value, step_time, type_sintony)
+        parameters = [Kp, Ki, Kd]
+        print (parameters)
+    except NameError:
+        print("Erro: A função get_parameters não foi definida.")
+        parameters = None
+else:
+    parameters = 0
 
-# Plot do gráfico
-plt.plot(a, b, label="Resposta ao degrau")
-plt.axvline(L, color="r", linestyle="--", label="L (Atraso)")
-plt.axvline(T, color="g", linestyle="--", label="T (Constante de tempo)")
-plt.xlabel("Tempo (s)")
-plt.ylabel("Saída")
+setpoint = voltage[0]
+
+# Tangent Line (y = mx + b)
+tangent_line = [slope * t + intercept for t in time]
+
+# Plotting
+plt.plot(time, system_value, 'o', label="System Response")
+plt.plot(time, tangent_line, label="Tangent Line at Inflexion", linestyle='--')
+plt.axhline(y=setpoint, color='r', linestyle='-', label=f"Setpoint ({setpoint})")
+plt.xlabel('Time (s)')
+plt.ylabel('System Value')
+plt.title(f'System Response vs PID Model (Kp={Kp:.2f}, Ki={Ki:.2f}, Kd={Kd:.2f})')
 plt.legend()
-plt.grid()
+plt.grid(True)
 plt.show()

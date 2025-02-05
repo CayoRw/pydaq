@@ -34,8 +34,6 @@ class StepResponse(Base):
          step_max: maximum step value
          terminal: 'Diff', 'RSE' or 'NRSE': terminal configuration (differential, referenced single ended or non-referenced single ended)
          plot: if True, plot data iteractively as they are sent/acquired
-
-
     """
 
     def __init__(
@@ -63,6 +61,9 @@ class StepResponse(Base):
         self.ao_channel = ao_channel
         self.step_min = step_min
         self.step_max = step_max
+        self.parameters = []
+        self.sintony_type = None
+        self.pid_parameters = False
 
         # Terminal configuration
         self.terminal = self.term_map[terminal]
@@ -284,6 +285,11 @@ class StepResponse(Base):
         task_ao.close()
         task_ai.close()
 
+        if self.pid_parameters:
+            Kp, Ki, Kd = self.get_parameters(self.time_var,self.input,self.output,self.step_time,self.sintony_type)
+        else:
+            self.parameters = [Kp, Ki, Kd]
+
         # Check if data will or not be saved, and save accordingly
         if self.save:
             print("\nSaving data ...")
@@ -291,5 +297,48 @@ class StepResponse(Base):
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.input, "input.dat")
             self._save_data(self.output, "output.dat")
+            if self.parameters:
+                self._save_data(self.parameters, "parameters.dat")
             print("\nData saved ...")
         return
+
+    def get_parameters(time, voltage, system_value, step_time,type_sintony):
+            # Estimativa do ganho estático k
+            k = (system_value[-1] - system_value[0]) / (voltage[-1] - 0)
+
+            # Cálculo da derivada
+            derivative = np.gradient(system_value, time)
+            
+            # Encontrando o índice do máximo valor absoluto da derivada
+            max_derivative_idx = np.argmax(np.abs(derivative))
+            
+            # Obtendo os valores correspondentes
+            time_inflection = time[max_derivative_idx]
+            sys_inflection = system_value[max_derivative_idx]
+            
+            # Ajustando reta tangente na inflexão
+            slope = derivative[max_derivative_idx]
+            intercept = sys_inflection - slope * time_inflection
+            
+            # Encontrando L e T
+            L = (step_time - (-intercept / slope)) if step_time > 0 else (-intercept / slope)
+            T = (k - intercept) / slope - step_time - L  # Ajuste para `step_time`
+            print(f"L: {L}, T: {T}")
+
+            if type_sintony == 0:  # P Controler
+                Kp = (T / L)
+                Ki = 0
+                Kd = 0
+            elif type_sintony == 1: # PI Controler
+                Kp = 0.9 * (T / L)
+                Ti = L / 0.3 
+                Ki = Kp / Ti
+                Kd = 0
+            elif type_sintony == 2: # PID Controler
+                Kp = 1.2 * (T / L)
+                Ti = 2 * L
+                Ki = Kp / Ti
+                Td = 0.5 * L
+                Kd = Kp * Td
+
+            return Kp, Ki, Kd
