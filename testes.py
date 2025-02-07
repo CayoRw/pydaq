@@ -1,43 +1,28 @@
-import sympy as sp
+import numpy as np
 
-def discrete_euler(numerador: str, denominador: str, period: float, y_prev: float, control: float) -> float:
-    s = sp.symbols('s')
+def simple_discrete_control(period: float, y_prev: list, u_prev: list, control: float) -> float:
+    # Simples modelo discreto de controle: y[k+1] = a * y[k] + b * u[k]
+    a = 0.5  # Coeficiente de amortecimento (pode ser ajustado)
+    b = 1.0  # Coeficiente de ganho do controle (pode ser ajustado)
+    
+    # Calcular a saída y[k+1] com base na entrada control (u[k])
+    y_new = a * y_prev[-1] + b * control  # Saída dependente da entrada de controle
+    
+    return y_new
 
-    # Criar função de transferência
-    num_expr = sp.sympify(numerador)
-    den_expr = sp.sympify(denominador)
+# Exemplo de teste
+period = 1.0
+y_prev = [0.0]
+u_prev = [0.0]
+controls = [0, 1, 2, 3, 4, 5]
+outputs = []
 
-    H_s = num_expr / den_expr  # Função de transferência H(s)
+for control in controls:
+    y_k = simple_discrete_control(period, y_prev, u_prev, control)
+    y_prev.append(y_k)
+    y_prev = y_prev[-1:]  # Mantém apenas o último valor de y
+    u_prev.append(control)
+    u_prev = u_prev[-1:]  # Mantém apenas o último valor de u
+    outputs.append(y_k)
 
-    # Aproximação de Euler: s ≈ (y[k] - y[k-1]) / T
-    H_s_discrete = H_s.subs(s, (1 - sp.exp(-period)) / period)  
-
-    # Multiplicar pelo controle (entrada do sistema)
-    output_expr = H_s_discrete * control
-
-    # Avaliar a expressão numérica para obter a saída
-    output = float(output_expr.evalf()) + y_prev  # Aproximação da resposta
-
-    return output
-
-# Definição dos parâmetros
-setpoint = 5
-numerador = 's+3'   
-denominador = 's**2+10*s+20'
-period = 0.05
-saida = 0
-y_prev = 0
-Kp = 10
-Kd = 1
-error = setpoint - saida
-control = error * Kp + (saida - y_prev) * Kd
-count = 0
-
-while count <= 100:    
-    # Cálculo da saída
-    saida = discrete_euler(numerador, denominador, period, y_prev, control)
-    error = setpoint - saida
-    control = error * Kp + (saida - y_prev) * Kd
-    print(saida)
-    y_prev = saida
-    count += 1
+print("\nOutputs finais:", outputs)

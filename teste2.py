@@ -1,100 +1,53 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import scipy.signal as signal
+import sympy as sp
 
-def get_parameters(time, voltage, system_value, step_time,type_sintony):
-    # Estimativa do ganho estático k
-    k = (system_value[-1] - system_value[0]) / (voltage[-1] - 0)
+def parse_polynomial(poly_str):
+    s = sp.symbols('s')
+    poly_expr = sp.sympify(poly_str)
+    coeffs = sp.Poly(poly_expr, s).all_coeffs()
+    return [float(c) for c in coeffs]
 
-    # Cálculo da derivada
-    derivative = np.gradient(system_value, time)
-    
-    # Encontrando o índice do máximo valor absoluto da derivada
-    max_derivative_idx = np.argmax(np.abs(derivative))
-    
-    # Obtendo os valores correspondentes
-    time_inflection = time[max_derivative_idx]
-    sys_inflection = system_value[max_derivative_idx]
-    
-    # Ajustando reta tangente na inflexão
-    slope = derivative[max_derivative_idx]
-    intercept = sys_inflection - slope * time_inflection
-    
-    # Encontrando L e T
-    L = (step_time - (-intercept / slope)) if step_time > 0 else (-intercept / slope)
-    T = (k - intercept) / slope - step_time - L  # Ajuste para `step_time`
-    print(f"L: {L}, T: {T}")
+# Função para determinar a ordem do polinômio
+def get_order(poly_str):
+    s = sp.symbols('s')
+    poly_expr = sp.sympify(poly_str)
+    return sp.degree(poly_expr, s)
 
-    if type_sintony == 0:  # P Controler
-        Kp = (T / L)
-        Ki = 0
-        Kd = 0
-    elif type_sintony == 1: # PI Controler
-        Kp = 0.9 * (T / L)
-        Ti = L / 0.3 
-        Ki = Kp / Ti
-        Kd = 0
-    elif type_sintony == 2: # PID Controler
-        Kp = 1.2 * (T / L)
-        Ti = 2 * L
-        Ki = Kp / Ti
-        Td = 0.5 * L
-        Kd = Kp * Td
+# Definição do numerador e denominador
+numerador_str = '1'  # Pode ser de qualquer grau, como 2*s**2 + 3*s + 1, etc.
+denominador_str = 's + 0.1'  # Também pode ser de qualquer grau, como 3*s**2 + 4*s + 2, etc.
 
-    return Kp, Ki, Kd, slope, intercept, time_inflection, sys_inflection
+numerador = parse_polynomial(numerador_str)
+denominador = parse_polynomial(denominador_str)
 
+# Exibindo os coeficientes do numerador e denominador
+print(f"Coeficientes do numerador: {numerador}")
+print(f"Coeficientes do denominador: {denominador}")
 
-pid_parameters = True
+# Amostragem e transformação bilinear
+T = 0.01
+numerador_discreto, denominador_discreto = signal.bilinear(numerador, denominador, fs=1/T)
 
-# Lista corrigida para o tempo (time)
-time = [
-    1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0,
-    11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0,
-    21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30, 31, 32, 33
-]
+# Exibindo os coeficientes discretizados
+print("Numerador discreto:", numerador_discreto)
+print("Denominador discreto:", denominador_discreto)
 
-# Lista corrigida para a voltagem (voltage)
-voltage = [10.0] * len(time)  # Criando uma lista de 10.0 com o mesmo tamanho de `time`
+# Inicializando as listas de entrada (u_k) e saída (y_k)
+y_k = [0] * 50  # Lista para valores de saída (10 valores)
+u_k = [1] * 50  # Lista para valores de entrada (10 valores)
 
-# Lista corrigida para os valores do sistema (system_value)
-system_value = [
-    0.0, 0, 0, 0, 0, 2.4000000000000004, 3.8240000000000003, 5.0022400000000005, 5.954662400000001,
-    6.725633024, 7.3496675942400005, 7.8547726925824, 8.263613950132223, 8.594537509803786,
-    8.862393065456166, 9.079200230138838, 9.254687897523764, 9.396730811323613,
-    9.511702932506896, 9.604763461158186, 9.680088347780497, 9.741057682759505,
-    9.790407372808446, 9.830351910644799, 9.862683747002384, 9.888853724147603,
-    9.910036180232275, 9.927181645942433, 9.94105949812554, 9.952292484413107,
-    9.961384668078983, 9.968744047116552, 9.974700862531739
-]
+# Laço para calcular os valores de y_k com base em u_k
+for k in range(max(len(numerador_discreto), len(denominador_discreto)), len(u_k)):
+    # Calculando a saída y_k de forma generalizada
+    y_k[k] = sum([numerador_discreto[i] * u_k[k - i - 1] for i in range(len(numerador_discreto))]) - \
+              sum([denominador_discreto[i] * y_k[k - i - 1] for i in range(1, len(denominador_discreto))])
 
-# Definição de valores adicionais
-step_time = 5
-type_sintony = 0
+    # Exemplo: alterando u_k para uma entrada variável
+    u_k[k] = 1  # Você pode mudar isso conforme necessário
 
-# Verifica se deve calcular os parâmetros do PIDs
-if pid_parameters:
-    # A função `get_parameters` precisa ser implementada!
-    try:
-        Kp, Ki, Kd, slope, intercept, time_inflection, sys_inflection = get_parameters(time, voltage, system_value, step_time, type_sintony)
-        parameters = [Kp, Ki, Kd]
-        print (parameters)
-    except NameError:
-        print("Erro: A função get_parameters não foi definida.")
-        parameters = None
-else:
-    parameters = 0
+# Exibindo os resultados
+print("Valores de y_k:", y_k)
+print("Valores de u_k:", u_k)
 
-setpoint = voltage[0]
-
-# Tangent Line (y = mx + b)
-tangent_line = [slope * t + intercept for t in time]
-
-# Plotting
-plt.plot(time, system_value, 'o', label="System Response")
-plt.plot(time, tangent_line, label="Tangent Line at Inflexion", linestyle='--')
-plt.axhline(y=setpoint, color='r', linestyle='-', label=f"Setpoint ({setpoint})")
-plt.xlabel('Time (s)')
-plt.ylabel('System Value')
-plt.title(f'System Response vs PID Model (Kp={Kp:.2f}, Ki={Ki:.2f}, Kd={Kd:.2f})')
-plt.legend()
-plt.grid(True)
-plt.show()
+def get_system_value()

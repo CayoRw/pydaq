@@ -90,7 +90,12 @@ Para o dia 03/02/25:                                                           |
 Implementação do ambiente virtual de controle:                                 |
 Sintonia dos parametros de controle:                                           |
 Escrita do artigo acadêmico                                                    |
-                                                                               |
-                                                                               |
-                                                                               | 
-                                                                               |
+_______________________________________________________________________________|
+Next steps:                                                                    |
+- Finish Sintony parameters                                                    |  
+-> plot line curve                                                             | - 30min -> can't
+-> have 2 type of sintony                                                      | - 1hr 
+- Finish simulated system (make sure all works)                                | - 1hr
+-> Plot and understand calibration curve                                       | - 1hr
+Do the control                                                                 | - 1hr
+Rewrite the report!                                                            | - 4hr

@@ -2,6 +2,8 @@ import os
 import time
 import numpy as np
 import sympy as sp
+from scipy.signal import dlti, dlsim
+import scipy.signal as signal
 import serial
 import serial.tools.list_ports
 from pydaq.utils.base import Base
@@ -158,8 +160,22 @@ class PIDControl(Base):
         self.feedback_value = 0
         self.control = 0
 
+        numerator_cont = self.parse_polynomial(self.numerator)
+        denominator_cont = self.parse_polynomial(self.denominator)
+        
+        print(f"Coeficientes do numerador: {numerator_cont}")
+        print(f"Coeficientes do denominador: {denominator_cont}")
+
+        self.system_cont = signal.TransferFunction(numerator_cont, denominator_cont)
+
     def update_simulated_system(self):
-        self.system_value = self.discrete_tustin(self.numerator, self.denominator, self.period, self.feedback_list, self.controls, self.control)  # Get the system response value by euler descritization of system
+        ordem = max(len(self.feedback_list), len(self.controls))  # Estimativa da ordem do sistema
+        while len(self.feedback_list) < ordem:
+            self.feedback_list.insert(0, 0.0)  # Preenche com zeros
+        while len(self.controls) < ordem:
+            self.controls.insert(0, 0.0)
+
+        _, self.system_value = self.get_value_simulate_system(self.system_cont, self.period, self.control, self.feedback_value)  # Get the system response value by euler descritization of system
         # Print ('System value = ', self.system_value )
         self.feedback_value = self.system_value         # Get the feedback sensor value
         self.time_elapsed += self.period # Clock
@@ -205,6 +221,12 @@ class PIDControl(Base):
             output_calibrated = float(output_calibrated)
             return output_calibrated
 
+    def parse_polynomial(self, poly_str):
+        s = sp.symbols('s')
+        poly_expr = sp.sympify(poly_str)
+        coeffs = sp.Poly(poly_expr, s).all_coeffs()
+        return [float(c) for c in coeffs]
+
     def discrete_euler(self, numerador: str, denominador: str, period: float, y_prev: float, control: float) -> float:
         s = sp.symbols('s')
         num_expr = sp.sympify(numerador)
@@ -215,21 +237,63 @@ class PIDControl(Base):
         output = float(output_expr.evalf()) 
         return output
     
-
-
     def discrete_tustin(self, numerador: str, denominador: str, period: float, y_prev: list, u_prev: list, control: float) -> float:
         s = sp.symbols('s')
         num_expr = sp.sympify(numerador)
         den_expr = sp.sympify(denominador)
         H_s = num_expr / den_expr  # Função de transferência no contínuo
-        
+
         # Transformada bilinear: s ≈ (2/T) * (z - 1) / (z + 1)
         z = sp.symbols('z')
         s_tustin = (2/period) * (z - 1) / (z + 1)
         H_z = H_s.subs(s, s_tustin).simplify()  # Discretização
-        
+
         # Obter coeficientes do numerador e denominador
         H_z = sp.simplify(H_z)
+        num, den = sp.fraction(H_z)
+        num_coeffs = sp.Poly(num, z).all_coeffs()
+        den_coeffs = sp.Poly(den, z).all_coeffs()
+
+        # Converter para valores numéricos
+        num_coeffs = [float(c) for c in num_coeffs]
+        den_coeffs = [float(c) for c in den_coeffs]
+
+        # Normalizar os coeficientes pelo primeiro coeficiente do denominador
+        a0 = den_coeffs[0]
+        num_coeffs = [c / a0 for c in num_coeffs]
+        den_coeffs = [c / a0 for c in den_coeffs]
+
+        # Garantir que y_prev e u_prev tenham o tamanho correto
+        ordem = len(den_coeffs) - 1  # Ordem do sistema
+        while len(y_prev) < ordem:
+            y_prev.insert(0, 0.0)  # Preenche com zeros se necessário
+        while len(u_prev) < ordem:
+            u_prev.insert(0, 0.0)
+
+        # Aplicar a equação de diferenças
+        y_k = sum(b * u for b, u in zip(num_coeffs, [control] + u_prev)) - sum(a * y for a, y in zip(den_coeffs[1:], y_prev))
+
+        return y_k
+
+    def discrete_dlsim(self, numerador: str, denominador: str, period: float, y_prev: list, y_prev2: float, u_prev: list, control: float) -> float:
+        # Criar a variável simbólica para o operador 's'
+        s = sp.symbols('s')
+        period = 0.1
+        # Definir os numeradores e denominadores da função de transferência contínua
+        num_expr = sp.sympify(numerador)
+        den_expr = sp.sympify(denominador)
+        
+        # Função de transferência no contínuo H(s)
+        H_s = num_expr / den_expr
+        
+        # Transformação bilinear: s ≈ (2/T) * (z - 1) / (z + 1)
+        z = sp.symbols('z')
+        s_tustin = (2 / period) * (z - 1) / (z + 1)
+
+        # Substituir s por s_tustin para obter a função de transferência discreta H(z)
+        H_z = H_s.subs(s, s_tustin).simplify()
+
+        # Obter os coeficientes do numerador e denominador da função de transferência discreta H(z)
         num, den = sp.fraction(H_z)
         num_coeffs = sp.Poly(num, z).all_coeffs()
         den_coeffs = sp.Poly(den, z).all_coeffs()
@@ -250,10 +314,38 @@ class PIDControl(Base):
         while len(u_prev) < ordem:
             u_prev.insert(0, 0.0)
         
-        # Aplicar a equação de diferenças
-        y_k = sum(b * u for b, u in zip(num_coeffs, [control] + u_prev)) - sum(a * y for a, y in zip(den_coeffs[1:], y_prev))
+        # Criar o sistema discreto usando o scipy.dlti (com coeficientes do numerador e denominador)
+        sysd = dlti(num_coeffs, den_coeffs)
         
-        return y_k
+        # Definir o vetor de tempo para a simulação
+        t_step = [0, period]  # Passo de tempo para cada atualização
+        u_step = [u_prev[-1], control]  # Entrada constante durante o intervalo
+
+        x0=y_prev2
+
+        # Simular a resposta do sistema utilizando o dlsim
+        y_step, x = dlsim(sysd, u_step, t_step, x0)  # Simular resposta (x0 é o estado anterior)
+        
+        # Retornar o valor da saída y[k] após o passo de simulação
+        return y_step[-1]
+
+    def parse_polynomial(self,poly_str):
+        s = sp.symbols('s')
+        poly_expr = sp.sympify(poly_str)
+        coeffs = sp.Poly(poly_expr, s).all_coeffs()
+        return [float(c) for c in coeffs]
+
+    def get_value_simulate_system(self, system, period, control, x0):
+        
+        time_control = np.linspace(0, period, 100)  
+        input_control_signal = np.full_like(time_control, control)
+        time_array_output, system_output, _ = signal.lsim(system, input_control_signal, time_control,x0)
+        last_time = time_array_output[-1]
+        last_output = system_output[-1]
+        print('Control: ', input_control_signal[1], 'System value: ', last_output, 'Time: ', last_time)
+        return last_time, last_output
+
+
 
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):

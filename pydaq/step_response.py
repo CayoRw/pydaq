@@ -183,6 +183,10 @@ class StepResponse(Base):
         # Closing port
         self.ser.close()
 
+        if self.pid_parameters:
+            Kp, Ki, Kd = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.ard_ao_min,self.ard_ao_max)
+            self.parameters = [Kp, Ki, Kd]
+            print ('PID Parameters: ', self.parameters)
         # Check if data will or not be saved, and save accordingly
         if self.save:
             print("\nSaving data ...")
@@ -190,6 +194,8 @@ class StepResponse(Base):
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.input, "input.dat")
             self._save_data(self.output, "output.dat")
+            if self.parameters:
+                self._save_data(self.parameters, "parameters.dat")
             print("\nData saved ...")
         return
 
@@ -286,9 +292,9 @@ class StepResponse(Base):
         task_ai.close()
 
         if self.pid_parameters:
-            Kp, Ki, Kd = self.get_parameters(self.time_var,self.input,self.output,self.step_time,self.sintony_type)
-        else:
+            Kp, Ki, Kd = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.step_min,self.step_max)
             self.parameters = [Kp, Ki, Kd]
+            print ('PID Parameters: ', self.parameters)
 
         # Check if data will or not be saved, and save accordingly
         if self.save:
@@ -302,9 +308,14 @@ class StepResponse(Base):
             print("\nData saved ...")
         return
 
-    def get_parameters(time, voltage, system_value, step_time,type_sintony):
+    def get_parameters(time, system_value, step_time,type_sintony,min,max):
+            
             # Estimativa do ganho estático k
-            k = (system_value[-1] - system_value[0]) / (voltage[-1] - 0)
+            delta = (min - max)
+            if delta == 0 or min == 0:
+                k = (system_value[-1] - system_value[0]) / (max - 0)
+            else:
+                k = (system_value[-1] - system_value[0]) / (max - min)
 
             # Cálculo da derivada
             derivative = np.gradient(system_value, time)
