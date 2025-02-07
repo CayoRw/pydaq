@@ -91,7 +91,8 @@ class PIDControl(Base):
         except (IndexError, ValueError):
             print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use the last valid value
-        self.control, error = self.update(self.feedback_value) # Get the control value
+        self.control_no_calibrated, error = self.update(self.feedback_value) # Get the control value
+        self.control = self.calibrated_control(self.control_no_calibrated)
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):
@@ -221,13 +222,7 @@ class PIDControl(Base):
             output_calibrated = float(output_calibrated)
             return output_calibrated
 
-    def parse_polynomial(self, poly_str):
-        s = sp.symbols('s')
-        poly_expr = sp.sympify(poly_str)
-        coeffs = sp.Poly(poly_expr, s).all_coeffs()
-        return [float(c) for c in coeffs]
-
-    def discrete_euler(self, numerador: str, denominador: str, period: float, y_prev: float, control: float) -> float:
+#    def discrete_euler(self, numerador: str, denominador: str, period: float, y_prev: float, control: float) -> float:
         s = sp.symbols('s')
         num_expr = sp.sympify(numerador)
         den_expr = sp.sympify(denominador)
@@ -237,7 +232,7 @@ class PIDControl(Base):
         output = float(output_expr.evalf()) 
         return output
     
-    def discrete_tustin(self, numerador: str, denominador: str, period: float, y_prev: list, u_prev: list, control: float) -> float:
+#    def discrete_tustin(self, numerador: str, denominador: str, period: float, y_prev: list, u_prev: list, control: float) -> float:
         s = sp.symbols('s')
         num_expr = sp.sympify(numerador)
         den_expr = sp.sympify(denominador)
@@ -275,7 +270,7 @@ class PIDControl(Base):
 
         return y_k
 
-    def discrete_dlsim(self, numerador: str, denominador: str, period: float, y_prev: list, y_prev2: float, u_prev: list, control: float) -> float:
+#   def discrete_dlsim(self, numerador: str, denominador: str, period: float, y_prev: list, y_prev2: float, u_prev: list, control: float) -> float:
         # Criar a variável simbólica para o operador 's'
         s = sp.symbols('s')
         period = 0.1
@@ -346,7 +341,8 @@ class PIDControl(Base):
         return last_time, last_output
 
 
-
+    def control_no_calibrated(self, control):
+        return 3.4157*control^2 + -12.7914*control + 11.8828
 '''
     def zero_order_hold(self, current_time_step, hold_time, new_output):
         if current_time_step % hold_time == 0:
