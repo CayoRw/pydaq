@@ -308,7 +308,7 @@ class StepResponse(Base):
             print("\nData saved ...")
         return
 
-    def get_parameters(time, system_value, step_time,type_sintony,min,max):
+    def get_parameters(self, time, system_value, step_time,type_sintony,min,max):
             
             # Estimativa do ganho estático k
             delta = (min - max)
@@ -334,7 +334,7 @@ class StepResponse(Base):
             # Encontrando L e T
             L = (step_time - (-intercept / slope)) if step_time > 0 else (-intercept / slope)
             T = (k - intercept) / slope - step_time - L  # Ajuste para `step_time`
-            print(f"L: {L}, T: {T}")
+            #print(f"L: {L}, T: {T}")
 
             if type_sintony == 0:  # P Controler
                 Kp = (T / L)

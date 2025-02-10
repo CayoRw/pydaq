@@ -73,6 +73,9 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
 
     def start_func_step_response(self):
         try:
+        
+            self.get_sintony_type()
+            print('Sintony type: ', self.sintony_type)
             # Instantiating the StepResponse class
             s = StepResponse()
 
@@ -131,7 +134,7 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
 
     def update_channels(self):
         # Changing availables channels if device changes
-
+        self.get_sintony_type()
         # Discovering new ao/ai channels
         new_ao_channels = nidaqmx.system.device.Device(
             self.device_names[self.device_type.index(self.device_combo.currentText())]

@@ -55,6 +55,8 @@ class StepResponse_Arduino_Widget(QWidget, Ui_Arduino_StepResponse_W):
 
     def start_func_step_response(self):
         try:
+            self.get_sintony_type()
+            print('Sintony type: ', self.sintony_type)
             # Instantiating the StepResponse class
             s = StepResponse()
 
@@ -69,7 +71,7 @@ class StepResponse_Arduino_Widget(QWidget, Ui_Arduino_StepResponse_W):
             s.plot = True if self.plot_radio_group.checkedId() == -2 else False
             s.save = True if self.save_radio_group.checkedId() == -2 else False
             s.path = self.path_line_edit.text()
-
+            s.sintony_type = self.sintony_type
             # Restarting variables
             self.time_var, self.input, self.output = [], [], []
 
