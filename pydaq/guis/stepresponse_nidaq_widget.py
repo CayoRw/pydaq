@@ -96,7 +96,7 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
             s.plot = True if self.plot_radio_group.checkedId() == -2 else False
             s.save = True if self.save_radio_group.checkedId() == -2 else False
             s.path = self.path_line_edit.text()
-            s.pid_parameters = self.enabled
+            s.pid_parameters = True if self.parameters_radio_group.checkedId() == -2 else False
             s.sintony_type = self.sintony_type
             s.error_path = False
 

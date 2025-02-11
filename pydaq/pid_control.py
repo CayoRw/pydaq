@@ -52,8 +52,8 @@ class PIDControl(Base):
         self.a = 0.2 # To simulated
 
     def update(self, feedback_value):
-        self.setpoint_calibrated = self.calibrationvu(self.setpoint)
-        error = self.setpoint_calibrated - feedback_value
+        #self.setpoint_calibrated = self.calibrationvu(self.setpoint)
+        error = self.setpoint - feedback_value
         self.integral = self.integral + error * self.period
         derivative = (error - self.previous_error) / self.period
         output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
@@ -91,8 +91,10 @@ class PIDControl(Base):
         except (IndexError, ValueError):
             print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use the last valid value
-        self.control_no_calibrated, error = self.update(self.feedback_value) # Get the control value
-        self.control = self.calibrated_control(self.control_no_calibrated)
+        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
+        self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
+        self.control_voltage = self.calibrationvu(self.control_unit)
+        self.control = self.control_voltage
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):
@@ -100,9 +102,8 @@ class PIDControl(Base):
         self.duty_cycle_control = int((self.control/self.ard_ao_max) *255) # Change to a duty cicle
         self.ser.write(f"{self.duty_cycle_control}\n".encode("utf-8")) # Send data to arduino 
         print(f"Control (V): {self.control:.2f}, Duty Cycle (0-255): {self.duty_cycle_control}, Feedback: {self.feedback_value:.2f}")
-        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.error_calibrated = self.calibrationuv(error)
-        self.errors.append(self.error_calibrated) # Queue data in a list
+        self.error = error
+        self.errors.append(self.error) # Queue data in a list
         self.system_values.append(self.feedback_calibrated)
         self.setpoints.append(self.setpoint)
         self.controls.append(self.control)
@@ -134,17 +135,17 @@ class PIDControl(Base):
     def update_plot_nidaq(self):
         self.time_elapsed += self.period # Clock
         self.feedback_value = self.task_ai.read()
-        self.control, error = self.update(self.feedback_value) # Get the control value
+        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
+        self.control, error = self.update(self.feedback_calibrated) # Get the control value
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):
             self.control = 5
         self.task_ao.write(self.control)
         print ('Time = ',self.time_elapsed,'Control: ', self.control, '; Feedback: ',self.feedback_value)
-        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.error_calibrated = self.calibrationuv(error)
+        self.error = error
         self.controls.append(self.control) # Att the datas
-        self.errors.append(self.error_calibrated)
+        self.errors.append(self.error)
         self.system_values.append(self.feedback_calibrated)
         self.setpoints.append(self.setpoint)
         self.time_var.append(self.time_elapsed)
@@ -181,11 +182,12 @@ class PIDControl(Base):
         self.feedback_value = self.system_value         # Get the feedback sensor value
         self.time_elapsed += self.period # Clock
         self.controls.append(self.control)         # Att the datas
-        self.control, error = self.update(self.feedback_value)         # Get control value
+        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
+        self.control, error = self.update(self.feedback_calibrated)         # Get control value
         self.control = self.control - self.disturbe
         self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.error_calibrated = self.calibrationuv(error)
-        self.errors.append(self.error_calibrated)
+        self.error = error
+        self.errors.append(self.error)
         #print('self.feedback_calibrated after self.calibration(self.feedback_value) -> ', self.feedback_calibrated, ' do tipo ', type(self.feedback_calibrated))
         self.feedback_list.append(self.feedback_value)
         self.system_values.append(self.feedback_calibrated)
@@ -238,5 +240,6 @@ class PIDControl(Base):
         print('Control: ', input_control_signal[1], 'System value: ', last_output, 'Time: ', last_time)
         return last_time, last_output
 
-    def control_no_calibrated(self, control):
-        return 3.4157*control^2 + -12.7914*control + 11.8828
+
+#    def control_no_calibrated(self, control):
+#        return 3.4157*control^2 + -12.7914*control + 11.8828

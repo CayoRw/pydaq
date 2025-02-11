@@ -72,6 +72,7 @@ class StepResponse_Arduino_Widget(QWidget, Ui_Arduino_StepResponse_W):
             s.save = True if self.save_radio_group.checkedId() == -2 else False
             s.path = self.path_line_edit.text()
             s.sintony_type = self.sintony_type
+            s.pid_parameters = True if self.parameters_radio_group.checkedId() == -2 else False
             # Restarting variables
             self.time_var, self.input, self.output = [], [], []
 
