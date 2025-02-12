@@ -49,5 +49,3 @@ for k in range(max(len(numerador_discreto), len(denominador_discreto)), len(u_k)
 # Exibindo os resultados
 print("Valores de y_k:", y_k)
 print("Valores de u_k:", u_k)
-
-def get_system_value()

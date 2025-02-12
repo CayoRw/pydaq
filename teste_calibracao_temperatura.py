@@ -4,15 +4,34 @@ from numpy.polynomial.polynomial import Polynomial
 from scipy.stats import linregress
 
 # Dados
-#C = np.array([37, 43, 45, 48, 49, 50, 51, 53, 54, 55, 56])
-#Vout = np.array([2, 2.33, 2.45, 2.53, 2.65, 2.73, 2.85, 2.89, 2.97, 3.02, 3.10])
-#Vin = np.array([0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5])
 
-#C = np.array([62,66,69,76,80,81,86,88,89,91,92])
-C = np.array([92,91,89,88,86,81,80,76,69,66,62,64,67,74,77,80,83,86,87,92,95,90])
-Vout = np.array([3.86,3.81,3.75,3.66,3.585,3.375,3.34,3.21,3.105,2.89,2.71, 2.7, 2.88, 2.865, 3, 3.08, 3.165, 3.27,2.94,3.09,3.12,3.17])
-#Vout = np.array([2.71,2.89,3.105,3.21,3.34,3.375,3.585,3.66,3.75,3.81,3.86])
-Vin = np.array([5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5,4, 4.5, 5, 4.5])
+#Primeira coleta de dados decrescente
+C1 = np.array([92,91,89,88,86,81,80,76,69,66,62])
+Vout1 = np.array([3.86,3.81,3.75,3.66,3.585,3.375,3.34,3.21,3.105,2.89,2.71])
+Vin1 = np.array([5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0])
+#Segunda coleta de dados crescente
+C2 = np.array([64,67,74,77,80,83,86]) #,87,92,95,90])
+Vout2 = np.array([2.7, 2.88, 2.865, 3, 3.08, 3.165, 3.27]) #,2.94,3.09,3.12,3.17])
+Vin2 = np.array([0.5, 1, 1.5, 2, 2.5, 3, 3.5]) #,4, 4.5, 5, 4.5])
+#Terceira coleta de dados decrescente
+C3 = np.array([97,96,92,89,87,82,81,78,74,70,66])
+Vout3 = np.array([3.97,3.87,3.75,3.645,3.57,3.39,3.35,3.238,3.125,2.954,2.821])
+Vin3 = np.array([5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0])
+#Quarta coleta de dados crescente
+C4 = np.array([69,72,76,79,82,86,87,90,93,96])
+Vout4 = np.array([2.65,2.754,2.852,2.961,3.061,3.19,3.248,3.364,3.457,3.568])
+Vin4 = np.array([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5])
+print('Lens Vout: ',len(Vout1),'  ',len(Vout2),' ',len(Vout2),'')
+print('Lens Vin: ',len(Vin1),'  ',len(Vin2),' ',len(Vin3),'')
+print('Lens C: ',len(C1),'  ',len(C2),' ',len(C3),'')
+
+Vin = np.concatenate([Vin1, Vin2, Vin3, Vin4])
+Vout = np.concatenate([Vout1,Vout2, Vout3, Vout4])
+C = np.concatenate([C1,C2, C3,C4])
+
+
+print(type(C), C.shape, C)
+print(type(Vin), Vin.shape, Vin)
 
 # Ajuste de uma equação de primeiro grau para Vout(C)
 coef_vinC = np.polyfit(C, Vin, 1)
@@ -34,9 +53,9 @@ r2_vinC = linregress(C, Vin).rvalue ** 2
 r2_vin = linregress(Vout, Vin).rvalue ** 2
 r2_c = linregress(Vout, C).rvalue ** 2
 
-print(f"Equação linear para Vin(C): {coef_vinC[0]:.4f}*C + {coef_vinC[1]:.4f}, R² = {r2_vinC:.4f}")
-print(f"Equação quadrática para Vin(Vout): {coef_vin[0]:.4f}*Vout^2 + {coef_vin[1]:.4f}*Vout + {coef_vin[2]:.4f}, R² = {r2_vin:.4f}")
-print(f"Equação linear para C(Vout): {coef_c[0]:.4f}*Vout + {coef_c[1]:.4f}, R² = {r2_c:.4f}")
+print(f"Equação linear para Vin(C): {coef_vinC[0]:.4f}*x + {coef_vinC[1]:.4f}, R² = {r2_vinC:.4f}")
+print(f"Equação quadrática para Vin(Vout): {coef_vin[0]:.4f}*x^2 + {coef_vin[1]:.4f}*x + {coef_vin[2]:.4f}, R² = {r2_vin:.4f}")
+print(f"Equação linear para C(Vout): {coef_c[0]:.4f}*x + {coef_c[1]:.4f}, R² = {r2_c:.4f}")
 
 # Criando o primeiro gráfico
 plt.figure(figsize=(8, 5))

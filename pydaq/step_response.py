@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import warnings
 import nidaqmx
 from nidaqmx.constants import TerminalConfiguration
-
+from scipy.signal import savgol_filter
 
 class StepResponse(Base):
     """
@@ -184,7 +184,7 @@ class StepResponse(Base):
         self.ser.close()
 
         if self.pid_parameters:
-            Kp, Ki, Kd = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.ard_ao_min,self.ard_ao_max)
+            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.ard_ao_min,self.ard_ao_max)
             self.parameters = [Kp, Ki, Kd]
             print ('PID Parameters: ', self.parameters)
         # Check if data will or not be saved, and save accordingly
@@ -197,6 +197,21 @@ class StepResponse(Base):
             if self.parameters:
                 self._save_data(self.parameters, "parameters.dat")
             print("\nData saved ...")
+        
+        if self.pid_parameters and self.plot:
+            # Criando o gráfico
+            plt.figure(figsize=(8, 5))
+            plt.plot(self.time_var, output_deslocated, label="Output System", linewidth=2)
+            plt.plot(self.time_var, tangent_line, '--', label="Tangent Line", linewidth=2, color='r')
+            plt.plot(self.time_var, gain_normalized, label="Input System", linewidth=2)
+            plt.scatter(time_inflection, sys_inflection, color='black', zorder=3, label="Inflection point")
+
+            plt.xlabel("Time (s)")
+            plt.ylabel("System Value")
+            plt.legend()
+            plt.grid(True)
+            plt.title("Inflection curva in system")
+            plt.show()
         return
 
     def step_response_nidaq(self):
@@ -292,7 +307,7 @@ class StepResponse(Base):
         task_ai.close()
 
         if self.pid_parameters:
-            Kp, Ki, Kd = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.step_min,self.step_max)
+            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.step_min,self.step_max)
             self.parameters = [Kp, Ki, Kd]
             print ('PID Parameters: ', self.parameters)
 
@@ -303,39 +318,60 @@ class StepResponse(Base):
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.input, "input.dat")
             self._save_data(self.output, "output.dat")
+            print("\nData saved ...")
             if self.parameters:
                 self._save_data(self.parameters, "parameters.dat")
-            print("\nData saved ...")
-        return
+                print('PID also saved')
 
+        if self.pid_parameters and self.plot:
+            # Criando o gráfico
+            plt.figure(figsize=(8, 5))
+            plt.plot(self.time_var, output_deslocated, label="Output System", linewidth=2)
+            plt.plot(self.time_var, tangent_line, '--', label="Tangent Line", linewidth=2, color='r')
+            plt.plot(self.time_var, gain_normalized, label="Input System", linewidth=2)
+            plt.scatter(time_inflection, sys_inflection, color='black', zorder=3, label="Inflection point")
+
+            plt.xlabel("Time (s)")
+            plt.ylabel("System Value")
+            plt.legend()
+            plt.grid(True)
+            plt.title("Inflection curva in system")
+            plt.show()
+
+        return
+    
     def get_parameters(self, time, system_value, step_time,type_sintony,min,max):
+        
+            time = np.array(time)
+            # Getting the gain K
             
-            # Estimativa do ganho estático k
+            system_value = np.array(system_value)  
+            system_value = system_value - system_value[1]
+
             delta = (min - max)
             if delta == 0 or min == 0:
                 k = (system_value[-1] - system_value[0]) / (max - 0)
             else:
                 k = (system_value[-1] - system_value[0]) / (max - min)
 
-            # Cálculo da derivada
-            derivative = np.gradient(system_value, time)
-            
-            # Encontrando o índice do máximo valor absoluto da derivada
-            max_derivative_idx = np.argmax(np.abs(derivative))
-            
+            max_derivative_idx, derivative = self.get_max_derivative_idx(time, system_value, step_time)
+
             # Obtendo os valores correspondentes
             time_inflection = time[max_derivative_idx]
             sys_inflection = system_value[max_derivative_idx]
-            
+
             # Ajustando reta tangente na inflexão
             slope = derivative[max_derivative_idx]
-            intercept = sys_inflection - slope * time_inflection
-            
+            intercept = sys_inflection - slope * time_inflection # Finding b by y(x)=ax+b ->  b = y(x)-ax
+            tangent_line = slope * time + intercept  # y=ax+b
+            #print('y=ax+b:', tangent_line,' = ',slope,' * x + ',intercept)
             # Encontrando L e T
-            L = (step_time - (-intercept / slope)) if step_time > 0 else (-intercept / slope)
-            T = (k - intercept) / slope - step_time - L  # Ajuste para `step_time`
+            L = (-step_time + (-intercept / slope)) # L shoud be 0=ax+b -> x = -b/a. But we also have 
+            T =  ((k - intercept) / slope)  - (-intercept / slope) # T here is the time the line hits the gain minus the time the line hit the 0
             #print(f"L: {L}, T: {T}")
-
+            # y = ax+b; 
+            # y = k;  { x = (k-b)/a
+            # y = 0;  { x = -b/a
             if type_sintony == 0:  # P Controler
                 Kp = (T / L)
                 Ki = 0
@@ -352,4 +388,30 @@ class StepResponse(Base):
                 Td = 0.5 * L
                 Kd = Kp * Td
 
-            return Kp, Ki, Kd
+            # Exibindo os parâmetros calculados
+            print(f"Kp: {Kp:.4f}, Ki: {Ki:.4f}, Kd: {Kd:.4f}, T: {T:.4f}, L: {L:.4f}")
+
+            gain_normalized = np.where(time < step_time, 0, k)
+            
+            return Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, system_value, gain_normalized
+
+    def get_max_derivative_idx(self, time, system_value, step_time, window_size=11, polyorder=2):
+        time = np.array(time)
+        system_value = np.array(system_value)
+
+        # Suavização dos dados para evitar picos espúrios
+        system_value_smooth = savgol_filter(system_value, window_size, polyorder)
+        
+        # Cálculo da derivada após suavização
+        derivative = np.gradient(system_value_smooth, time)
+
+        # Garantir que buscamos o máximo da derivada apenas para t >= step_time
+        valid_indices = time >= step_time  # Máscara booleana para o intervalo válido
+        derivative_valid = derivative[valid_indices]  # Aplicando a máscara na derivada
+        time_valid = time[valid_indices]  # Aplicando a máscara no tempo
+        
+        # Encontrar o índice do máximo valor absoluto da derivada no intervalo válido
+        max_derivative_local_idx = np.argmax(np.abs(derivative_valid))
+        max_derivative_idx = np.where(valid_indices)[0][max_derivative_local_idx]  # Convertendo índice relativo para o original
+        
+        return max_derivative_idx, derivative

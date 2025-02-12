@@ -16,7 +16,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
-    
+
 #signal to send back to QWidget the values
     send_values = Signal(float, float, float, int, float)
 
@@ -188,7 +188,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
         self.board = board
         self.simulate = simulate
         if self.simulate == True:
-            print ('Simulated Sysetm')
+            print ('Simulated system choosed')
         elif self.board == 'arduino':
             self.com_port = device
             print('Board ', self.board)
@@ -207,8 +207,8 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print(' ')
     
     def check_start(self):
-        print('simulate is ', self.simulate)
         if self.simulate == True:
+            print('Starting simulated system ', self.simulate)
             self.pid.simulate_system()
         elif self.board == 'arduino':
             self.pid.com_port = self.com_port
@@ -281,9 +281,9 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             xmin = max(self.setpoints + self.system_values + self.errors) * -0.1
         self.ax.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1)
         self.ax2.set_ylim(xmin, max(self.setpoints + self.system_values + self.errors) *1.1) # Reload the error axe
-        if len(self.system_values) > 30: # Reload the X axe after 30 datas
-            self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
-        else:
-            self.ax.set_xlim(0, self.time_elapsed)
+        #if len(self.system_values) > 30: # Reload the X axe after 30 datas
+        #    self.ax.set_xlim((len(self.system_values) - 30) * self.period, len(self.system_values) * self.period)
+        #else:
+        #    self.ax.set_xlim(0, self.time_elapsed)
         self.canvas.draw()
         return self.line1, self.line2, self.line3

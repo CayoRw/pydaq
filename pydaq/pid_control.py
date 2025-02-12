@@ -70,7 +70,11 @@ class PIDControl(Base):
         self.time_var = [] 
         self.time_elapsed = 0.0
         self.feedback_value = 0
-        self.control = self.setpoint
+        self.feedback_calibrated = 0
+        self.control_voltage = 0
+        self.control_unit = 0
+        self.control = 0
+        
         self.com_ports = [i.description for i in serial.tools.list_ports.comports()] # COM ports
         self._open_serial() # Oppening ports
         self.arduino_ai_bits = 10 # Arduino ADC resolution (in bits)
@@ -91,9 +95,9 @@ class PIDControl(Base):
         except (IndexError, ValueError):
             print('using the last data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use the last valid value
-        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
+        self.feedback_calibrated = self.calibrationuv(self.feedback_value) #Calibration by U(v)
         self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
-        self.control_voltage = self.calibrationvu(self.control_unit)
+        self.control_voltage = self.calibrationvu(self.control_unit) #Calibration by V(u)
         self.control = self.control_voltage
         if(self.control <= 0):
             self.control = 0
@@ -101,8 +105,8 @@ class PIDControl(Base):
             self.control = 5
         self.duty_cycle_control = int((self.control/self.ard_ao_max) *255) # Change to a duty cicle
         self.ser.write(f"{self.duty_cycle_control}\n".encode("utf-8")) # Send data to arduino 
-        print(f"Control (V): {self.control:.2f}, Duty Cycle (0-255): {self.duty_cycle_control}, Feedback: {self.feedback_value:.2f}")
         self.error = error
+        print(f"Control (V)/(U): {self.control:.2f} / {self.control_unit:.2f}; Feedback (V)/(U): {self.feedback_value:.2f} / {self.feedback_calibrated:.2f}; Setpoint(U) {self.setpoint:.2f}; error (U) {self.error}")
         self.errors.append(self.error) # Queue data in a list
         self.system_values.append(self.feedback_calibrated)
         self.setpoints.append(self.setpoint)
@@ -123,6 +127,7 @@ class PIDControl(Base):
             min_val=0.0,  # Max value to usb 6009
             max_val=5.0   # Max value to usb 6009
         )
+
         self.setpoints = []
         self.system_values = []
         self.errors = []
@@ -131,19 +136,24 @@ class PIDControl(Base):
         self.time_elapsed = 0.0
         self.feedback_value = 0
         self.control = 0
-
+        self.control_unit = 0
+        self.feedback_calibrated = 0
+        
     def update_plot_nidaq(self):
         self.time_elapsed += self.period # Clock
         self.feedback_value = self.task_ai.read()
         self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.control, error = self.update(self.feedback_calibrated) # Get the control value
+        self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
+        self.control_voltage = self.calibrationvu(self.control_unit)
+        self.control = self.control_voltage
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):
             self.control = 5
         self.task_ao.write(self.control)
-        print ('Time = ',self.time_elapsed,'Control: ', self.control, '; Feedback: ',self.feedback_value)
         self.error = error
+        
+        print(f"Control (V)/(U): {self.control:.2f} / {self.control_unit:.2f}; Feedback (V)/(U): {self.feedback_value:.2f} / {self.feedback_calibrated:.2f}; Setpoint(U) {self.setpoint:.2f}; error (U) {self.error}")
         self.controls.append(self.control) # Att the datas
         self.errors.append(self.error)
         self.system_values.append(self.feedback_calibrated)
@@ -154,45 +164,51 @@ class PIDControl(Base):
     def simulate_system(self):
         self.setpoints = []
         self.system_values = []
-        self.feedback_list = []
+        self.feedback_voltages = []
         self.errors = []
         self.controls = []
+        self.controls_voltages = []
         self.time_var = [] 
+        self.error = 0
         self.time_elapsed = 0.0
         self.feedback_value = 0
         self.control = 0
+        self.control_voltage = 0
+        self.feedback_calibrated = 0
 
         numerator_cont = self.parse_polynomial(self.numerator)
         denominator_cont = self.parse_polynomial(self.denominator)
-        
-        print(f"Coeficientes do numerador: {numerator_cont}")
-        print(f"Coeficientes do denominador: {denominator_cont}")
+
+        print(f"Numerator readed: {numerator_cont}")
+        print(f"Denominator readed: {denominator_cont}")
 
         self.system_cont = signal.TransferFunction(numerator_cont, denominator_cont)
 
     def update_simulated_system(self):
-        ordem = max(len(self.feedback_list), len(self.controls))  # Estimativa da ordem do sistema
-        while len(self.feedback_list) < ordem:
-            self.feedback_list.insert(0, 0.0)  # Preenche com zeros
-        while len(self.controls) < ordem:
-            self.controls.insert(0, 0.0)
+        ordem = max(len(self.feedback_voltages), len(self.controls_voltages))  # Estimate the ordem
+        while len(self.feedback_voltages) < ordem:
+            self.feedback_voltages.insert(0, 0.0)  # Fill '0' 
+        while len(self.controls_voltages) < ordem:
+            self.controls_voltages.insert(0, 0.0)
+        self.control_unit, error = self.update(self.feedback_calibrated) 
+        self.control_unit = self.control_unit - self.disturbe
+        self.control_voltage = self.calibrationvu(self.control_unit)
+        self.control = self.control_voltage
 
-        _, self.system_value = self.get_value_simulate_system(self.system_cont, self.period, self.control, self.feedback_value)  # Get the system response value by euler descritization of system
-        # Print ('System value = ', self.system_value )
-        self.feedback_value = self.system_value         # Get the feedback sensor value
-        self.time_elapsed += self.period # Clock
-        self.controls.append(self.control)         # Att the datas
         self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.control, error = self.update(self.feedback_calibrated)         # Get control value
-        self.control = self.control - self.disturbe
-        self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.error = error
+        self.controls.append(self.control)
+        self.controls_voltages.append(self.control_voltage)
         self.errors.append(self.error)
-        #print('self.feedback_calibrated after self.calibration(self.feedback_value) -> ', self.feedback_calibrated, ' do tipo ', type(self.feedback_calibrated))
-        self.feedback_list.append(self.feedback_value)
-        self.system_values.append(self.feedback_calibrated)
+        self.feedback_voltages.append(self.feedback_value) # This one goes to re-update the system and is in 'voltage'
+        self.system_values.append(self.feedback_calibrated) # This one is in unit specified and are showed in the graphic
         self.setpoints.append(self.setpoint)
         self.time_var.append(self.time_elapsed)
+
+        _, self.feedback_value = self.get_value_simulate_system(self.system_cont, self.period, self.control, self.feedback_value)  # Get the system response value by euler descritization of system
+        self.error = error
+        #print(f"Control (V)/(U): {self.control:.2f} / {self.control_unit:.2f}; Feedback (V)/(U): {self.feedback_value:.2f} / {self.feedback_calibrated:.2f}; Setpoint(U) {self.setpoint:.2f}; error (U) {self.error}")        # Get the feedback sensor value
+        self.time_elapsed += self.period # Clock        # Att the datas
+
         return self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls
 
     #def system_output(self, y_prev, control): # System type 1/s+a
@@ -231,7 +247,7 @@ class PIDControl(Base):
         return [float(c) for c in coeffs]
 
     def get_value_simulate_system(self, system, period, control, x0):
-        
+
         time_control = np.linspace(0, period, 100)  
         input_control_signal = np.full_like(time_control, control)
         time_array_output, system_output, _ = signal.lsim(system, input_control_signal, time_control,x0)
@@ -239,7 +255,6 @@ class PIDControl(Base):
         last_output = system_output[-1]
         print('Control: ', input_control_signal[1], 'System value: ', last_output, 'Time: ', last_time)
         return last_time, last_output
-
 
 #    def control_no_calibrated(self, control):
 #        return 3.4157*control^2 + -12.7914*control + 11.8828
