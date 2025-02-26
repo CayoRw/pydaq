@@ -35,7 +35,6 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
             os.path.join(os.path.join(os.path.expanduser("~")), "Desktop")
         )
        
-
 #Fuctions
  #   def locate_arduino(self):
  #       current_selection = self.comboBox_arduino.currentText()
@@ -49,8 +48,6 @@ class PID_Control_Arduino_Widget(QWidget, Ui_Arduino_PID_Control):
 #            index = self.comboBox_arduino.findText(current_selection)
 #            if index != -1:
 #                self.comboBox_arduino.setCurrentIndex(index)
-
-
 
     def update_com_ports(self):  # Updating com ports
         self.com_ports = [i.description for i in serial.tools.list_ports.comports()]

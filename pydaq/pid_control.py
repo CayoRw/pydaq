@@ -143,9 +143,13 @@ class PIDControl(Base):
         self.time_elapsed += self.period # Clock
         self.feedback_value = self.task_ai.read()
         self.feedback_calibrated = self.calibrationuv(self.feedback_value)
-        self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
+        #self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
+        error = 0
+        #self.control_unit = 0
         self.control_voltage = self.calibrationvu(self.control_unit)
         self.control = self.control_voltage
+        
+        self.control = self.setpoint
         if(self.control <= 0):
             self.control = 0
         elif (self.control >=5):

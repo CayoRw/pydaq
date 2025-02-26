@@ -150,7 +150,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
                 frames=range(100), 
                 init_func=self.init_plot, 
                 blit=True, 
-                interval=self.period*1000
+                interval=self.period*999
                 )
             plt.suptitle('PID Control', color='white')
             self.canvas.draw()
@@ -205,7 +205,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             print('Ai channel ', self.ai_channel)
             print('Termnal ', self.terminal)
             print(' ')
-    
+
     def check_start(self):
         if self.simulate == True:
             print('Starting simulated system ', self.simulate)
@@ -265,10 +265,22 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
             self.system_values, self.errors, self.setpoints, self.time_var, self.time_elapsed, self.controls = self.pid.update_plot_nidaq()
         
         self.system_value = self.system_values[-1]
-        if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:         # Change the color when the system value reaches 95% of setpoint
-            self.line1.set_color('yellow')  
-        else:
-            self.line1.set_color('cyan')  
+        #if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint:         # Change the color when the system value reaches 95% of setpoint
+        #    self.line1.set_color('yellow')  
+        #else:
+        #    self.line1.set_color('cyan')
+        
+        new_color = 'yellow' if abs(self.system_value - self.setpoint) <= 0.05 * self.setpoint else 'cyan'
+        # Atualiza a cor apenas se for diferente da atual
+        if self.line1.get_color() != new_color:
+            self.line1.set_color(new_color)  # Muda a cor da linha
+        
+            if self.ax.get_legend() is not None:
+                self.ax.get_legend().remove()
+
+            # Força atualização das labels
+            self.ax.legend(handles=[self.line1, self.line2, self.line3])
+
         self.ax.set_xlim(0, self.time_elapsed) # Updating
         self.line1.set_data(np.arange(len(self.system_values)) * self.period, self.system_values)
         self.line2.set_data(np.arange(len(self.setpoints)) * self.period, self.setpoints)

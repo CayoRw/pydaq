@@ -99,3 +99,37 @@ Next steps:                                                                    |
 -> Plot and understand calibration curve                                       | - 1hr
 Do the control                                                                 | - 1hr
 Rewrite the report!                                                            | - 4hr
+_______________________________________________________________________________|
+ [3.011417993335803, 0.20681896992365525, 10.962048517520195]                  |
+                                                                               |
+Equação linear para Vin(C): 0.1506*x + -9.7043, R² = 0.9526                    |
+Equação linear para C(Vout): 23.5167*x + 4.2400, R² = 0.7970                   |
+                                                                               |
+_______________________________________________________________________________|
+Reuniao dia 18/02                                                              | 
+                                                                               | 
+- {IEE} {PID} de mais palavras maiúsculas nas referências                      | 
+- Escrever na introdução, conceitos preliminares, metodologia e resultados     | -> feito
+temas relacionado a ensino a engenharia                                        | -> feito
+- Agradecer a FAPEMIG, CAPS, CNPQ E UFSJ no apoio...                           | -> feito
+- Observar parenteses ou sem parenteses                                        | -> feito
+- Colocar @r em matlab, labview                                                | -> feito
+- Grafia National Instrument                                                   | -> feito
+- Setpoint em italico no diagrama de blocos                                    | -> feito
+- Grafia dos termos em inglês                                                  | -> feito
+- Virgula nas equações                                                         | -> feito
+- Gif imagem Figura 2                                                          | 
+- Verificar toda a metodologia pelo Mendeley                                   | 
+- Refazer todas as figuras                                                     | 
+- Referência nas equações                                                      | -> feito
+-> duplo gratuito na conclusao                                                 | 
+_______________________________________________________________________________| 
+
+PID Parameters:  [6.651672597864751, 1.2773469278407117, 8.659501069137546]
+Equação linear para Vin(C): 0.1632*x + -10.9192, R² = 0.9856
+Equação quadrática para Vout(Vin): 0.0028*x^2 + 0.1904*x + 2.7514, R² = 0.7376
+Equação linear para C(Vout): 22.8740*x + 8.0258, R² = 0.8050
+
+Anotacoes:
+Semana do dia 17 - submeter o artigo                                           |
+                                                                              
