@@ -25,9 +25,19 @@ print('Lens Vout: ',len(Vout1),'  ',len(Vout2),' ',len(Vout2),'',len(Vout4),'')
 print('Lens Vin: ',len(Vin1),'  ',len(Vin2),' ',len(Vin3),'',len(Vout4),'')
 print('Lens C: ',len(C1),'  ',len(C2),' ',len(C3),'',len(Vout4),'')
 
-Vin = np.concatenate([Vin3, Vin4])
-Vout = np.concatenate([Vout3, Vout4])
-C = np.concatenate([C3, C4])
+Vin = np.concatenate([Vin1, Vin2, Vin3, Vin4])
+Vout = np.concatenate([Vout1,Vout2, Vout3, Vout4])
+C = np.concatenate([C1,C2, C3,C4])
+
+#Decrescente
+#Vin = np.concatenate([Vin1, Vin3])
+#Vout = np.concatenate([Vout1,Vout3])
+#C = np.concatenate([C1,C3])
+
+#Crescente
+#Vin = np.concatenate([Vin2, Vin4])
+#Vout = np.concatenate([Vout2, Vout4])
+#C = np.concatenate([C2, C4])
 
 print(type(C), C.shape, C)
 print(type(Vin), Vin.shape, Vin)
