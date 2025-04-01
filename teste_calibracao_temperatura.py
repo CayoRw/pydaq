@@ -39,6 +39,11 @@ C = np.concatenate([C1,C2, C3,C4])
 #Vout = np.concatenate([Vout2, Vout4])
 #C = np.concatenate([C2, C4])
 
+#Uma de cada
+Vin = np.concatenate([Vin3, Vin4])
+Vout = np.concatenate([Vout3, Vout4])
+C = np.concatenate([C3, C4])
+
 print(type(C), C.shape, C)
 print(type(Vin), Vin.shape, Vin)
 
@@ -53,17 +58,17 @@ poly_c = np.poly1d(coef_c)
 C_fit = poly_c(Vout)
 
 # Ajuste de uma equação de segundo grau para Vin(Vout)
-coef_vin = np.polyfit(Vout, Vin, 2)
-poly_vin = np.poly1d(coef_vin)
-Vin_fit = poly_vin(Vout)
+coef_vout_vin = np.polyfit(Vin, Vout, 2)
+poly_vin = np.poly1d(coef_vout_vin)
+Vou_vin_fit = poly_vin(Vin)
 
 # Estatísticas de ajuste
 r2_vinC = linregress(C, Vin).rvalue ** 2
-r2_vin = linregress(Vout, Vin).rvalue ** 2
+r2_vout_vin = linregress(Vin, Vout).rvalue ** 2
 r2_c = linregress(Vout, C).rvalue ** 2
 
 print(f"Equação linear para Vin(C): {coef_vinC[0]:.4f}*x + {coef_vinC[1]:.4f}, R² = {r2_vinC:.4f}")
-print(f"Equação quadrática para Vin(Vout): {coef_vin[0]:.4f}*x^2 + {coef_vin[1]:.4f}*x + {coef_vin[2]:.4f}, R² = {r2_vin:.4f}")
+print(f"Equação quadrática para Vin(Vout): {coef_vout_vin[0]:.4f}*x^2 + {coef_vout_vin[1]:.4f}*x + {coef_vout_vin[2]:.4f}, R² = {r2_vout_vin:.4f}")
 print(f"Equação linear para C(Vout): {coef_c[0]:.4f}*x + {coef_c[1]:.4f}, R² = {r2_c:.4f}")
 
 # Criando o primeiro gráfico
@@ -80,8 +85,8 @@ plt.show()
 
 # Criando o segundo gráfico
 plt.figure(figsize=(8, 5))
-plt.plot(Vout, Vin, 'o', label='Vin (V) - Dados')
-plt.plot(Vout, Vin_fit, '-', label='Ajuste Quadrático')
+plt.plot(Vin, Vout, 'o', label='Vin (V) - Dados')
+plt.plot(Vin, Vou_vin_fit, '-', label='Ajuste Quadrático')
 plt.xlabel('Vout (V)')
 plt.ylabel('Vin (V)')
 plt.title('Relação entre Vout e Vin')
