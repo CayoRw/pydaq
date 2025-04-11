@@ -184,8 +184,31 @@ class StepResponse(Base):
         self.ser.close()
 
         if self.pid_parameters:
-            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.ard_ao_min,self.ard_ao_max)
+            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_plot, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.ard_ao_min,self.ard_ao_max)
             self.parameters = [Kp, Ki, Kd]
+            print ('PID Parameters: ', self.parameters)
+            
+            time_var = np.array(self.time_var)
+            tangent_plot = np.array(tangent_plot)
+            
+            min_output = np.min(output_deslocated)
+            max_output = np.max(output_deslocated)
+    
+            indices_min = np.where(tangent_plot >= min_output)[0]
+            indices_max = np.where(tangent_plot <= max_output)[0]
+    
+            time_start = time_var[indices_min[0]]  # Primeiro tempo onde tangent_plot >= min_output
+            time_end = time_var[indices_max[-1]]
+    
+            mask = (time_var >= time_start) & (time_var <= time_end)
+
+            # Aplicar a máscara
+            filtered_time = time_var[mask]
+            filtered_tangent = tangent_plot[mask]
+            
+            print('O tamanho do vetor time do filtro é: ',len(filtered_time))
+            print('O tamanho do vetor tangente do filtro é: ',len(filtered_tangent))
+
             print ('PID Parameters: ', self.parameters)
         # Check if data will or not be saved, and save accordingly
         if self.save:
@@ -197,21 +220,31 @@ class StepResponse(Base):
             if self.parameters:
                 self._save_data(self.parameters, "parameters.dat")
             print("\nData saved ...")
-        
+
         if self.pid_parameters and self.plot:
             # Criando o gráfico
             plt.figure(figsize=(8, 5))
-            plt.plot(self.time_var, output_deslocated, label="Output System", linewidth=2)
-            plt.plot(self.time_var, tangent_line, '--', label="Tangent Line", linewidth=2, color='r')
-            plt.plot(self.time_var, gain_normalized, label="Input System", linewidth=2)
-            plt.scatter(time_inflection, sys_inflection, color='black', zorder=3, label="Inflection point")
+            # Criando o gráfico
+            # Saída do sistema normalizada (deslocada para começar em zero)
+            plt.plot(self.time_var, output_deslocated, label="Normalized System Output", linewidth=2)
 
-            plt.xlabel("Time (s)")
-            plt.ylabel("System Value")
-            plt.legend()
+            # Reta tangente ao ponto de inflexão (ajustada para o intervalo de interesse)
+            plt.plot(filtered_time, filtered_tangent, '--', label="Tangent Line at Inflection", linewidth=2, color='r')
+
+            # Entrada degrau normalizada (ganho K baseado na diferença max/min)
+            plt.plot(self.time_var, gain_normalized, label=f"Normalized Step Input", linewidth=2)
+
+            # Configurações do gráfico
+            plt.xlabel("Time (s)", fontsize=16)
+            plt.ylabel("System Value Normalized", fontsize=16)  # Alterado para refletir a normalização
+            plt.legend(fontsize=14)
             plt.grid(True)
-            plt.title("Inflection curva in system")
+            plt.title("Step Response with Inflection Point (Ziegler-Nichols Tuning)", fontsize=16)  # Título ajustado
+            plt.tick_params(axis='both', which='major', labelsize=14)
+            plt.tight_layout()
             plt.show()
+
+            return
         return
 
     def step_response_nidaq(self):
@@ -307,10 +340,31 @@ class StepResponse(Base):
         task_ai.close()
 
         if self.pid_parameters:
-            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.step_min,self.step_max)
+            Kp, Ki, Kd, time_inflection, sys_inflection, tangent_plot, output_deslocated, gain_normalized = self.get_parameters(self.time_var, self.output,self.step_time,self.sintony_type,self.step_min,self.step_max)
             self.parameters = [Kp, Ki, Kd]
             print ('PID Parameters: ', self.parameters)
+            
+            time_var = np.array(self.time_var)
+            tangent_plot = np.array(tangent_plot)
+            
+            min_output = np.min(output_deslocated)
+            max_output = np.max(output_deslocated)
+    
+            indices_min = np.where(tangent_plot >= min_output)[0]
+            indices_max = np.where(tangent_plot <= max_output)[0]
+    
+            time_start = time_var[indices_min[0]]  # Primeiro tempo onde tangent_plot >= min_output
+            time_end = time_var[indices_max[-1]]
+    
+            mask = (time_var >= time_start) & (time_var <= time_end)
 
+            # Aplicar a máscara
+            filtered_time = time_var[mask]
+            filtered_tangent = tangent_plot[mask]
+            
+            print('O tamanho do vetor time do filtro é: ',len(filtered_time))
+            print('O tamanho do vetor tangente do filtro é: ',len(filtered_tangent))
+            
         # Check if data will or not be saved, and save accordingly
         if self.save:
             print("\nSaving data ...")
@@ -324,21 +378,30 @@ class StepResponse(Base):
                 print('PID also saved')
 
         if self.pid_parameters and self.plot:
-            # Criando o gráfico
+            
             plt.figure(figsize=(8, 5))
-            plt.plot(self.time_var, output_deslocated, label="Output System", linewidth=2)
-            plt.plot(self.time_var, tangent_line, '--', label="Tangent Line", linewidth=2, color='r')
-            plt.plot(self.time_var, gain_normalized, label="Input System", linewidth=2)
-            plt.scatter(time_inflection, sys_inflection, color='black', zorder=3, label="Inflection point")
+            # Criando o gráfico
+            # Saída do sistema normalizada (deslocada para começar em zero)
+            plt.plot(self.time_var, output_deslocated, label="Normalized System Output", linewidth=2)
 
-            plt.xlabel("Time (s)")
-            plt.ylabel("System Value")
-            plt.legend()
+            # Reta tangente ao ponto de inflexão (ajustada para o intervalo de interesse)
+            plt.plot(filtered_time, filtered_tangent, '--', label="Tangent Line at Inflection", linewidth=2, color='r')
+
+            # Entrada degrau normalizada (ganho K baseado na diferença max/min)
+            plt.plot(self.time_var, gain_normalized, label=f"Normalized Step Input", linewidth=2)
+
+
+            # Configurações do gráfico
+            plt.xlabel("Time (s)", fontsize=16)
+            plt.ylabel("System Value Normalized", fontsize=16)  # Alterado para refletir a normalização
+            plt.legend(fontsize=14)
             plt.grid(True)
-            plt.title("Inflection curva in system")
+            plt.title("Step Response with Inflection Point (Ziegler-Nichols Tuning)", fontsize=16)  # Título ajustado
+            plt.tick_params(axis='both', which='major', labelsize=14)
+            plt.tight_layout()
             plt.show()
 
-        return
+            return
     
     def get_parameters(self, time, system_value, step_time,type_sintony,min,max):
         
@@ -364,10 +427,14 @@ class StepResponse(Base):
             slope = derivative[max_derivative_idx]
             intercept = sys_inflection - slope * time_inflection # Finding b by y(x)=ax+b ->  b = y(x)-ax
             tangent_line = slope * time + intercept  # y=ax+b
+            
             #print('y=ax+b:', tangent_line,' = ',slope,' * x + ',intercept)
             # Encontrando L e T
             L = (-step_time + (-intercept / slope)) # L shoud be 0=ax+b -> x = -b/a. But we also have 
             T =  ((k - intercept) / slope)  - (-intercept / slope) # T here is the time the line hits the gain minus the time the line hit the 0
+            self.end_time_tangent = self.step_time + L + T
+            tangent_plot = tangent_line
+            
             #print(f"L: {L}, T: {T}")
             # y = ax+b; 
             # y = k;  { x = (k-b)/a
@@ -393,7 +460,7 @@ class StepResponse(Base):
 
             gain_normalized = np.where(time < step_time, 0, k)
             
-            return Kp, Ki, Kd, time_inflection, sys_inflection, tangent_line, system_value, gain_normalized
+            return Kp, Ki, Kd, time_inflection, sys_inflection, tangent_plot, system_value, gain_normalized
 
     def get_max_derivative_idx(self, time, system_value, step_time, window_size=11, polyorder=2):
         time = np.array(time)
