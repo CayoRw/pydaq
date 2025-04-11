@@ -1,6 +1,6 @@
 import os
 import nidaqmx
-
+import asyncio
 from PySide6.QtWidgets import QFileDialog, QWidget
 from pydaq.utils.signals import GuiSignals
 
@@ -89,7 +89,7 @@ class GetData_NIDAQ_Widget(QWidget, Ui_NIDAQ_GetData_W):
 
         if not g.error_path:
             # Calling data aquisition method
-            g.get_data_nidaq()
+            asyncio.run(g.get_data_nidaq())
             self.signals.returned.emit(g)
 
     def _nidaq_info(self):

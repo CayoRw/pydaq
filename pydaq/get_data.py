@@ -1,7 +1,8 @@
 import os
 import time
 import warnings
-
+import asyncio
+import concurrent.futures   
 import matplotlib.pyplot as plt
 import nidaqmx
 from nidaqmx.constants import TerminalConfiguration
@@ -85,7 +86,7 @@ class GetData(Base):
         # Value per bit - Arduino
         self.ard_vpb = (self.ard_ai_max - self.ard_ai_min) / ((2 ** self.arduino_ai_bits)-1)
 
-    def get_data_nidaq(self):
+    async def get_data_nidaq(self):
         """
             This function can be used for data acquisition and step response experiments using Python + NIDAQ boards.
 
@@ -113,6 +114,10 @@ class GetData(Base):
             self.title = f"PYDAQ - Data Acquisition. {self.device}, {self.channel}"
             self._start_updatable_plot()
 
+        stl = time.time()  # Start time
+        sum = 0
+        deltam = 0
+
         # Main loop, where data will be acquired
         for k in range(self.cycles):
 
@@ -127,33 +132,36 @@ class GetData(Base):
             self.time_var.append(k * self.ts)
 
             if self.plot:
+                asyncio.create_task(self._update_plot_async(k))
 
-                # Checking if there is still an open figure. If not, stop the
-                # for loop.
-                try:
-                    plt.get_figlabels().index("iter_plot")
-                except BaseException:
-                    break
-
-                # Updating data values
-                self._update_plot(self.time_var, self.data)
-
-            print(f"Iteration: {k} of {self.cycles - 1}")
+            #print(f"Iteration: {k} of {self.cycles - 1}")
 
             # Getting end time
             et = time.time()
 
-            # Wait for (ts - delta_time) seconds
+            # Wait for (ts - delta_time 0 delta_time_average) seconds
+            wait_time = self.ts - (et - st) - sum * (0.001) / self.ts
+
             try:
-                time.sleep(self.ts + (st - et))
+                time.sleep(wait_time)
+                #await asyncio.sleep(wait_time)
+                print(f"Iteration: {k} of {self.cycles - 1} | Wait_time = {self.ts} - {et-st} - {sum * (0.01) / self.ts} = {wait_time} | deltam = {deltam}")
             except BaseException:
                 warnings.warn(
                     "Time spent to append data and update interface was greater than ts. "
                     "You CANNOT trust time.dat"
                 )
+                print(f"Iteration: {k} of {self.cycles - 1} | Wait_time = None | deltam = {deltam}")
+
+            etl = time.time()  # End time
+
+            deltam = (etl - stl)/(k+1)
+            sum = (deltam - self.ts) + sum
 
         # Closing task
         task.close()
+
+        print(f"Time spent: {etl-stl} | Interaction: {k} | Average sleep: {deltam} ")
 
         # Check if data will or not be saved, and save accordingly
         if self.save:
@@ -162,8 +170,17 @@ class GetData(Base):
             self._save_data(self.time_var, "time.dat")
             self._save_data(self.data, "data.dat")
             print("\nData saved ...")
-
         return
+
+    async def _update_plot_async(self,k):
+        try:
+            #plt.get_figlabels().index("iter_plot")
+            self._update_plot(self.time_var, self.data)
+        except Exception:
+            pass
+        # Updating data values
+        #self._update_plot(self.time_var, self.data)
+
 
     def get_data_arduino(self):
         """
