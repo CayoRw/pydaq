@@ -1,6 +1,7 @@
 import os
 import nidaqmx
 import asyncio
+
 from PySide6.QtWidgets import QFileDialog, QWidget
 from pydaq.utils.signals import GuiSignals
 

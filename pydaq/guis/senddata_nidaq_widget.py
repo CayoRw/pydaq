@@ -1,6 +1,7 @@
 import os
 import nidaqmx
 import numpy as np
+import asyncio
 
 from PySide6.QtWidgets import QFileDialog, QWidget
 from pydaq.utils.signals import GuiSignals
@@ -82,7 +83,7 @@ class SendData_NIDAQ_Widget(QWidget, Ui_NIDAQ_SendData_W):
 
         if not s.error_path:
             # Calling send data method
-            s.send_data_nidaq()
+            asyncio.run(s.send_data_nidaq())
             self.signals.returned.emit(s)
 
     def locate_path(self):  # Calling the File Browser Widget

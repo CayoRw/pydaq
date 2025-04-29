@@ -150,7 +150,7 @@ class PID_Control_Window_Dialog(QDialog, Ui_Dialog_Plot_PID_Window, Base):
                 frames=range(100), 
                 init_func=self.init_plot, 
                 blit=True, 
-                interval=self.period*999
+                interval=self.period*1000
                 )
             plt.suptitle('PID Control', color='white')
             self.canvas.draw()

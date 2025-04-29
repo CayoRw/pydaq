@@ -1,6 +1,7 @@
 import os
 import time
 import warnings
+import asyncio
 
 import matplotlib.pyplot as plt
 import nidaqmx
@@ -80,13 +81,14 @@ class SendData(Base):
 
         self.legend = ["Output"]
 
-    def send_data_nidaq(self):
+    async def send_data_nidaq(self):
         """
             This function can be used to send experimental data  using Python + NIDAQ boards.
 
         :example:
             send_data_nidaq()
         """
+        print('Starting sending data')
 
         # Checking if there is data to be sent
         if self.data is None:
@@ -106,49 +108,78 @@ class SendData(Base):
             max_val=float(self.ao_max),
         )
 
+        # Start plotting if enabled
+        self.plot_running = False
+        plot_task = None
+        self.print_queue = asyncio.Queue()
+
+        async def print_worker():
+            while True:
+                message = await self.print_queue.get()
+                if message is None:
+                    break
+                print(message)
+                
+        print_task = asyncio.create_task(print_worker())
+
         if self.plot:  # If plot, start updatable plot
             self.title = f"PYDAQ - Sending Data. {self.device}, {self.channel}"
             self._start_updatable_plot()
+            await asyncio.sleep(0.5)
+
+        async def plot_updater():
+            while self.plot_running:
+                self._update_plot(self.time_var, self.data[0 : len(self.time_var)])
+                await asyncio.sleep(self.ts + 0.01)  # Plot slower than main loop
+
+        if self.plot:
+            self.plot_running = True
+            plot_task = asyncio.create_task(plot_updater())
+
+        # Contador de tempo global
+        st = time.perf_counter()
 
         # Main loop, where data will be sent
         for k in range(self.cycles):
-
-            # Counting time to append data and update interface
-            st = time.time()
+            
+            Start_iteration_time = time.perf_counter()
 
             # Sending data
             task.write(self.data[k])
+            # Get and queue time data in a list
+            time_var = time.perf_counter() - st
+            self.time_var.append(time_var)
 
-            # Queue data in a list
-            self.time_var.append(k * self.ts)
-
-            if self.plot:
-
-                # Checking if there is still an open figure. If not, stop the for loop.
-                try:
-                    plt.get_figlabels().index("iter_plot")
-                except:
-                    break
-
-                # Updating data values
-                self._update_plot(self.time_var, self.data[0: k + 1])
-
-            print(f"Iteration: {k} of {self.cycles - 1}")
-
-            # Getting end time
-            et = time.time()
+            # Calculate how much time remains until next ts
+            self.wait_time = (st + (k + 1) * self.ts) - time.perf_counter()
 
             # Wait for (ts - delta_time) seconds
             try:
-                time.sleep(self.ts + (st - et))
-            except:
+                if self.wait_time > 0:
+                    await asyncio.sleep(self.wait_time)
+                    await self.print_queue.put(
+                        f"Iteration: {k} of {self.cycles - 1} | Start time = {(Start_iteration_time - st):.5f} | Wait time = {self.wait_time:.9f}"
+                    )
+            except BaseException:
                 warnings.warn(
                     "Time spent to append data and update interface was greater than ts. "
                     "You CANNOT trust time.dat"
                 )
 
+        total_time = time.perf_counter() - st
+        print(f"Loop time spent: {total_time:.5f}s | Iterations: {k+1} | Average sleep: {total_time/(k+1):.5f}s")
+
         # Closing task
         task.close()
+
+        # Finalizing print and plot tasks
+        await self.print_queue.put(None)
+        await print_task
+        if self.plot:
+            self.plot_running = False
+            await plot_task
+
+        await asyncio.sleep(0.5)
 
         return
 

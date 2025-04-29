@@ -87,18 +87,9 @@ Proposta: Simulate in a radio group box                                        |
    - PID Control -> Simul a control system                                     | 
 _______________________________________________________________________________| 
 Para o dia 03/02/25:                                                           |
-Implementação do ambiente virtual de controle:                                 |
-Sintonia dos parametros de controle:                                           |
-Escrita do artigo acadêmico                                                    |
-_______________________________________________________________________________|
-Next steps:                                                                    |
-- Finish Sintony parameters                                                    |  
--> plot line curve                                                             | - 30min -> can't
--> have 2 type of sintony                                                      | - 1hr 
-- Finish simulated system (make sure all works)                                | - 1hr
--> Plot and understand calibration curve                                       | - 1hr
-Do the control                                                                 | - 1hr
-Rewrite the report!                                                            | - 4hr
+Implementação do ambiente virtual de controle:                                 | -> feito
+Sintonia dos parametros de controle:                                           | -> feito
+Escrita do artigo acadêmico                                                    | -> feito
 _______________________________________________________________________________|
  [3.011417993335803, 0.20681896992365525, 10.962048517520195]                  |
                                                                                |
@@ -124,12 +115,27 @@ temas relacionado a ensino a engenharia                                        |
 - Referência nas equações                                                      | -> feito
 -> duplo gratuito na conclusao                                                 | 
 _______________________________________________________________________________| 
-
-PID Parameters:  [6.651672597864751, 1.2773469278407117, 8.659501069137546]
-Equação linear para Vin(C): 0.1632*x + -10.9192, R² = 0.9856
-Equação quadrática para Vout(Vin): 0.0028*x^2 + 0.1904*x + 2.7514, R² = 0.7376
-Equação linear para C(Vout): 22.8740*x + 8.0258, R² = 0.8050
-
-Anotacoes:
+                                                                               |
+PID Parameters:  [6.651672597864751, 1.2773469278407117, 8.659501069137546]    |
+Equação linear para Vin(C): 0.1632*x + -10.9192, R² = 0.9856                   |
+Equação quadrática para Vout(Vin): 0.0028*x^2 + 0.1904*x + 2.7514, R² = 0.7376 |
+Equação linear para C(Vout): 22.8740*x + 8.0258, R² = 0.8050                   |
+Anotacoes                                                                      |
 Semana do dia 17 - submeter o artigo                                           |
-                                                                              
+_______________________________________________________________________________|
+Repensar todo o código usando o asyncio                                        | -> feito
+Ver o Time.dat                                                                 | -> feito
+Implementar no Step Response e no Send Data                                    | ->
+
+
+Sincronizar com a versão 0.0.6
+Commit no github
+Identificar os pincipais gargalos
+Instalar no outro pc com bom hardware
+Remover o acesso ao hardware e verificar o novo desempenho do arquivo do get data
+(Comentar o acesso ao hardware e compilar)
+Resolver 'problemas' do plot 
+Modularizar a parte de aquisição de dados
+Desempenho do PID Control
+
+Reunião terça 13/05 8h30

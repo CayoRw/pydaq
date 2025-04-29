@@ -75,25 +75,30 @@ class Base:
         plt.xlabel("Time (seconds)")
         plt.ylabel("Voltage")
         plt.grid()
-        self.line = self.ax.plot([], [])
-        plt.show()
+
+        self.line, = self.ax.plot([], [], "o-" , label="Signal")
+        self.ax.legend()
+
+        self.fig.show()
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
 
     def _update_plot(self, x_value, y_value, number_of_inputs=1):
         """Method to update plot already started using _start_updatable_plot
         using x_value and y_value as new data"""
 
-        self.ax.clear()
-        plt.title(self.title)
-        plt.xlabel("Time (seconds)")
-        plt.ylabel("Voltage")
-        plt.grid()
         if number_of_inputs > 1:
             for k in range(number_of_inputs):
                 self.ax.plot(x_value[k], y_value[k], "o-")
                 plt.legend(self.legend)
         else:
-            self.ax.plot(x_value, y_value, "o-")
+            #self.ax.plot(x_value, y_value, "o-")
+            #plt.legend(self.legend)
+            self.ax.relim()
+            self.ax.autoscale_view()
             plt.legend(self.legend)
+
+        self.line.set_data(x_value, y_value)
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
 

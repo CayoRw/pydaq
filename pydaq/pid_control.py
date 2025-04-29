@@ -93,8 +93,9 @@ class PIDControl(Base):
         try:
             self.feedback_value =  int(data.split()[-2]) * self.ard_vpb
         except (IndexError, ValueError):
-            print('using the last data value ',self.feedback_value)
+            print('using the data value ',self.feedback_value)
             self.feedback_value = self.feedback_value # Use the last valid value
+
         self.feedback_calibrated = self.calibrationuv(self.feedback_value) #Calibration by U(v)
         self.control_unit, error = self.update(self.feedback_calibrated) # Get the control value
         self.control_voltage = self.calibrationvu(self.control_unit) #Calibration by V(u)
@@ -259,6 +260,3 @@ class PIDControl(Base):
         last_output = system_output[-1]
         print('Control: ', input_control_signal[1], 'System value: ', last_output, 'Time: ', last_time)
         return last_time, last_output
-
-#    def control_no_calibrated(self, control):
-#        return 3.4157*control^2 + -12.7914*control + 11.8828

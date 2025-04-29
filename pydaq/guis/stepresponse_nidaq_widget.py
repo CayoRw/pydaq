@@ -1,5 +1,6 @@
 import os
 import nidaqmx
+import asyncio
 
 from PySide6.QtWidgets import QFileDialog, QWidget
 from pydaq.utils.signals import GuiSignals
@@ -106,7 +107,7 @@ class StepResponse_NIDAQ_Widget(QWidget, Ui_NIDAQ_StepResponse_W):
 
         # Calling send data method
         if not s.error_path:
-            s.step_response_nidaq()
+            asyncio.run(s.step_response_nidaq())
             self.signals.returned.emit(s)
 
     def locate_path(self):  # Calling the Folder Browser Widget
