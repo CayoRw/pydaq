@@ -2,6 +2,7 @@ import os
 import time
 import warnings
 
+import asyncio
 import matplotlib.pyplot as plt
 import nidaqmx
 from nidaqmx.constants import TerminalConfiguration
@@ -88,7 +89,7 @@ class GetData(Base):
             (2**self.arduino_ai_bits) - 1
         )
 
-    def get_data_nidaq(self):
+    async def get_data_nidaq(self):
         """
             This function can be used for data acquisition and step response experiments using Python + NIDAQ boards.
 
@@ -96,15 +97,20 @@ class GetData(Base):
             get_data_nidaq()
         """
 
+        print ('Starting aquisition')
+
         # Cleaning data array
         self.data = []
         self.time_var = []
+        # Start asynchronous queue
+        self.data_queue = asyncio.Queue()
+        self.print_queue = asyncio.Queue()
 
         # Checking if path was defined
         self._check_path()
 
         # Number of self.cycles necessary
-        self.cycles = int(np.floor(self.session_duration / self.ts)) + 1
+        self.cycles = int(np.floor(self.session_duration / self.ts)) + 1  
 
         # Initializing device, with channel defined
         task = nidaqmx.Task()
@@ -112,59 +118,99 @@ class GetData(Base):
             self.device + "/" + self.channel, terminal_config=self.terminal
         )
 
+        # Start plotting task if enabled
+        self.plot_running = False
+        plot_task = None
+
         if self.plot:  # If plot, start updatable plot
             self.title = f"PYDAQ - Data Acquisition. {self.device}, {self.channel}"
             self._start_updatable_plot()
+            await asyncio.sleep(0.5)
 
+        async def plot_updater():
+            while self.plot_running:
+                self._update_plot(self.time_var, self.data)
+                await asyncio.sleep(self.ts+0.5)  # Update plot less frequently than data acquisition
+
+        # Append task (runs in parallel with acquisition)
+        async def store_data():
+            while True:
+                item = await self.data_queue.get()
+                if item is None:
+                    break
+                timestamp, value = item
+                self.time_var.append(timestamp)
+                self.data.append(value)
+
+        async def print_worker():
+            while True:
+                message = await self.print_queue.get()
+                if message is None:
+                    break
+                print(message)
+
+        # Starting asynchronous tasks
+        consumer_task = asyncio.create_task(store_data())
+        print_task = asyncio.create_task(print_worker())
+        if self.plot:
+            self.plot_running = True
+            plot_task = asyncio.create_task(plot_updater())
+
+        st = time.perf_counter()  # Loop start time
         # Main loop, where data will be acquired
         for k in range(self.cycles):
 
-            # Counting time to append data and update interface
-            st = time.time()
+            Start_iteration_time = time.perf_counter()
 
             # Acquire data
             temp = task.read()
+            # Acquire real time data
+            time_var = time.perf_counter() - st
 
-            # Queue data in a list
-            self.data.append(temp)
-            self.time_var.append(k * self.ts)
+            # Queue data for storage
+            await self.data_queue.put((time_var, temp))
+        
+            self.wait_time = (st + (k + 1) * self.ts) - time.perf_counter()
 
-            if self.plot:
-
-                # Checking if there is still an open figure. If not, stop the
-                # for loop.
-                try:
-                    plt.get_figlabels().index("iter_plot")
-                except BaseException:
-                    break
-
-                # Updating data values
-                self._update_plot(self.time_var, self.data)
-
-            print(f"Iteration: {k} of {self.cycles - 1}")
-
-            # Getting end time
-            et = time.time()
-
-            # Wait for (ts - delta_time) seconds
             try:
-                time.sleep(self.ts + (st - et))
+                if self.wait_time > 0:
+                    await asyncio.sleep(self.wait_time)
+                    await self.print_queue.put(
+                        f"Iteration: {k} of {self.cycles - 1} | Start time = {(Start_iteration_time - st):.5f} | Wait time = {self.wait_time:.9f}"
+                    )            
             except BaseException:
                 warnings.warn(
                     "Time spent to append data and update interface was greater than ts. "
                     "You CANNOT trust time.dat"
                 )
 
+        total_time = time.perf_counter() - st
+        await self.print_queue.put(
+            f"\nLoop time spent: {total_time:.10f}s | Iterations: {k + 1} | Average sleep: {(total_time / (k + 1)):.10f}s"
+        )
+
         # Closing task
         task.close()
+
+        # Finalizing data, print and plot consumer
+        await self.data_queue.put(None)
+        await consumer_task
+        await self.print_queue.put(None)
+        await print_task
+        if self.plot:
+            self.plot_running = False
+            await plot_task
 
         # Check if data will or not be saved, and save accordingly
         if self.save:
             print("\nSaving data ...")
             # Saving time_var and data
-            self._save_data(self.time_var, "time.dat")
+            time_formated = [f"{t:.10f}" for t in self.time_var]
+            self._save_data(time_formated, "time.dat")
             self._save_data(self.data, "data.dat")
             print("\nData saved ...")
+
+        await asyncio.sleep(0.5)
 
         return
 
