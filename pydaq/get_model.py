@@ -17,7 +17,8 @@ import queue
 from pydaq.utils.signals import Signal
 from math import floor
 from sysidentpy.model_structure_selection import FROLS
-from sysidentpy.basis_function._basis_function import Polynomial
+#from sysidentpy.basis_function._basis_function import Polynomial
+from sysidentpy.basis_function import Polynomial
 from sysidentpy.metrics import root_relative_squared_error
 from sysidentpy.utils.display_results import results
 from sysidentpy.utils.plotting import plot_residues_correlation, plot_results
@@ -27,6 +28,9 @@ from sysidentpy.residues.residues_correlation import (
 )
 from collections import Counter
 from typing import Tuple
+
+from sysidentpy.parameter_estimation import LeastSquares
+
 
 mpl.rcParams["axes.spines.right"] = False
 mpl.rcParams["axes.spines.top"] = False
@@ -461,10 +465,15 @@ class GetModel(Base):
 
         basis_function = Polynomial(degree=self.degree)
 
+        if self.ext_lsq:
+            self.estimator = LeastSquares(unbiased=True)
+        elif self.estimator is None or isinstance(self.estimator, str):
+            self.estimator = LeastSquares(unbiased=False)
+
         model = FROLS(
             order_selection=True,
             n_info_values=self.num_info_val,
-            extended_least_squares=self.ext_lsq,
+            # The extended_least_squares parameter no longer goes here; it's defined by the estimator above.
             ylag=[i + 1 for i in range(self.inp_lag)],
             xlag=[i + 1 for i in range(self.out_lag)],
             info_criteria="aic",
@@ -497,26 +506,28 @@ class GetModel(Base):
         ee = compute_residues_autocorrelation(y_valid, yhat)
         x1e = compute_cross_correlation(y_valid, yhat, x_valid)
 
-        metrics_df = dict()
-        metrics_namelist = list()
-        metrics_vallist = list()
+        metrics_namelist = []
+        metrics_vallist = []
 
-        for index in range(len(metrics_list)):
-            if (
-                metrics_list[index] == "r2_score"
-                or metrics_list[index] == "forecast_error"
-            ):
-                pass
-            else:
-                metrics_namelist.append(
-                    Base.get_acronym(Base.adjust_string(metrics_list[index]))
-                )
-                metrics_vallist.append(
-                    getattr(metrics, metrics_list[index])(y_valid, yhat)
-                )
-        metrics_vallist = [f"{value:.4f}" for value in metrics_vallist]
-        metrics_df["Metric Name"] = metrics_namelist
-        metrics_df["Value"] = metrics_vallist
+        for name in dir(metrics):
+            if name.startswith("_"):
+                continue
+
+            func = getattr(metrics, name)
+
+            if callable(func):
+                try:
+                    value = func(y_valid, yhat)
+
+                    # Ensure value is scalar
+                    if isinstance(value, (int, float, np.number)):
+                        metrics_namelist.append(
+                            Base.get_acronym(Base.adjust_string(name))
+                        )
+                        metrics_vallist.append(f"{value:.4f}")
+
+                except Exception:
+                    continue
 
         plot_combined_results_with_metrics(
             y=y_valid,
@@ -584,10 +595,15 @@ class GetModel(Base):
 
         basis_function = Polynomial(degree=self.degree)
 
+        if self.ext_lsq:
+            self.estimator = LeastSquares(unbiased=True)
+        elif self.estimator is None or isinstance(self.estimator, str):
+            self.estimator = LeastSquares(unbiased=False)
+
         model = FROLS(
             order_selection=True,
             n_info_values=self.num_info_val,
-            extended_least_squares=self.ext_lsq,
+            # The extended_least_squares parameter no longer goes here; it's defined by the estimator above.
             ylag=[i + 1 for i in range(self.inp_lag)],
             xlag=[i + 1 for i in range(self.out_lag)],
             info_criteria="aic",
@@ -618,26 +634,29 @@ class GetModel(Base):
 
         ee = compute_residues_autocorrelation(y_valid, yhat)
         x1e = compute_cross_correlation(y_valid, yhat, x_valid)
-        metrics_df = dict()
-        metrics_namelist = list()
-        metrics_vallist = list()
 
-        for index in range(len(metrics_list)):
-            if (
-                metrics_list[index] == "r2_score"
-                or metrics_list[index] == "forecast_error"
-            ):
-                pass
-            else:
-                metrics_namelist.append(
-                    Base.get_acronym(Base.adjust_string(metrics_list[index]))
-                )
-                metrics_vallist.append(
-                    getattr(metrics, metrics_list[index])(y_valid, yhat)
-                )
-        metrics_vallist = [f"{value:.4f}" for value in metrics_vallist]
-        metrics_df["Metric Name"] = metrics_namelist
-        metrics_df["Value"] = metrics_vallist
+        metrics_namelist = []
+        metrics_vallist = []
+
+        for name in dir(metrics):
+            if name.startswith("_"):
+                continue
+
+            func = getattr(metrics, name)
+
+            if callable(func):
+                try:
+                    value = func(y_valid, yhat)
+
+                    # Ensure value is scalar
+                    if isinstance(value, (int, float, np.number)):
+                        metrics_namelist.append(
+                            Base.get_acronym(Base.adjust_string(name))
+                        )
+                        metrics_vallist.append(f"{value:.4f}")
+
+                except Exception:
+                    continue
 
         plot_combined_results_with_metrics(
             y=y_valid,
