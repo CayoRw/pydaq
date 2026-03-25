@@ -473,7 +473,6 @@ class GetModel(Base):
         model = FROLS(
             order_selection=True,
             n_info_values=self.num_info_val,
-            # The extended_least_squares parameter no longer goes here; it's defined by the estimator above.
             ylag=[i + 1 for i in range(self.inp_lag)],
             xlag=[i + 1 for i in range(self.out_lag)],
             info_criteria="aic",
@@ -506,28 +505,26 @@ class GetModel(Base):
         ee = compute_residues_autocorrelation(y_valid, yhat)
         x1e = compute_cross_correlation(y_valid, yhat, x_valid)
 
-        metrics_namelist = []
-        metrics_vallist = []
+        metrics_df = dict()
+        metrics_namelist = list()
+        metrics_vallist = list()
 
-        for name in dir(metrics):
-            if name.startswith("_"):
-                continue
-
-            func = getattr(metrics, name)
-
-            if callable(func):
-                try:
-                    value = func(y_valid, yhat)
-
-                    # Ensure value is scalar
-                    if isinstance(value, (int, float, np.number)):
-                        metrics_namelist.append(
-                            Base.get_acronym(Base.adjust_string(name))
-                        )
-                        metrics_vallist.append(f"{value:.4f}")
-
-                except Exception:
-                    continue
+        for index in range(len(metrics_list)):
+            if (
+                metrics_list[index] == "r2_score"
+                or metrics_list[index] == "forecast_error"
+            ):
+                pass
+            else:
+                metrics_namelist.append(
+                    Base.get_acronym(Base.adjust_string(metrics_list[index]))
+                )
+                metrics_vallist.append(
+                    getattr(metrics, metrics_list[index])(y_valid, yhat)
+                )
+        metrics_vallist = [f"{value:.4f}" for value in metrics_vallist]
+        metrics_df["Metric Name"] = metrics_namelist
+        metrics_df["Value"] = metrics_vallist
 
         plot_combined_results_with_metrics(
             y=y_valid,
@@ -603,7 +600,6 @@ class GetModel(Base):
         model = FROLS(
             order_selection=True,
             n_info_values=self.num_info_val,
-            # The extended_least_squares parameter no longer goes here; it's defined by the estimator above.
             ylag=[i + 1 for i in range(self.inp_lag)],
             xlag=[i + 1 for i in range(self.out_lag)],
             info_criteria="aic",
@@ -635,28 +631,26 @@ class GetModel(Base):
         ee = compute_residues_autocorrelation(y_valid, yhat)
         x1e = compute_cross_correlation(y_valid, yhat, x_valid)
 
-        metrics_namelist = []
-        metrics_vallist = []
+        metrics_df = dict()
+        metrics_namelist = list()
+        metrics_vallist = list()
 
-        for name in dir(metrics):
-            if name.startswith("_"):
-                continue
-
-            func = getattr(metrics, name)
-
-            if callable(func):
-                try:
-                    value = func(y_valid, yhat)
-
-                    # Ensure value is scalar
-                    if isinstance(value, (int, float, np.number)):
-                        metrics_namelist.append(
-                            Base.get_acronym(Base.adjust_string(name))
-                        )
-                        metrics_vallist.append(f"{value:.4f}")
-
-                except Exception:
-                    continue
+        for index in range(len(metrics_list)):
+            if (
+                metrics_list[index] == "r2_score"
+                or metrics_list[index] == "forecast_error"
+            ):
+                pass
+            else:
+                metrics_namelist.append(
+                    Base.get_acronym(Base.adjust_string(metrics_list[index]))
+                )
+                metrics_vallist.append(
+                    getattr(metrics, metrics_list[index])(y_valid, yhat)
+                )
+        metrics_vallist = [f"{value:.4f}" for value in metrics_vallist]
+        metrics_df["Metric Name"] = metrics_namelist
+        metrics_df["Value"] = metrics_vallist
 
         plot_combined_results_with_metrics(
             y=y_valid,
